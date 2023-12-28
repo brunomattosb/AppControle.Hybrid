@@ -1,0 +1,24 @@
+﻿
+
+
+<Router AppAssembly="@typeof(MauiProgram).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Components.Layout.MainLayout)">
+            <Authorizing>
+                <p>Autorizando...</p>
+            </Authorizing>
+            <NotAuthorized>
+                <p>Não está autorizado para ver este conteúdo...</p>
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <CascadingAuthenticationState>
+            <PageTitle>Não encontrado!</PageTitle>
+            <LayoutView Layout="@typeof(Components.Layout.MainLayout)">
+                <p role="alert">Eu sinto que não há nada nesta rota.</p>
+            </LayoutView>
+        </CascadingAuthenticationState>
+    </NotFound>
+</Router>

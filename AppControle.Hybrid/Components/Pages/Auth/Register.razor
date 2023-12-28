@@ -1,0 +1,268 @@
+﻿@page "/Register"
+@inject IRepository repository
+@inject SweetAlertService sweetAlertService
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+
+
+<EditForm Model="UserDTO" OnValidSubmit="CreteUserAsync">
+    <DataAnnotationsValidator /> 
+
+    <div class="card ">
+        <div class="card-header">
+            <span>
+                <i class="oi oi-person" /> Cadastrar novo usuário
+                <button class="btn btn-sm btn-primary float-end" type="submit"><i class="oi oi-check" /> Cadastrar</button>
+            </span>
+        </div>
+
+        <div class="card-body p-1">
+            <form>
+                <div class="row justify-content-center">
+
+                    <div class="col-12 col-lg-2">
+                        <label for="inputCpfCnpj" class="form-label">*CPF / CNPJ</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@UserDTO.Cpf_Cnpj" />
+                            <ValidationMessage For="@(() => UserDTO.Cpf_Cnpj)" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5 col-xxl-4">
+                        <label for="inputName" class="form-label">Nome</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@UserDTO.Name" />
+                            <ValidationMessage For="@(() => UserDTO.Name)" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5 col-xxl-4">
+                        <label for="inputFantasyName" class="form-label">Nome Fantasia</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@UserDTO.FantasyName" />
+                            <ValidationMessage For="@(() => UserDTO.FantasyName)" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-3 col-xxl-4">
+                        <label for="inputEmail" class="form-label">Email</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@UserDTO.Email" />
+                            <ValidationMessage For="@(() => UserDTO.Email)" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 col-xxl-2">
+                        <label for="inputCountry" class="form-label">Pais</label>
+                        <div>
+                            <select class="form-select" @onchange="CountryChangedAsync">
+                                <option value="0">-- Selecione um Pais --</option>
+                                @if (countries is not null)
+                                {
+                                    @foreach (var country in countries)
+                                    {
+                                        <option value="@country.Id">@country.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 col-xxl-2">
+                        <label for="inputState" class="form-label">Estado</label>
+                        <div>
+                            <select class="form-select" @onchange="StateChangedAsync">
+                                <option value="0">-- Selecione um Estado --</option>
+                                @if (states is not null)
+                                {
+                                    @foreach (var state in states)
+                                    {
+                                        <option value="@state.Id">@state.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 col-xxl-2">
+                        <label for="inputCity" class="form-label">Cidade</label>
+
+                        <div>
+                            <select class="form-select" @bind="UserDTO.CityId">
+                                <option value="0">-- Selecione uma Cidade --</option>
+
+                                @if (cities is not null)
+                                {
+                                    @foreach (var city in cities)
+                                    {
+                                        <option value="@city.Id">@city.Name</option>
+                                    }
+                                }
+                            </select>
+                            <ValidationMessage For="@(() => UserDTO.CityId)" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center ">
+                    <div class="col-12 col-lg-3 col-xxl-2">
+                        <label for="inputTipi" class="form-label">Telefone</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@UserDTO.PhoneNumber" />
+                            <ValidationMessage For="@(() => UserDTO.PhoneNumber)" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 col-xxl-2">
+                        <label for="inputCep" class="form-label">CEP</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@UserDTO.AddressCep" />
+                            <ValidationMessage For="@(() => UserDTO.AddressCep)" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5 col-xxl-5">
+                        <label for="inputAddress" class="form-label">Endereço</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@UserDTO.Address" />
+                            <ValidationMessage For="@(() => UserDTO.Address)" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-1 col-xxl-1">
+                        <label for="inputNumber" class="form-label">Número</label>
+                        <div>
+                            <InputNumber class="form-control" @bind-Value="UserDTO.AddressNumber" />
+                            <ValidationMessage For="@(() => UserDTO.AddressNumber)" />
+                        </div>
+                     </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-4 col-xxl-2">
+                        <label for="inputNeighborhgood" class="form-label">Bairro</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@UserDTO.Neighborhood" />
+                            <ValidationMessage For="@(() => UserDTO.Neighborhood)" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-4 col-xxl-4">
+                        <label for ="inputNeighborhgood" class="form-label">Senha</label>
+                        <div>
+                            <InputText type="password" class="form-control" @bind-Value="@UserDTO.Password" />
+                            <ValidationMessage For="@(() => UserDTO.Password)" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-xxl-4">
+                        <label for="inputNeighborhgood" class="form-label">Confirmação da senha</label>
+                        <div>
+                            <InputText type="password" class="form-control" @bind-Value="@UserDTO.PasswordConfirm" />
+                            <ValidationMessage For="@(() => UserDTO.PasswordConfirm)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-end">
+                    <div class="col-12 col-lg-6">
+                        <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
+                            
+                    </div>
+
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private UserDTO UserDTO = new();
+    private List<Country>? countries;
+    private List<State>? states;
+    private List<City>? cities;
+    private string? imageUrl;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public bool IsAdmin { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadCountriesAsync();
+    }
+
+    private void ImageSelected(string imagenBase64)
+    {
+        UserDTO.Photo = imagenBase64;
+        imageUrl = null;
+    }
+
+    private async Task LoadCountriesAsync()
+    {
+        var responseHttp = await repository.GetNoPage<List<Country>>("/api/countries/combobox");
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            // await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        countries = responseHttp.Response;
+    }
+
+    private async Task CountryChangedAsync(ChangeEventArgs e)
+    {
+        var selectedCountry = Convert.ToInt32(e.Value!);
+        await LoadStatesAsyn(selectedCountry);
+    }
+
+    private async Task LoadStatesAsyn(int countryId)
+    {
+        var responseHttp = await repository.GetNoPage<List<State>>($"/api/states/combobox/{countryId}");
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            // await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        states = responseHttp.Response;
+    }
+
+    private async Task StateChangedAsync(ChangeEventArgs e)
+    {
+        var selectedState = Convert.ToInt32(e.Value!);
+        await LoadCitiesAsyn(selectedState);
+    }
+
+    private async Task LoadCitiesAsyn(int stateId)
+    {
+        var responseHttp = await repository.GetNoPage<List<City>>($"/api/cities/combobox/{stateId}");
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            // await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        cities = responseHttp.Response;
+    }
+
+    private async Task CreteUserAsync()
+    {
+        UserDTO.UserName = UserDTO.Email;
+        UserDTO.UserType = UserType.User;
+        if (IsAdmin)
+        {
+            UserDTO.UserType = UserType.Admin;
+        }
+        else
+        {
+            UserDTO.UserType = UserType.User;
+        }
+        var responseHttp = await repository.Post<UserDTO>("/api/accounts/CreateUser", UserDTO);
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+        await sweetAlertService.FireAsync("Confirmação", "Sua conta foi criada com sucesso. Foi enviado um e-mail com instruções para ativar seu usuário.", SweetAlertIcon.Info);
+        navigationManager.NavigateTo("/");
+    }
+}

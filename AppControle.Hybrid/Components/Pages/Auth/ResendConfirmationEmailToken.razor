@@ -1,0 +1,57 @@
+﻿@* @page "/ResendToken"
+@inject IRepository repository
+@inject SweetAlertService sweetAlertService
+@inject NavigationManager navigationManager
+
+@if (loading)
+{
+    <div class="spinner" />
+}
+<div class="row">
+    <div class="col-6">
+        <EditForm Model="emailDTO" OnValidSubmit="ResendConfirmationEmailTokenAsync">
+            <DataAnnotationsValidator />
+            <div class="card">
+                <div class="card-header">
+                    <span>
+                        <i class="oi oi-key" /> Reenviar email de confirmação de senha
+                        <button class="btn btn-sm btn-primary float-end mx-2" type="submit"><i class="oi oi-loop-square" /> Reenviar</button>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label>Email:</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@emailDTO.Email" />
+                            <ValidationMessage For="@(() => emailDTO.Email)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private EmailDTO emailDTO = new();
+    private bool loading;
+
+    private async Task ResendConfirmationEmailTokenAsync()
+    {
+        loading = true;
+        var responseHttp = await repository.Post("/api/accounts/ResedToken", emailDTO);
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            loading = false;
+            return;
+        }
+
+        //TOOD: Não deixar enviar para emails ja validado
+        loading = false;
+        await sweetAlertService.FireAsync("Confirmação", "Foi enviado novamente um e-mail com instruções para ativar seu usuário.", SweetAlertIcon.Info);
+        navigationManager.NavigateTo("/");
+    }
+}
+ *@

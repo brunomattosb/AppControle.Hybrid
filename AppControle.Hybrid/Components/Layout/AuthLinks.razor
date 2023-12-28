@@ -1,0 +1,59 @@
+﻿
+
+<AuthorizeView>
+    <Authorized>
+        <button @onclick="DropdownToggleMenu" type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+          <span class="sr-only">Open user menu</span>
+            @if (!string.IsNullOrEmpty(photoUser))
+            {
+                <img src="@photoUser" class="w-8 h-8 rounded-full" alt="dropdown image" />
+            }
+        </button>
+        <!-- Dropdown menu -->
+        <div class=" @(_dropdownMenuVisible == true ? "":"hidden") z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
+            <div class="px-4 py-3">
+                <span class="block text-sm text-gray-900 dark:text-white">@context.User.Identity!.Name</span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
+            </div>
+            <ul class="py-2" aria-labelledby="user-menu-button">
+                <li>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Editar Usuario</a>
+                </li>
+                <li>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sair</a>
+                </li>
+            </ul>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+            @* <a href="Register" class="nav-link btn btn-link me-2">Registrar</a> *@
+        <a href="Login" class="self-center text-xl  whitespace-nowrap dark:text-white">Login</a>
+    </NotAuthorized>
+
+</AuthorizeView>
+@code
+{
+    private bool _dropdownMenuVisible = false;
+
+    private string photoUser;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; } = null!;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        var authenticationState = await authenticationStateTask;
+        var claims = authenticationState.User.Claims.ToList();
+        var photoClaim = claims.FirstOrDefault(x => x.Type == "Photo");
+        if (photoClaim is not null)
+        {
+            photoUser = photoClaim.Value;
+        }
+    }
+
+    private void DropdownToggleMenu()
+    {
+        _dropdownMenuVisible = !_dropdownMenuVisible;
+    }
+}
+
