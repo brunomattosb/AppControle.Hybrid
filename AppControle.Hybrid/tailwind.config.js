@@ -9,9 +9,12 @@ module.exports = {
         extend: {},
     },
     plugins: [
-        require('preline/plugin')
+        //require('@tailwindcss/typography'),
+        require('@tailwindcss/forms'),
+        //require('@tailwindcss/aspect-ratio'),
+        //require('@tailwindcss/container-queries'),
     ],
 }
 
-
+//npm install -D @tailwindcss/forms
 
