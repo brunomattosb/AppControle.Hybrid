@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AppControle.Shared.Entities
 {
-    public class User : IdentityUser
+    public class User : IdentityUser 
     {
         [Display(Name = "CPF / CNPJ")]
         [Required(ErrorMessage = "O campo {0} é obligatório.")]
