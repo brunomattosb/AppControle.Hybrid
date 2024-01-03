@@ -1,4 +1,5 @@
 ﻿@page "/Register"
+@using AppControle.Hybrid.Components.Shared
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
@@ -8,76 +9,176 @@
 <EditForm Model="UserDTO" OnValidSubmit="CreteUserAsync">
     <DataAnnotationsValidator /> 
 
-    <form class="space-y-12 p-1">
-        <div class="border-b border-gray-900/10 pb-12">
-            <h2 class="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-            <p class="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+    <div class="mt-5 flex justify-end xl:justify-center pe-3 sm:pe-5 mb-2">
 
-            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div class="sm:col-span-3">
-                    <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
+        <h2 class="text-xl font-bold leading-7 text-gray-900">Criar novo usuário</h2>
+    </div>
+
+    <form class="space-y-12  pe-3 sm:pe-5 ps-3 sm:ps-5">
+        <div class="border-b border-t border-gray-900/10 pb-12">
+            
+            @* <p class="mt-1 text-sm leading-6 text-gray-600">Use um email válido onde você possa receber correspondência.</p> *@
+
+            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
+                <div class="sm:col-span-4 md:col-span-2">
+                    <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">* CFP / CNPJ</label>
                     <div class="mt-2">
-                        <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <InputText name="cpf_cnpj" id="cpf_cnpj" @bind-Value="@UserDTO.Cpf_Cnpj" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.Cpf_Cnpj)" />
                     </div>
                 </div>
 
-                <div class="sm:col-span-3">
-                    <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
+                <div class="sm:col-span-4 md:col-span-2">
+                    <label for="rg_ie" class="block text-sm font-medium leading-6 text-gray-900">RG / IE</label>
                     <div class="mt-2">
-                        <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <InputText name="rg_ie" id="rg_ie" @bind-Value="@UserDTO.Rg_Ie" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.Rg_Ie)" />
                     </div>
                 </div>
 
-                <div class="sm:col-span-4 lg:col-span-2">
-                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+                <div class="sm:col-span-4 md:col-span-2">
+                    <label for="name" class="block text-sm font-medium leading-6 text-gray-900">* Name</label>
                     <div class="mt-2">
-                        <input id="email" name="email" type="email" autocomplete="email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <InputText name="name" id="name" @bind-Value="@UserDTO.Name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.Name)" />
                     </div>
                 </div>
 
-                <div class="sm:col-span-3">
-                    <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Country</label>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="fantasyname" class="block text-sm font-medium leading-6 text-gray-900">Nome Fantasia</label>
                     <div class="mt-2">
-                        <select id="country" name="country" autocomplete="country-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                            <option>United States</option>
-                            <option>Canada</option>
-                            <option>Mexico</option>
+                        <InputText name="fantasyname" id="fantasyname" @bind-Value="@UserDTO.FantasyName" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.FantasyName)" />
+                    </div>
+                </div>                
+                <!-- -- -->
+                <div class="sm:col-span-4 ">
+                    <div class="grid-cols-3 grid">
+                        <div class="col-span-2">
+                            <label for="address" class="block text-sm font-medium leading-6 text-gray-900">Endereço</label>
+                            <div class="mt-2">
+                                <InputText name="address" id="address" @bind-Value="@UserDTO.Address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.Address)" />
+                            </div>
+                        </div>
+
+                        <div class="col-span-1 pl-2 sm:pl-5 ">
+                            <label for="addressnumber" class="block text-sm font-medium leading-6 text-gray-900">N°</label>
+                            <div class="mt-2">
+                                <InputNumber name="addressnumber" id="addressnumber" @bind-Value="@UserDTO.AddressNumber" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.AddressNumber)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="cep" class="block text-sm font-medium leading-6 text-gray-900">CEP</label>
+                    <div class="mt-2">
+                        <InputText name="cep" id="cep" @bind-Value="@UserDTO.AddressCep" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.AddressCep)" />
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="bairro" class="block text-sm font-medium leading-6 text-gray-900">Bairro</label>
+                    <div class="mt-2">
+                        <InputText name="bairro" id="bairro" @bind-Value="@UserDTO.Neighborhood" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.Neighborhood)" />
+                    </div>
+                </div>
+                <!-- -- -->
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="cep" class="block text-sm font-medium leading-6 text-gray-900">Pais</label>
+                    <div class="mt-2">
+                        <select id="country" name="country" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" @onchange="CountryChangedAsync">
+                            <option value="0">-- Selecione um Pais --</option>
+                            @if (countries is not null)
+                            {
+                                @foreach (var country in countries)
+                                {
+                                    <option value="@country.Id">@country.Name</option>
+                                }
+                            }
                         </select>
                     </div>
                 </div>
-
-                <div class="col-span-full">
-                    <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900">Street address</label>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="cep" class="block text-sm font-medium leading-6 text-gray-900">Estado</label>
                     <div class="mt-2">
-                        <input type="text" name="street-address" id="street-address" autocomplete="street-address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <select id="country" name="country" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:text-sm sm:leading-6" @onchange="StateChangedAsync">
+                            <option value="0">-- Selecione um Estado --</option>
+                            @if (states is not null)
+                            {
+                                @foreach (var state in states)
+                                {
+                                    <option value="@state.Id">@state.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="cep" class="block text-sm font-medium leading-6 text-gray-900">Cidade</label>
+                    <div class="mt-2">
+                        <select id="country" name="country" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:text-sm sm:leading-6" @bind="UserDTO.CityId" >
+                            <option value="0">-- Selecione uma Cidade --</option>
+
+                            @if (cities is not null)
+                            {
+                                @foreach (var city in cities)
+                                {
+                                    <option value="@city.Id">@city.Name</option>
+                                }
+                            }
+                        </select>
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.CityId)" />
                     </div>
                 </div>
 
-                <div class="sm:col-span-2 sm:col-start-1">
-                    <label for="city" class="block text-sm font-medium leading-6 text-gray-900">City</label>
+                <!-- -->
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
                     <div class="mt-2">
-                        <input type="text" name="city" id="city" autocomplete="address-level2" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <InputText name="email" id="email" @bind-Value="@UserDTO.Email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.Email)" />
                     </div>
                 </div>
 
-                <div class="sm:col-span-2">
-                    <label for="region" class="block text-sm font-medium leading-6 text-gray-900">State / Province</label>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="addressnuphoneNumbermber" class="block text-sm font-medium leading-6 text-gray-900">Telefone</label>
                     <div class="mt-2">
-                        <input type="text" name="region" id="region" autocomplete="address-level1" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <InputText name="phoneNumber" id="phoneNumber" @bind-Value="@UserDTO.PhoneNumber" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.PhoneNumber)" />
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="password" class="block text-sm font-medium leading-6 text-gray-900">* Senha</label>
+                    <div class="mt-2">
+                        <InputText type="password" id="password" name="password" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" @bind-Value="@UserDTO.Password" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.Password)" />
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="confirmpassword" class="block text-sm font-medium leading-6 text-gray-900">* Confirmação de Senha</label>
+                    <div class="mt-2">
+                        <InputText type="password" id="confirmpassword" name="confirmpassword" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" @bind-Value="@UserDTO.PasswordConfirm" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => UserDTO.PasswordConfirm)" />
                     </div>
                 </div>
 
-                <div class="sm:col-span-2">
-                    <label for="postal-code" class="block text-sm font-medium leading-6 text-gray-900">ZIP / Postal code</label>
-                    <div class="mt-2">
-                        <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                    </div>
+                <!-- -->
+                <div class="sm:col-span-4">
+                    <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />       
+
                 </div>
+
+
+
+
             </div>
         </div>
     </form>
 
-    <div class="mt-6 flex items-center justify-end gap-x-6">
+    <div class="mt-6 flex items-center justify-end gap-x-6 mb-5 me-5">
         <a type="button" href="/" class="text-sm font-semibold leading-6 text-gray-900">Cancel</a>
         <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
     </div>
@@ -85,200 +186,31 @@
 </EditForm>
 
 
-
-
-
-
-
-
-
-
-
-    @*<div class="card ">
-        <div class="card-header">
-            <span>
-                <i class="oi oi-person" /> Cadastrar novo usuário
-                <button class="btn btn-sm btn-primary float-end" type="submit"><i class="oi oi-check" /> Cadastrar</button>
-            </span>
-        </div>
-
-        <div class="card-body p-1">
-            <form>
-                <div class="row justify-content-center">
-
-                    <div class="col-12 col-lg-2">
-                        <label for="inputCpfCnpj" class="form-label">*CPF / CNPJ</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@UserDTO.Cpf_Cnpj" />
-                            <ValidationMessage For="@(() => UserDTO.Cpf_Cnpj)" />
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-5 col-xxl-4">
-                        <label for="inputName" class="form-label">Nome</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@UserDTO.Name" />
-                            <ValidationMessage For="@(() => UserDTO.Name)" />
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-5 col-xxl-4">
-                        <label for="inputFantasyName" class="form-label">Nome Fantasia</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@UserDTO.FantasyName" />
-                            <ValidationMessage For="@(() => UserDTO.FantasyName)" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row justify-content-center">
-                    <div class="col-12 col-lg-3 col-xxl-4">
-                        <label for="inputEmail" class="form-label">Email</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@UserDTO.Email" />
-                            <ValidationMessage For="@(() => UserDTO.Email)" />
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-3 col-xxl-2">
-                        <label for="inputCountry" class="form-label">Pais</label>
-                        <div>
-                            <select class="form-select" @onchange="CountryChangedAsync">
-                                <option value="0">-- Selecione um Pais --</option>
-                                @if (countries is not null)
-                                {
-                                    @foreach (var country in countries)
-                                    {
-                                        <option value="@country.Id">@country.Name</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-3 col-xxl-2">
-                        <label for="inputState" class="form-label">Estado</label>
-                        <div>
-                            <select class="form-select" @onchange="StateChangedAsync">
-                                <option value="0">-- Selecione um Estado --</option>
-                                @if (states is not null)
-                                {
-                                    @foreach (var state in states)
-                                    {
-                                        <option value="@state.Id">@state.Name</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-3 col-xxl-2">
-                        <label for="inputCity" class="form-label">Cidade</label>
-
-                        <div>
-                            <select class="form-select" @bind="UserDTO.CityId">
-                                <option value="0">-- Selecione uma Cidade --</option>
-
-                                @if (cities is not null)
-                                {
-                                    @foreach (var city in cities)
-                                    {
-                                        <option value="@city.Id">@city.Name</option>
-                                    }
-                                }
-                            </select>
-                            <ValidationMessage For="@(() => UserDTO.CityId)" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row justify-content-center ">
-                    <div class="col-12 col-lg-3 col-xxl-2">
-                        <label for="inputTipi" class="form-label">Telefone</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@UserDTO.PhoneNumber" />
-                            <ValidationMessage For="@(() => UserDTO.PhoneNumber)" />
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-3 col-xxl-2">
-                        <label for="inputCep" class="form-label">CEP</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@UserDTO.AddressCep" />
-                            <ValidationMessage For="@(() => UserDTO.AddressCep)" />
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-5 col-xxl-5">
-                        <label for="inputAddress" class="form-label">Endereço</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@UserDTO.Address" />
-                            <ValidationMessage For="@(() => UserDTO.Address)" />
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-1 col-xxl-1">
-                        <label for="inputNumber" class="form-label">Número</label>
-                        <div>
-                            <InputNumber class="form-control" @bind-Value="UserDTO.AddressNumber" />
-                            <ValidationMessage For="@(() => UserDTO.AddressNumber)" />
-                        </div>
-                     </div>
-                </div>
-                <div class="row justify-content-center">
-                    <div class="col-12 col-lg-4 col-xxl-2">
-                        <label for="inputNeighborhgood" class="form-label">Bairro</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@UserDTO.Neighborhood" />
-                            <ValidationMessage For="@(() => UserDTO.Neighborhood)" />
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-lg-4 col-xxl-4">
-                        <label for ="inputNeighborhgood" class="form-label">Senha</label>
-                        <div>
-                            <InputText type="password" class="form-control" @bind-Value="@UserDTO.Password" />
-                            <ValidationMessage For="@(() => UserDTO.Password)" />
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-4 col-xxl-4">
-                        <label for="inputNeighborhgood" class="form-label">Confirmação da senha</label>
-                        <div>
-                            <InputText type="password" class="form-control" @bind-Value="@UserDTO.PasswordConfirm" />
-                            <ValidationMessage For="@(() => UserDTO.PasswordConfirm)" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row justify-content-end">
-                    <div class="col-12 col-lg-6">
-                        <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
-                            
-                    </div>
-
-                </div>
-
-            </form>
-
-
-        </div>
-    </div>*@
  
 @code {
 
-    User user = new User
-    {
-        Address =,
-        AddressCep =,
-        AddressNumber =,
-        City =,
-        CityId =,
-        Cpf_Cnpj =,
-        Email =,
-        FantasyName =,
-        Id =,
-        IM =,
-        Name =,
-        Neighborhood =,
-        PhoneNumber =,
-        Photo =,
-        Rg_Ie =,
-        RegisterDate =,
-        UserName =,
-        UserType =,
+    // User user = new User
+    // {
+    //     Neighborhood =,
+    //     City =,
+    //     CityId =,
+    //     AddressCep =,
+    //     AddressNumber =,
+    //     Address =,
+    //     FantasyName =,
+    //     Name =,
+    //     Cpf_Cnpj =,
+    //     Rg_Ie =,
+    //     Email =,
+    //     PhoneNumber =,
+    //     Photo =,
+    //     UserType =,
 
-    };
+    //     UserName =,
+    //     IM =,
+    //     Id =,
+    //     RegisterDate =,
+    // };
     private UserDTO UserDTO = new();
     private List<Country>? countries;
     private List<State>? states;
@@ -355,14 +287,14 @@
     {
         UserDTO.UserName = UserDTO.Email;
         UserDTO.UserType = UserType.User;
-        if (IsAdmin)
-        {
-            UserDTO.UserType = UserType.Admin;
-        }
-        else
-        {
-            UserDTO.UserType = UserType.User;
-        }
+        // if (IsAdmin)
+        // {
+        //     UserDTO.UserType = UserType.Admin;
+        // }
+        // else
+        // {
+        //     UserDTO.UserType = UserType.User;
+        // }
         var responseHttp = await repository.Post<UserDTO>("/api/accounts/CreateUser", UserDTO);
         if (responseHttp.Error)
         {
