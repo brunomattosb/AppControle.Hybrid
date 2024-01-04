@@ -2,6 +2,7 @@
 using AppControle.API.Helpers;
 using AppControle.API.Services;
 using AppControle.Shared.Entities;
+using AppControle.Shared.Enums;
 using AppControle.Shared.Responses;
 using Microsoft.EntityFrameworkCore;
 using SisVendas.Shared.Responses;
@@ -28,7 +29,7 @@ namespace SisVendas.API.Data
             await _context.Database.EnsureCreatedAsync();
             await CheckCountriesAsync();
             //await CheckCategoriesAsync();
-            //await CheckRolesAsync();
+            await CheckRolesAsync();
             //await CheckUserAsync("1010", "Juan", "Zuluaga", "zulu@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "JuanZuluaga.jpeg", UserType.Admin);
             //await CheckUserAsync("2020", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpeg", UserType.User);
             //await CheckUserAsync("3030", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
@@ -159,11 +160,11 @@ namespace SisVendas.API.Data
         //        await _context.SaveChangesAsync();
         //    }
         //}
-        //private async Task CheckRolesAsync()
-        //{
-        //    await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
-        //    await _userHelper.CheckRoleAsync(UserType.User.ToString());
-        //}
+        private async Task CheckRolesAsync()
+        {
+            await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
+            await _userHelper.CheckRoleAsync(UserType.User.ToString());
+        }
 
         //private async Task<User> CheckUserAsync(string document, string firstName, string lastName, string email, string phone, string address, string image, UserType userType)
         //{

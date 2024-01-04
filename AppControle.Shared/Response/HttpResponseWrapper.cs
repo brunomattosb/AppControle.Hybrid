@@ -55,7 +55,7 @@ namespace AppControle.Shared.Response
                 return "Não há permissão para fazer esta operação";
             }
 
-            return "Ocorreu um erro inesperado";
+            return "Ocorreu um erro inesperado ";
         }
     }
 }

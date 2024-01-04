@@ -223,7 +223,7 @@
 
     protected async override Task OnInitializedAsync()
     {
-        // await LoadCountriesAsync();
+        await LoadCountriesAsync();
     }
 
     private void ImageSelected(string imagenBase64)
@@ -299,6 +299,7 @@
         if (responseHttp.Error)
         {
             var message = await responseHttp.GetErrorMessageAsync();
+            if()
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
             return;
         }

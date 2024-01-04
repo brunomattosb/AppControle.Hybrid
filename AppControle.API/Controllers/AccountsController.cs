@@ -7,6 +7,7 @@ using AppControleAPI.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -266,42 +267,54 @@ namespace AppControle.API.Controllers
         [HttpPost("CreateUser")]
         public async Task<ActionResult> CreateUser([FromBody] UserDTO model)
         {
-            User user = model;
-            if (!string.IsNullOrEmpty(model.Photo))
+            try
             {
-                var photoUser = Convert.FromBase64String(model.Photo);
-                model.Photo = await _fileStorage.SaveFileAsync(photoUser, ".jpg", _container);
-            }
 
-            var result = await _userHelper.AddUserAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
-
-                //return Ok(BuildToken(user));
-
-                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                var tokenLink = Url.Action("ConfirmEmail", "accounts", new
+                User user = model;
+                if (!string.IsNullOrEmpty(model.Photo))
                 {
-                    userid = user.Id,
-                    token = myToken
-                }, HttpContext.Request.Scheme, _configuration["UrlWEB"]);
-
-                var response = _mailHelper.SendMail(user.Name, user.Email!,
-                    $"Confirmação de conta Automações Brasil",
-                    $"<h1>Automações Brasil - Confirmação de conta</h1>" +
-                    $"<p>Para habilitar o usuário, por valor clique em 'Confirmar Email':</p>" +
-                    $"<b><a href ={tokenLink}>Confirmar Email</a></b>");
-
-                if (response.IsSuccess)
-                {
-                    return NoContent();
+                    var photoUser = Convert.FromBase64String(model.Photo);
+                    model.Photo = await _fileStorage.SaveFileAsync(photoUser, ".jpg", _container);
                 }
 
-                return BadRequest(response.Message);
+                var result = await _userHelper.AddUserAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
+
+                    //return Ok(BuildToken(user));
+
+                    var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                    var tokenLink = Url.Action("ConfirmEmail", "accounts", new
+                    {
+                        userid = user.Id,
+                        token = myToken
+                    }, HttpContext.Request.Scheme, _configuration["UrlWEB"]);
+
+                    var response = _mailHelper.SendMail(user.Name, user.Email!,
+                        $"Confirmação de conta Automações Brasil",
+                        $"<h1>Automações Brasil - Confirmação de conta</h1>" +
+                        $"<p>Para habilitar o usuário, por valor clique em 'Confirmar Email':</p>" +
+                        $"<b><a href ={tokenLink}>Confirmar Email</a></b>");
+
+                    if (response.IsSuccess)
+                    {
+                        return NoContent();
+                    }
+
+                    return BadRequest(response.Message);
+                }
+
+                return BadRequest(result.Errors.FirstOrDefault());
+
+            }
+            catch(Exception ex)
+            {
+                string teste = ex.Message;
+                return BadRequest();
+
             }
 
-            return BadRequest(result.Errors.FirstOrDefault());
         }
         [HttpGet("all")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
