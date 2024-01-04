@@ -267,6 +267,7 @@ namespace AppControle.API.Controllers
         [HttpPost("CreateUser")]
         public async Task<ActionResult> CreateUser([FromBody] UserDTO model)
         {
+
             try
             {
 
@@ -305,14 +306,25 @@ namespace AppControle.API.Controllers
                     return BadRequest(response.Message);
                 }
 
-                return BadRequest(result.Errors.FirstOrDefault());
+                throw new Exception(result.Errors?.FirstOrDefault()?.Code);
 
             }
-            catch(Exception ex)
+            catch (DbUpdateException e)
             {
-                string teste = ex.Message;
-                return BadRequest();
+                if (e.InnerException!.Message.Contains("Duplicate"))
+                {
+                    return BadRequest("O CPF / CNPJ informado já possui cadastro.");
+                }
+                return BadRequest(e.InnerException.Message);
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("DuplicateEmail") || e.Message.Contains("DuplicateUserName"))
+                {
+                    return BadRequest("Email já cadastrado!");
+                }
 
+                return BadRequest(e.Message);
             }
 
         }
