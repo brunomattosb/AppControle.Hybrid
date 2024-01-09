@@ -8,6 +8,7 @@
 
 @if (user is null)
 {
+    //TODO: Padronizar spinner
     <div class="text-center">
         <div role="status">
             <svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -302,6 +303,16 @@ else
             return;
         }
         await loginService.LoginAsync(responseHttp.Response!.Token, false);
+
+        //TODO: Padronizar toast
+        var toast = sweetAlertService.Mixin(new SweetAlertOptions
+            {
+                Toast = true,
+                Position = SweetAlertPosition.TopEnd,
+                ShowConfirmButton = true,
+                Timer = 5000
+            });
+        await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Usuario alterado com sucesso!");
         navigationManager.NavigateTo("/");
     }
 }
