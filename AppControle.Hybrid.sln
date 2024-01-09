@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.Shared", "AppCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.API", "AppControle.API\AppControle.API.csproj", "{977EC182-EA6C-4AA5-BA6E-12F31D1CD6C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppControle.WebApp", "AppControle.WebApp\AppControle.WebApp.csproj", "{0898EFD5-675A-4020-8F99-07B2B6F227B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.WebApp", "AppControle.WebApp\AppControle.WebApp.csproj", "{0898EFD5-675A-4020-8F99-07B2B6F227B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

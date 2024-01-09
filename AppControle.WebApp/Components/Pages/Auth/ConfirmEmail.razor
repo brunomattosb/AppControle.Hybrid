@@ -1,0 +1,44 @@
+﻿@page "/api/accounts/ConfirmEmail"
+@inject IRepository repository
+@inject NavigationManager navigationManager
+
+@* <EditForm OnValidSubmit="ConfirmAccountAsync">
+    <DataAnnotationsValidator />  *@
+<h3>Confirmação de email</h3>
+
+<p>@messageConfirm</p>
+
+@* <button type="button" @onclick="ConfirmAccountAsync" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Confirmar Conta</button> *@
+@* </EditForm> *@
+
+@code {
+    private string messageConfirm = "Confirmando conta, aguarde...";
+    private string? message;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string UserId { get; set; } = "";
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Token { get; set; } = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        var responseHttp = await repository.Get($"/api/accounts/ConfirmEmail/?userId={UserId}&token={Token}");
+
+        if (responseHttp.Error)
+        {
+            message = await responseHttp.GetErrorMessageAsync();
+            // await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            navigationManager.NavigateTo("/");
+        }
+        else
+        {
+            // await sweetAlertService.FireAsync("Confirmación", "Gracias por confirmar su email, ahora puedes ingresar al sistema.", SweetAlertIcon.Info);
+            navigationManager.NavigateTo("/");
+        }
+
+        messageConfirm = "Conta confirmada com sucesso!";
+    }
+}
