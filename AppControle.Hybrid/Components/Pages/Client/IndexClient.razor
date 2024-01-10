@@ -7,13 +7,12 @@
 <div class="p-5 h-screen bg-gray-100">
     <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <div>
-            <a href="/clients/create" id="dropdownActionButton" data-dropdown-toggle="dropdownAction" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+            <a href="/clients/create" id="dropdownActionButton" data-dropdown-toggle="dropdownAction" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button">
                 <span class="sr-only">Action button</span>
                 Adicionar Cliente                
             </a>
 
         </div>
-        <label for="table-search" class="sr-only">Search</label>
         <div class="inline-flex rounded-md shadow-sm" role="group">
 
             <div class="relative">
@@ -22,7 +21,7 @@
                 </div>
                 <input @bind-value="Filter" type="text" id="table-search" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pesquisar clientes">
             </div>
-            <button @onclick="ApplyFilterAsync" id="dropdownActionButton" data-dropdown-toggle="dropdownAction" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+            <button @onclick="ApplyFilterAsync" id="dropdownActionButton" data-dropdown-toggle="dropdownAction" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button">
                 Pesquisar
             </button>
         </div>
@@ -31,116 +30,85 @@
     <p class="text-xl mb-2">Clientes</p>
 
     <!-- Tabela -->
-    
-
-    <div class="overflow-auto rounded-lg shadow hidden md:block">
+    <div class="relative overflow-x-auto rounded-lg shadow hidden md:block">
         <GenericList MyList="lClients">
         <Body>
-            <table class="w-full">
-                <thead class="bg-red-50 border-b-2 border-gray-200">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Nome
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Data de registro
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Saldo
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                    
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var client in lClients!)
+                {
                     <tr>
-                            <th class="w-40 p-3 text-sm font-semibold tracking-wide text-left">Nome</th>
-                            <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Data de Registro</th>
-                            <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Saldo</th>
-                            <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left"></th>
-                        @* <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">Status</th> *@
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                        @foreach (var client in lClients!)
-                        {
-                            <tr class="bg-white">
-
-                                <td class=" p-3 text-sm text-gray-700 whitespace-nowrap">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     @client.Name
-                                </td>
-                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        </th>
+                        <td class="px-6 py-4">
                                     @client.RegisterDate
-                                </td>
-                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        </td>
+                        <td class="px-6 py-4">
                                     @client.Balance.ToString("C")
-                                </td>
-                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                                    <a href="/clients/details/@client.Id" class="font-bold text-blue-500 hover:underline">Detalhar</a>
-                                </td>
-
-                            </tr>
-
-                        }
-                    
-                    @* <tr class="bg-gray-50">
-                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                            <a href="#" class="font-bold text-blue-500 hover:underline">10002</a>
                         </td>
-                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">Kring New Fit office chair, mesh + PU, black</td>
-                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                            <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">Shipped</span>
+                        <td class="px-6 py-4">
+                                    <a href="/clients/details/@client.Id" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Detalhar</a>
                         </td>
-                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">16/10/2021</td>
-                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">$200.00</td>
-                    </tr> *@
-                    
-                </tbody>
-            </table>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
         </Body>
         </GenericList>
     </div>
 
     <!-- Box -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-        <div class="bg-white space-y-3 p-4 rounded-lg shadow">
-            <div class="flex items-center space-x-2 text-sm">
-                 <div>
-                    <a href="#" class="text-blue-500 font-bold hover:underline">#1000</a>
+        <GenericList MyList="lClients">
+        <Body>
+        @foreach (var client in lClients!)
+        {
+            <div class="bg-white space-y-3 p-4 rounded-lg shadow">
+                <div class="flex items-center space-x-2 text-sm">
+                    <div>
+                                <a href="#" class="text-gray-500">Registro:</a>
+                    </div>
+                    <div class="text-gray-500">@client.RegisterDate</div>
+                    @* <div>
+                        <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Delivered</span>
+                    </div> *@
                 </div>
-                <div class="text-gray-500">10/10/2021</div>
-                <div>
-                    <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Delivered</span>
+                <div class="text-sm text-gray-700">
+                    @client.Name
                 </div>
+                <div class="text-sm font-medium text-black">
+                    Saldo: @client.Balance.ToString("C")
                 </div>
-            <div class="text-sm text-gray-700">
-                Kring New Fit office chair, mesh + PU, black
+                <a href="/clients/details/@client.Id" class="mt-2 font-bold text-blue-500 hover:underline">Detalhar</a>
             </div>
-            <div class="text-sm font-medium text-black">
-                $200.00
-            </div>
-        </div>
-
-        <div class="bg-white space-y-3 p-4 rounded-lg shadow">
-            <div class="flex items-center space-x-2 text-sm">
-                <div>
-                    <a href="#" class="text-blue-500 font-bold hover:underline">#1001</a>
-                </div>
-                <div class="text-gray-500">10/10/2021</div>
-                <div>
-                    <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">Shipped</span>
-                </div>
-            </div>
-            <div class="text-sm text-gray-700">
-                Kring New Fit office chair, mesh + PU, black
-            </div>
-            <div class="text-sm font-medium text-black">
-                $200.00
-            </div>
-        </div>
-        <div class="bg-white space-y-3 p-4 rounded-lg shadow">
-            <div class="flex items-center space-x-2 text-sm">
-                <div>
-                    <a href="#" class="text-blue-500 font-bold hover:underline">#1002</a>
-                </div>
-                <div class="text-gray-500">10/10/2021</div>
-                <div>
-                    <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">Canceled</span>
-                </div>
-            </div>
-            <div class="text-sm text-gray-700">
-                Kring New Fit office chair, mesh + PU, black
-            </div>
-            <div class="text-sm font-medium text-black">
-                $200.00
-            </div>
-        </div>
+        }      
+        </Body>
+        </GenericList>
     </div>
+
+    @* Pagination *@
+    <Pagination CurrentPage="CurrentPage"
+                QuantityTotalPages="TotalPages"
+                Ray="2"
+                SelectedPage="SelectedPageAsync" />
 </div>
 
 

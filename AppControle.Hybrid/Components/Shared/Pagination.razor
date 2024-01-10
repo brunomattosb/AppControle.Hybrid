@@ -1,11 +1,10 @@
-﻿<nav aria-label="Paginacao">
-    <ul class="pagination justify-content-center">
+﻿<nav aria-label="Paginacao" class="mt-2 ">
+    <ul class="flex items-center -space-x-px h-8 text-sm">
         @foreach (var link in links)
         {
             <li @onclick="@(() => selectedPageLink(link))"
-                style="cursor: pointer;"
-                class="page-item @(link.Enabled ? null : "disabled") @(link.Active ? "active" : null)">
-                <span class="page-link" href="#">@link.Text</span>
+                class="@(link.Active ? "text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:bg-gray-700 dark:text-white":" hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white border-gray-300 leading-tight text-gray-500 bg-white ") flex items-center justify-center px-3 h-8 border border-gray-300 dark:border-gray-700">
+                <span class="" href="#">@link.Text</span>
             </li>
         }
     </ul>

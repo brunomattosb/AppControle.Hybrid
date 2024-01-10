@@ -2,6 +2,7 @@
 using AppControle.Shared.Repositories;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace AppControle.Hybrid
@@ -11,6 +12,7 @@ namespace AppControle.Hybrid
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>

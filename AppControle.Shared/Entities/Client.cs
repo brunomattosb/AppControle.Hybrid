@@ -58,15 +58,15 @@ namespace AppControle.Shared.Entities
 
             [Display(Name = "CEP")]
             [MaxLength(8, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
-            public string? Cep { get; set; }
+            public string? AddressCep { get; set; }
 
             [Display(Name = "Logradouro")]
             [MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
-            public string? Addres { get; set; }
+            public string? Address { get; set; }
 
             [Display(Name = "Número")]
             //[MaxLength(6, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
-            public int Number { get; set; }
+            public int AddressNumber { get; set; }
 
             [Display(Name = "Complemento")]
             [MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
@@ -84,7 +84,7 @@ namespace AppControle.Shared.Entities
             [Display(Name = "Telefone")]
             [DisplayFormat(DataFormatString = "{0:###-###-####}")]
             //[MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
-            public long? Phone { get; set; }
+            public long? PhoneNumber { get; set; }
 
             public string? UserId { get; set; }
 

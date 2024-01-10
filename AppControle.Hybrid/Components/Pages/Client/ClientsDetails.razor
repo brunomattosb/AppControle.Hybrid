@@ -1,0 +1,243 @@
+﻿@page "/clients/details/{ClientId:int}"
+@using System.Net
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+@attribute [Authorize]
+
+@if (client is null)
+{
+    <div class="spinner" />
+}
+else
+{
+   
+    <div class="card">
+        <div class="card-header">
+            <span>
+                <i class="oi oi-dollar"></i> @client.Name
+
+                <AuthorizeView >
+                    <Authorized>
+
+                        <button class="btn btn-warning btn-sm" @onclick=@(() => EditAsync())>
+                            <i class="oi oi-pencil" /> Editar
+                        </button>
+                        <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync())>
+                            <i class="oi oi-trash" /> Excluir
+                        </button>
+                    </Authorized>
+                </AuthorizeView>
+
+                <a class="btn btn-sm btn-success " href="/clients"><i class="oi oi-arrow-thick-left" /> Voltar</a>  @* float-end *@
+            </span>
+        </div>
+        <div class ="mx-2 my-2">
+            <div class="row justify-content-center">
+                
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">CPF / CNPJ</label>
+                    <label class="form-label">@client.Cpf_Cnpj</label>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">RG / IE</label>
+                    <label class="form-label">@client.Rg_Ie</label>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">Email</label>
+                    <label class="form-label">@client.Email</label>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">Nome Fantasia</label>
+                    <label class="form-label">@client.FantasyName</label>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">Endereço</label>
+                    <label class="form-label">@client.Address @client.AddressNumber, @client.City!.Name, @client.City.State!.Name, @client.City.State.Country!.Name</label>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">CEP</label>
+                    <label class="form-label">@client.AddressCep</label>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">Complemento</label>
+                    <label class="form-label">@client.Complement</label>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">Data de Nascimento</label>
+                    <label class="form-label">@client.BirthData</label>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">Gênero</label>
+                    <label class="form-label">@client.Gender</label>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">Bairro</label>
+                    <label class="form-label">@client.Neighborhood</label>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">Telefone</label>
+                    <label class="form-label">@client.PhoneNumber</label>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-5">
+                    <label class="form-label fw-bold">Saldo</label>
+                    <label class="form-label">@($"{client.Balance:C2}")</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            @* <div class="col-12 col-md-2">
+                <label for="inputCountry" class="form-label">Serviços</label>
+                <div>
+        <select class="form-select" >@* @onchange="CountryChangedAsync" *@@*
+        <option value="0">-- Selecione um Serviço --</option>
+                        @if (lServicos is not null)
+                        {
+                            @foreach (var servico in lServicos)
+                            {
+        <option value="@servico.Id">@servico.Name</option> @* selected="@(country.Id == Client.City!?.State!.Country!.Id) "*@@*
+        }
+                        }
+                    </select>
+                </div>
+            </div> 
+            <div class="col-12 col-md-5 col-xxl-4">
+                <label for="inputName" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="inputName">
+            </div>
+            <div class="col-12 col-md-5 col-xxl-4">
+                <label for="inputFantasyName" class="form-label">Nome Fantasia</label>
+                <input type="text" class="form-control" id="inputFantasyName">
+            </div>
+        *@
+
+            
+        </div> 
+    </div>
+}
+
+@code {
+    private Client? client;
+
+    // private List<Product> lServicos;
+
+
+    [Parameter]
+    public int ClientId { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadAsync();
+        await LoadServicesAsync();
+    }
+    private async Task LoadServicesAsync()
+    {
+        // var responseHttp = await repository.GetNoPage<List<Product>>("/api/products/combobox");
+        // if (responseHttp.Error)
+        // {
+        //     var message = await responseHttp.GetErrorMessageAsync();
+        //     // await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+        //     return;
+        // }
+
+        // lServicos = responseHttp.Response;
+    }
+    private async Task EditAsync()
+    {
+        navigationManager.NavigateTo("/clients/edit/"+ClientId);
+
+        await LoadAsync();
+    }
+    private async Task DeleteAsync()
+    {
+        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmaçao",
+                Text = string.Format("Deseja excluir o cliente: {0} ?", client.Name),
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true,
+                CancelButtonText = "Não",
+                ConfirmButtonText = "Sim"
+            });
+
+        var confirm = string.IsNullOrEmpty(result.Value);
+        if (confirm)
+        {
+            return;
+        }
+
+        var responseHttp = await repository.Delete($"/api/clients/{ClientId}");
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode != HttpStatusCode.NotFound)
+            {
+                var message = await responseHttp.GetErrorMessageAsync();
+                await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                return;
+            }
+        }
+
+        await LoadAsync();
+    }
+    private async Task LoadAsync()
+    {
+        var responseHppt = await repository.GetNoPage<Client>($"api/clients/{ClientId}");
+        if (responseHppt.Error)
+        {
+            if (responseHppt.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/clients");
+                return;
+            }
+            var messageError = await responseHppt.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", messageError, SweetAlertIcon.Error);
+            return;
+        }
+        client = responseHppt.Response;
+    }
+
+    // private async Task ModifyTemporalSale(string message, OrderStatus status)
+    // {
+    //     var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+    //         {
+    //             Title = "Confirmación",
+    //             Text = $"¿Esta seguro que quieres {message} el pedido?",
+    //             Icon = SweetAlertIcon.Question,
+    //             ShowCancelButton = true
+    //         });
+
+    //     var confirm = string.IsNullOrEmpty(result.Value);
+    //     if (confirm)
+    //     {
+    //         return;
+    //     }
+
+    //     var saleDTO = new SaleDTO
+    //         {
+    //             Id = ClientId,
+    //             OrderStatus = status
+    //         };
+
+    //     var responseHTTP = await repository.Put("api/clients", saleDTO);
+    //     if (responseHTTP.Error)
+    //     {
+    //         var mensajeError = await responseHTTP.GetErrorMessageAsync();
+    //         await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+    //         return;
+    //     }
+
+    //     navigationManager.NavigateTo("/clients");
+    // }
+}
