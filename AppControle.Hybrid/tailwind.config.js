@@ -5,16 +5,21 @@ module.exports = {
     darkMode: 'class',
     content: [
         "./**/*.{razor,html}",
-        'node_modules/preline/dist/*.js',
+        "node_modules/preline/dist/*.js",
+        "./node_modules/flowbite/**/*.{js,razor,html,cshtml}"
     ],
     theme: {
         extend: {},
     },
     plugins: [
-        //require('@tailwindcss/typography'),
+        //Forms
         require('@tailwindcss/forms'),
+        //Flowbite - não funciona
+        require('flowbite/plugin'),
         // Iconify plugin
         addDynamicIconSelectors(),
+
+        //require('@tailwindcss/typography'),
         //require('@tailwindcss/aspect-ratio'),
         //require('@tailwindcss/container-queries'),
     ],
