@@ -141,10 +141,12 @@ namespace SisVendas.API.Data
         //}
         private async Task CheckClientsAsync()
         {
+            City city = await _context.Cities!.FirstOrDefaultAsync();
+            User user = await _context.Users!.FirstOrDefaultAsync(c => c.Cpf_Cnpj == "1010")!;
+
+
             if (!_context.Clients.Any())
             {
-                City city = await _context.Cities!.FirstOrDefaultAsync();
-                User user = await _context.Users!.FirstOrDefaultAsync(c => c.Cpf_Cnpj == "1010")!;
                 _context.Clients.Add(new Client
                 {
                     Name = "Client 1",
