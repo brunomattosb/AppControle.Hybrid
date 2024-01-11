@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240109200538_IniciandoClients")]
-    partial class IniciandoClients
+    [Migration("20240111152722_addProduct")]
+    partial class addProduct
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,6 +21,22 @@ namespace AppControle.API.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("AppControle.Shared.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
 
             modelBuilder.Entity("AppControle.Shared.Entities.City", b =>
                 {
@@ -54,9 +70,16 @@ namespace AppControle.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Addres")
+                    b.Property<string>("Address")
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
+
+                    b.Property<string>("AddressCep")
+                        .HasMaxLength(8)
+                        .HasColumnType("varchar(8)");
+
+                    b.Property<int>("AddressNumber")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
@@ -64,16 +87,8 @@ namespace AppControle.API.Migrations
                     b.Property<DateTime?>("BirthData")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Cep")
-                        .HasMaxLength(8)
-                        .HasColumnType("varchar(8)");
-
                     b.Property<int>("CityId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Complement")
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
 
                     b.Property<string>("Cpf_Cnpj")
                         .IsRequired()
@@ -100,14 +115,15 @@ namespace AppControle.API.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("Phone")
+                    b.Property<long?>("PhoneNumber")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Rg_Ie")
                         .HasMaxLength(19)
@@ -128,6 +144,37 @@ namespace AppControle.API.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("AppControle.Shared.Entities.ClientService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ClientService");
+                });
+
             modelBuilder.Entity("AppControle.Shared.Entities.Country", b =>
                 {
                     b.Property<int>("Id")
@@ -145,6 +192,83 @@ namespace AppControle.API.Migrations
                         .IsUnique();
 
                     b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsService")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<float>("Stock")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.ProductCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductCategories");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.ProductImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.State", b =>
@@ -443,6 +567,55 @@ namespace AppControle.API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AppControle.Shared.Entities.ClientService", b =>
+                {
+                    b.HasOne("AppControle.Shared.Entities.Client", "Client")
+                        .WithMany("ClientService")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppControle.Shared.Entities.Product", "Product")
+                        .WithMany("ClientServices")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.ProductCategory", b =>
+                {
+                    b.HasOne("AppControle.Shared.Entities.Category", "Category")
+                        .WithMany("ProductCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppControle.Shared.Entities.Product", "Product")
+                        .WithMany("ProductCategories")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.ProductImage", b =>
+                {
+                    b.HasOne("AppControle.Shared.Entities.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("AppControle.Shared.Entities.State", b =>
                 {
                     b.HasOne("AppControle.Shared.Entities.Country", "Country")
@@ -516,14 +689,33 @@ namespace AppControle.API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AppControle.Shared.Entities.Category", b =>
+                {
+                    b.Navigation("ProductCategories");
+                });
+
             modelBuilder.Entity("AppControle.Shared.Entities.City", b =>
                 {
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("AppControle.Shared.Entities.Client", b =>
+                {
+                    b.Navigation("ClientService");
+                });
+
             modelBuilder.Entity("AppControle.Shared.Entities.Country", b =>
                 {
                     b.Navigation("States");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.Product", b =>
+                {
+                    b.Navigation("ClientServices");
+
+                    b.Navigation("ProductCategories");
+
+                    b.Navigation("ProductImages");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.State", b =>

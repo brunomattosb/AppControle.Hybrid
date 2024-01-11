@@ -5,6 +5,7 @@
 
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
+    
     <form class="space-y-12  pe-3 sm:pe-5 ps-3 sm:ps-5">
         <div class="border-b border-t border-gray-900/10 pb-12">
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
@@ -83,7 +84,7 @@
                             {
                                 @foreach (var country in countries)
                                 {
-                                    <option value="@country.Id">@country.Name</option>
+                                    <option value="@country.Id" selected="@(country.Id == Client?.City?.State!.Country!.Id)">@country.Name</option>
                                 }
                             }
                         </select>
@@ -98,7 +99,7 @@
                             {
                                 @foreach (var state in states)
                                 {
-                                    <option value="@state.Id">@state.Name</option>
+                                    <option value="@state.Id" selected="@(state.Id == Client?.City?.State!.Id)">@state.Name</option>
                                 }
                             }
                         </select>
@@ -114,7 +115,7 @@
                             {
                                 @foreach (var city in cities)
                                 {
-                                    <option value="@city.Id">@city.Name</option>
+                                    <option value="@city.Id" selected="@(city.Id == Client?.City?.Id)">@city.Name</option>
                                 }
                             }
                         </select>
@@ -139,8 +140,8 @@
                 </div>
                 <div class="sm:col-span-4 md:col-span-2 ">
                     <label for="addressnuphoneNumbermber" class="block text-sm font-medium leading-6 text-gray-900">* Gênero</label>
-                    <div>
-                        <select class="block text-sm font-medium leading-6 text-gray-900" @onchange="GenderChangeAsync">
+                    <div class="mt-2">
+                        <select class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:text-sm sm:leading-6" @onchange="GenderChangeAsync">
                             <option value="0">-- Selecione um gênero --</option>
                             <option value="1" selected="@(Client.Gender! == GenderType.Masculino)">Masculino</option>
                             <option value="2" selected="@(Client.Gender! == GenderType.Feminino)">Feminino</option>
@@ -157,9 +158,9 @@
                 </div>
                 <!-- -->
                 <div class="sm:col-span-4 md:col-span-5 ">
-                    <label for="inputName" class="form-label">Complemento</label>
-                    <InputTextArea class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" id="inputName" @bind-Value="@Client.Complement" />
-                    <ValidationMessage For="@(() => Client.Complement)" />
+                    <label for="inputName" class="form-label">Comentário</label>
+                    <InputTextArea class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" id="inputName" @bind-Value="@Client.Remarks" />
+                    <ValidationMessage For="@(() => Client.Remarks)" />
                 </div>
             </div>
         </div>

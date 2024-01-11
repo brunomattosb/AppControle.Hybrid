@@ -1,15 +1,14 @@
-﻿@page "/clients/create"
+﻿@page "/clients/edit/{ClientId:int}"
+@using System.Net
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
-@attribute [Authorize]
 
 
 <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
-
-    <h2 class="text-xl font-bold leading-7 text-gray-900">Criar novo cliente</h2>
+    <h2 class="text-xl font-bold leading-7 text-gray-900">Editar cliente</h2>
 </div>
-@if (Client is null)
+@if (client is null)
 {
     <div class="text-center">
         <div role="status">
@@ -19,38 +18,70 @@
             </svg>
             <span class="sr-only">Loading...</span>
         </div>
-     </div>    
+    </div>
 }
 else
 {
-    <ClientsForm @ref="ClientForm" Client="Client" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+    <ClientsForm @ref="clientsForm" Client="client" OnValidSubmit="EditAsync" ReturnAction="Return" />
 }
+
 
 
 
 @code {
-    private Client Client = new();
-    private ClientsForm? ClientForm;
+    private Client? client;
+    private ClientsForm? clientsForm;
 
-    private async Task CreateAsync()
+    [Parameter]
+    public int ClientId { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        // Client.City = null;
-        // Client.User = null;
-        var httpResponse = await repository.Post("/api/clients", Client);
-        if(httpResponse.Error)
+        var responseHttp = await repository.GetNoPage<Client>($"/api/clients/{ClientId}");
+        if (responseHttp.Error)
         {
-            var message = await httpResponse.GetErrorMessageAsync();
+            if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/clients");
+                return;
+            }
+
+            var message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        client = responseHttp.Response;
+    }
+
+    private async Task EditAsync()
+    {
+        client.City = null;
+        client.User = null;
+        var responseHttp = await repository.Put("/api/clients", client);
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
             return;
         }
         else
-            await sweetAlertService.FireAsync("Sucesso!", "Client salvo!", SweetAlertIcon.Success);
+        {
+            var toast = sweetAlertService.Mixin(new SweetAlertOptions
+                {
+                    Toast = true,
+                    Position = SweetAlertPosition.TopEnd,
+                    ShowConfirmButton = true,
+                    Timer = 5000
+                });
+            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Cliente editado!");
+        }
         Return();
     }
 
     private void Return()
     {
-        ClientForm!.FormPostedSuccessfully = true;
-        navigationManager.NavigateTo("/clients");
+        clientsForm!.FormPostedSuccessfully = true;
+        navigationManager.NavigateTo($"/clients/details/{@client.Id}");
     }
 }

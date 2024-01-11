@@ -161,30 +161,30 @@ namespace AppControle.API.Controllers
 
         }
 
-            //// DELETE: api/Clients/5
-            //[HttpDelete("{id}")]
-            //public async Task<IActionResult> DeleteClient(int id)
-            //{
-            //    if (_context.Clients == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //    var client = await _context.Clients.FindAsync(id);
-            //    if (client == null)
-            //    {
-            //        return NotFound();
-            //    }
+        // DELETE: api/Clients/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteClient(int id)
+        {
+            if (_context.Clients == null)
+            {
+                return NotFound();
+            }
+            var client = await _context.Clients.FindAsync(id);
+            if (client == null)
+            {
+                return NotFound();
+            }
 
-            //    _context.Clients.Remove(client);
-            //    await _context.SaveChangesAsync();
+            _context.Clients.Remove(client);
+            await _context.SaveChangesAsync();
 
-            //    return NoContent();
-            //}
-
-            //private bool ClientExists(int id)
-            //{
-            //    return (_context.Clients?.Any(e => e.Id == id)).GetValueOrDefault();
-            //}
-
+            return NoContent();
         }
+
+        private bool ClientExists(int id)
+        {
+            return (_context.Clients?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+    }
 }

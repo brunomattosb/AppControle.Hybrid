@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231227143556_Iniciando")]
-    partial class Iniciando
+    [Migration("20240111010610_addCitieshh")]
+    partial class addCitieshh
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,9 +42,90 @@ namespace AppControle.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StateId");
+                    b.HasIndex("StateId", "Name")
+                        .IsUnique();
 
-                    b.ToTable("City");
+                    b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("AddressCep")
+                        .HasMaxLength(8)
+                        .HasColumnType("varchar(8)");
+
+                    b.Property<int>("AddressNumber")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("BirthData")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Complement")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("Cpf_Cnpj")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("varchar(14)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("FantasyName")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Neighborhood")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<long?>("PhoneNumber")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Rg_Ie")
+                        .HasMaxLength(19)
+                        .HasColumnType("varchar(19)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("Cpf_Cnpj")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.Country", b =>
@@ -60,7 +141,10 @@ namespace AppControle.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Country");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.State", b =>
@@ -79,9 +163,10 @@ namespace AppControle.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("CountryId", "Name")
+                        .IsUnique();
 
-                    b.ToTable("State");
+                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.User", b =>
@@ -339,6 +424,23 @@ namespace AppControle.API.Migrations
                         .IsRequired();
 
                     b.Navigation("State");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.Client", b =>
+                {
+                    b.HasOne("AppControle.Shared.Entities.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppControle.Shared.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("City");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.State", b =>
