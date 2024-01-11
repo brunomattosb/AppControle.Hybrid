@@ -4,93 +4,123 @@
 @inject SweetAlertService sweetAlertService
 @attribute [Authorize]
 
-@if (lProducts is null)
-{
-    <div class="spinner" />
-}
-else
-{
-    <GenericList MyList="lProducts">
-        <Body>
-            <div class="card">
-                <div class="card-header">
-                    <span>
-                        <i class="oi oi-star" /> Productos
-                        <a class="btn btn-sm btn-primary float-end" href="/products/create"><i class="oi oi-plus" /> Nuevo Producto</a>
-                    </span>
-                </div>
-                <div class="card-body">
-                    <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
-                        <div>
-                            <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar producto..." @bind-value="Filter" />
-                        </div>
-                        <div class="mx-1">
-                            <button type="button" class="btn btn-outline-primary" @onclick="ApplyFilterAsync"><i class="oi oi-layers" /> Filtrar</button>
-                            <button type="button" class="btn btn-outline-danger" @onclick="CleanFilterAsync"><i class="oi oi-ban" /> Limpiar</button>
-                        </div>
-                    </div>
 
-                    <Pagination CurrentPage="CurrentPage"
-                                QuantityTotalPages="TotalPages"
-                                Ray="2"
-                                SelectedPage="SelectedPageAsync" />
 
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Precio</th>
-                                <th>Inventario</th>
-                                <th>Categorías</th>
-                                <th>Imagenes</th>
-                                <th>Imagen Principal</th>
-                                <th style="width:200px"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var product in lProducts)
-                            {
-                                <tr>
-                                    <td>
-                                        @product.Name
-                                    </td>
-                                    <td>
-                                        @product.Description
-                                    </td>
-                                    <td>
-                                        @($"{product.Price:C2}")
-                                    </td>
-                                    <td>
-                                        @($"{product.Stock:N2}")
-                                    </td>
-                                    <td>
-                                        @product.ProductCategoriesNumber
-                                    </td>
-                                    <td>
-                                        @product.ProductImagesNumber
-                                    </td>
-                                    <td>
-                                        <img src="@product.MainImage" style="width:100px;" />
-                                    </td>
-                                    <td>
-                                        <a href="/products/edit/@product.Id" class="btn btn-warning"><i class="oi oi-pencil" /> Editar</a>
-                                        <button class="btn btn-danger" @onclick=@(() => Delete(product.Id))><i class="oi oi-trash" /> Borrar</button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+<div class="p-5 h-screen bg-gray-100">
+    <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+        <div>
+            <a href="/clients/create" id="dropdownActionButton" data-dropdown-toggle="dropdownAction" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button">
+                <span class="sr-only">Action button</span>
+                Adicionar Produto
+            </a>
+
+        </div>
+        <div class="inline-flex rounded-md shadow-sm" role="group">
+
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
                 </div>
+                <input @bind-value="Filter" type="text" id="table-search" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pesquisar produto">
             </div>
-        </Body>
-    </GenericList>
-}
+            <button @onclick="ApplyFilterAsync" id="dropdownActionButton" data-dropdown-toggle="dropdownAction" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button">
+                Pesquisar
+            </button>
+        </div>
+
+    </div>
+    <p class="text-xl mb-2">Clientes</p>
+
+    <!-- Tabela -->
+    <div class="relative overflow-x-auto rounded-lg shadow hidden md:block">
+        <GenericList MyList="lProducts">
+            <Body>
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+
+                            <th scope="col" class="px-6 py-3">
+                                Name
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Position
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Status
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                <img class="w-10 h-10 rounded-full" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
+                                <div class="ps-3">
+                                    <div class="text-base font-semibold">Neil Sims</div>
+                                    <div class="font-normal text-gray-500">neil.sims@flowbite.com</div>
+                                </div>
+                            </th>
+                            <td class="px-6 py-4">
+                                React Developer
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Online
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <!-- Modal toggle -->
+                                <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </Body>
+        </GenericList>
+    </div>
+
+    <!-- Box -->
+  @*   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+        <GenericList MyList="lClients">
+            <Body>
+                @foreach (var client in lClients!)
+                {
+                    <div class="bg-white space-y-3 p-4 rounded-lg shadow">
+                        <div class="flex items-center space-x-2 text-sm">
+                            <div>
+                                <a href="#" class="text-gray-500">Registro:</a>
+                            </div>
+                            <div class="text-gray-500">@client.RegisterDate</div>
+                        </div>
+                        <div class="text-sm text-gray-700">
+                            @client.Name
+                        </div>
+                        <div class="text-sm font-medium text-black">
+                            Saldo: @client.Balance.ToString("C")
+                        </div>
+                        <a href="/clients/details/@client.Id" class="mt-2 font-bold text-blue-500 hover:underline">Detalhar</a>
+                    </div>
+                }
+            </Body>
+        </GenericList>
+    </div> *@
+
+    @* Pagination *@
+    <Pagination CurrentPage="CurrentPage"
+                QuantityTotalPages="TotalPages"
+                Ray="2"
+                SelectedPage="SelectedPageAsync" />
+</div>
+
+
 
 @code {
     private int CurrentPage = 1;
     private int TotalPages;
-
     public List<Product> lProducts { get; set; }
 
     [Parameter]
@@ -101,15 +131,9 @@ else
     [SupplyParameterFromQuery]
     public string Filter { get; set; } = "";
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         await LoadAsync();
-    }
-
-    private async Task SelectedPageAsync(int page)
-    {
-        CurrentPage = page;
-        await LoadAsync(page);
     }
 
     private async Task LoadAsync(int page = 1, int QuantityPerPage = 5)
@@ -169,10 +193,10 @@ else
         await LoadAsync(1);
     }
 
-    private async Task CleanFilterAsync()
+    private async Task SelectedPageAsync(int page)
     {
-        Filter = string.Empty;
-        await ApplyFilterAsync();
+        CurrentPage = page;
+        await LoadAsync(page);
     }
 
     private async Task ApplyFilterAsync()
@@ -182,3 +206,81 @@ else
         await SelectedPageAsync(page);
     }
 }
+
+
+@* 
+<GenericList MyList="lProducts">
+    <Body>
+        <div class="card">
+            <div class="card-header">
+                <span>
+                    <i class="oi oi-star" /> Productos
+                    <a class="btn btn-sm btn-primary float-end" href="/products/create"><i class="oi oi-plus" /> Nuevo Producto</a>
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                    <div>
+                        <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar producto..." @bind-value="Filter" />
+                    </div>
+                    <div class="mx-1">
+                        <button type="button" class="btn btn-outline-primary" @onclick="ApplyFilterAsync"><i class="oi oi-layers" /> Filtrar</button>
+                        <button type="button" class="btn btn-outline-danger" @onclick="CleanFilterAsync"><i class="oi oi-ban" /> Limpiar</button>
+                    </div>
+                </div>
+
+                <Pagination CurrentPage="CurrentPage"
+                            QuantityTotalPages="TotalPages"
+                            Ray="2"
+                            SelectedPage="SelectedPageAsync" />
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Inventario</th>
+                            <th>Categorías</th>
+                            <th>Imagenes</th>
+                            <th>Imagen Principal</th>
+                            <th style="width:200px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in lProducts)
+                        {
+                            <tr>
+                                <td>
+                                    @product.Name
+                                </td>
+                                <td>
+                                    @product.Description
+                                </td>
+                                <td>
+                                    @($"{product.Price:C2}")
+                                </td>
+                                <td>
+                                    @($"{product.Stock:N2}")
+                                </td>
+                                <td>
+                                    @product.ProductCategoriesNumber
+                                </td>
+                                <td>
+                                    @product.ProductImagesNumber
+                                </td>
+                                <td>
+                                    <img src="@product.MainImage" style="width:100px;" />
+                                </td>
+                                <td>
+                                    <a href="/products/edit/@product.Id" class="btn btn-warning"><i class="oi oi-pencil" /> Editar</a>
+                                    <button class="btn btn-danger" @onclick=@(() => Delete(product.Id))><i class="oi oi-trash" /> Borrar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </Body>
+</GenericList> *@
