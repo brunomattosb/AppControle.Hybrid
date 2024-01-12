@@ -1,10 +1,12 @@
-﻿@* @inject SweetAlertService sweetAlertService
+﻿@using AppControle.Hybrid.Helpers
+@inject SweetAlertService sweetAlertService
 
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
 
 <EditForm EditContext="editContext" OnValidSubmit="OnDataAnnotationsValidatedAsync">
     <DataAnnotationsValidator />
 
+    
     <div class="card">
         <div class="card-header">
             <span>
@@ -13,7 +15,7 @@
                 <button class="btn btn-sm btn-primary float-end mx-2" type="submit"><i class="oi oi-check" /> Guardar Cambios</button>
             </span>
         </div>
-        <div class="card-body">
+        @* <div class="card-body">
             <div class="row">
                 <div class="col-6">
                     <div class="mb-3">
@@ -72,7 +74,7 @@
                 
             </div>
 
-        </div>
+        </div> *@
         
     </div>
 </EditForm>
@@ -119,57 +121,56 @@
     {
         editContext = new(ProductDTO);
 
-        selected = SelectedCategories.Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name)).ToList();
-        nonSelected = NonSelectedCategories.Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name)).ToList();
+        // selected = SelectedCategories.Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name)).ToList();
+        // nonSelected = NonSelectedCategories.Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name)).ToList();
     }
 
     private void ImageSelected(string imagenBase64)
     {
-        if (ProductDTO.ProductImages is null)
-        {
-            ProductDTO.ProductImages = new List<string>();
-        }
+        // if (ProductDTO.ProductImages is null)
+        // {
+        //     ProductDTO.ProductImages = new List<string>();
+        // }
 
-        ProductDTO.ProductImages!.Add(imagenBase64);
-        imageUrl = null;
+        // ProductDTO.ProductImages!.Add(imagenBase64);
+        // imageUrl = null;
     }
 
     private async Task OnDataAnnotationsValidatedAsync()
     {
-        ProductDTO.ProductCategoryIds = selected.Select(x => int.Parse(x.Key)).ToList();
-        await OnValidSubmit.InvokeAsync();
+        // ProductDTO.ProductCategoryIds = selected.Select(x => int.Parse(x.Key)).ToList();
+        // await OnValidSubmit.InvokeAsync();
     }
 
     private async Task OnBeforeInternalNavigation(LocationChangingContext context)
     {
-        var formWasEdited = editContext.IsModified();
+        // var formWasEdited = editContext.IsModified();
 
-        if (!formWasEdited)
-        {
-            return;
-        }
+        // if (!formWasEdited)
+        // {
+        //     return;
+        // }
 
-        if (FormPostedSuccessfully)
-        {
-            return;
-        }
+        // if (FormPostedSuccessfully)
+        // {
+        //     return;
+        // }
 
-        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
-            {
-                Title = "Confirmación",
-                Text = "¿Deseas abandonar la página y perder los cambios?",
-                Icon = SweetAlertIcon.Warning,
-                ShowCancelButton = true
-            });
+        // var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+        //     {
+        //         Title = "Confirmación",
+        //         Text = "¿Deseas abandonar la página y perder los cambios?",
+        //         Icon = SweetAlertIcon.Warning,
+        //         ShowCancelButton = true
+        //     });
 
-        var confirm = !string.IsNullOrEmpty(result.Value);
+        // var confirm = !string.IsNullOrEmpty(result.Value);
 
-        if (confirm)
-        {
-            return;
-        }
+        // if (confirm)
+        // {
+        //     return;
+        // }
 
-        context.PreventNavigation();
+        // context.PreventNavigation();
     }
 }
- *@

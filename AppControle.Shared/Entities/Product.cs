@@ -40,8 +40,6 @@ namespace AppControle.Shared.Entities
         public int ClientServicesNumber => ClientServices == null ? 0 : ClientServices.Count;
         public ICollection<ProductImage>? ProductImages { get; set; }
 
-        [Display(Name = "Imagens")]
-        public int ProductImagesNumber => ProductImages == null ? 0 : ProductImages.Count;
 
         [Display(Name = "Imagem")]
         public string MainImage => (ProductImages == null || ProductImages.Count == 0) ? string.Empty : ProductImages.FirstOrDefault()!.Image;

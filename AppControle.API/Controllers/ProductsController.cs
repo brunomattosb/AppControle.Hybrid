@@ -66,22 +66,22 @@ namespace AppControle.API.Controllers
         //        .ToListAsync());
         //}
 
-        //[HttpGet("{id:int}")]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> GetAsync(int id)
-        //{
-        //    var product = await _context.Products
-        //        .Include(x => x.ProductImages)
-        //        .Include(x => x.ProductCategories!)
-        //        .ThenInclude(x => x.Category)
-        //        .FirstOrDefaultAsync(x => x.Id == id);
-        //    if (product == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet("{id:int}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAsync(int id)
+        {
+            var product = await _context.Products
+                .Include(x => x.ProductImages)
+                .Include(x => x.ProductCategories!)
+                .ThenInclude(x => x.Category)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
-        //    return Ok(product);
-        //}
+            return Ok(product);
+        }
 
         //[HttpPost]
         //public async Task<ActionResult> PostAsync(ProductDTO productDTO)
