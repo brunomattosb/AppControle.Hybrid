@@ -35,30 +35,30 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        // var httpResponse = await repository.Get<List<Category>>("/api/categories");
+        var httpResponse = await repository.GetNoPage<List<Category>>("/api/categories");
         loading = false;
 
-        // if (httpResponse.Error)
-        // {
-        //     var message = await httpResponse.GetErrorMessageAsync();
-        //     await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
-        //     return;
-        // }
+        if (httpResponse.Error)
+        {
+            var message = await httpResponse.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
 
-        // nonSelectedCategories = httpResponse.Response!;
+        nonSelectedCategories = httpResponse.Response!;
     }
 
     private async Task CreateAsync()
     {
-        // var httpResponse = await repository.Post("/api/products", productDTO);
-        // if (httpResponse.Error)
-        // {
-        //     var message = await httpResponse.GetErrorMessageAsync();
-        //     await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
-        //     return;
-        // }
+        var httpResponse = await repository.Post("/api/products", productDTO);
+        if (httpResponse.Error)
+        {
+            var message = await httpResponse.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
 
-        // Return();
+        Return();
     }
 
     private void Return()
