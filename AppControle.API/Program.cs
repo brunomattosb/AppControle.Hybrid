@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MySqlConnector;
 using SisVendas.API.Data;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -58,6 +59,7 @@ builder.Services.AddScoped<IMailHelper, MailHelper>();
 //Azure
 builder.Services.AddScoped<IFileStorage, FileStorage>();
 //MySQL
+//builder.Services.AddTransient<MySqlConnection>(_ => new MySqlConnection(builder.Configuration.GetConnectionString("ConnectionStrings:Default")));
 string mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
@@ -132,3 +134,10 @@ app.UseCors(x => x
     .AllowCredentials());
 
 app.Run();
+
+
+
+//public void ConfigureServices(IServiceCollection services)
+//{
+//    services.AddTransient<MySqlConnection>(_ => new MySqlConnection(Configuration["ConnectionStrings:Default"]));
+//}

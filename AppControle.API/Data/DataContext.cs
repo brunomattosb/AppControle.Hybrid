@@ -1,6 +1,7 @@
 ﻿using AppControle.Shared.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace AppControle.API.Data
 {
@@ -19,9 +20,14 @@ namespace AppControle.API.Data
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ClientService> ClientService { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.HasCharSet(null, DelegationModes.ApplyToDatabases);
             base.OnModelCreating(modelBuilder);
+
 
             modelBuilder.Entity<Country>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<State>().HasIndex("CountryId", "Name").IsUnique();

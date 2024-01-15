@@ -62,6 +62,18 @@ else
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
             return;
         }
+        else
+        {
+            //TODO: Unificar Toast
+            var toast = sweetAlertService.Mixin(new SweetAlertOptions
+                {
+                    Toast = true,
+                    Position = SweetAlertPosition.TopEnd,
+                    ShowConfirmButton = true,
+                    Timer = 5000
+                });
+            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Produto adicionado com sucesso!");
+        }
 
         Return();
     }

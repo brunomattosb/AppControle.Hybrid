@@ -28,9 +28,9 @@ namespace SisVendas.API.Data
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
-            await CheckCountriesAsync();
             await CheckCategoriesAsync();
             await CheckRolesAsync();
+            await CheckCountriesAsync();
             await CheckUserAsync("1010", "Juan", "Zuluaga", "zulu@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "JuanZuluaga.jpeg", UserType.Admin);
             await CheckUserAsync("2020", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpeg", UserType.User);
             await CheckUserAsync("3030", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
@@ -450,6 +450,7 @@ namespace SisVendas.API.Data
                                     List<ResponseApiCities> states = (List<ResponseApiCities>)responseStates.Result!;
                                     foreach (ResponseApiCities stateResponse in states!)
                                     {
+                                        
                                         State state = country.States!.FirstOrDefault(s => s.Name == stateResponse.Name!)!;
                                         if (state == null)
                                         {
@@ -469,7 +470,13 @@ namespace SisVendas.API.Data
                                                     {
                                                         state.Cities.Add(new City() { Name = cityResponse.Name! });
                                                     }
+
+                                                    country.States.Add(state);
+                                                    //_context.Countries.Add(country);
+                                                    //await _context.SaveChangesAsync();
+                                                    //return;
                                                 }
+
                                             }
                                             
                                             if (state.Cities.Count > 0)

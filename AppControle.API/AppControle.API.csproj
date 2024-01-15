@@ -31,4 +31,8 @@
     <ProjectReference Include="..\AppControle.Shared\AppControle.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

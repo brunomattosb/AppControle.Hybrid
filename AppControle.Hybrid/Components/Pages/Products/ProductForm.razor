@@ -58,7 +58,7 @@
                    
                 </div>
                 <div class="sm:col-span-4 md:col-span-2 ">
-                    <label for="bairro" class="block text-sm font-medium leading-6 text-gray-900">Bairro</label>
+                    <label for="Imagem" class="block text-sm font-medium leading-6 text-gray-900">Imagem</label>
                      <div class="mb-3">
                         <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
                     </div>
@@ -129,10 +129,19 @@
         editContext = new(ProductDTO);
         selected = SelectedCategories.Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name)).ToList();
         nonSelected = NonSelectedCategories.Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name)).ToList();
+
+        if(ProductDTO.ProductImages?.Count > 0)
+        {
+            imageUrl = ProductDTO.ProductImages[0];
+        }
     }
 
     private void ImageSelected(string imagenBase64)
     {
+        ProductDTO.ProductImages = new();
+        ProductDTO.ProductImages!.Add(imagenBase64);
+        imageUrl = null;
+
         // if (ProductDTO.ProductImages is null)
         // {
         //     ProductDTO.ProductImages = new List<string>();

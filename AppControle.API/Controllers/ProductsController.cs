@@ -119,7 +119,7 @@ namespace AppControle.API.Controllers
             {
                 if (dbUpdateException.InnerException!.Message.ToLower().Contains("duplicate"))
                 {
-                    return BadRequest("Ya existe una ciudad con el mismo nombre.");
+                    return BadRequest("Já existe um produto com o mesmo nome");
                 }
 
                 return BadRequest(dbUpdateException.Message);

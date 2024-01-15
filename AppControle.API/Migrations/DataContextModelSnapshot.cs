@@ -19,6 +19,8 @@ namespace AppControle.API.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            MySqlModelBuilderExtensions.HasCharSet(modelBuilder, null, DelegationModes.ApplyToDatabases);
+
             modelBuilder.Entity("AppControle.Shared.Entities.Category", b =>
                 {
                     b.Property<int>("Id")

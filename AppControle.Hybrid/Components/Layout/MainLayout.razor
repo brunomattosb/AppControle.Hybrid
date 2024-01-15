@@ -5,15 +5,14 @@
 <div class="relative min-h-screen">
     @*  *@
     <NavMenu />
-    @Body
-    @*<ErrorBoundary @ref="@errorBoundary">
+    <ErrorBoundary @ref="@errorBoundary">
         <ChildContent>
             @Body
-        < /ChildContent>
+        </ChildContent>
         <ErrorContent>
             <div> <h2>Ocorreu um erro!</h2></div>
         </ErrorContent>
-    </ErrorBoundary> *@
+    </ErrorBoundary> 
     @* <div class="p-36"></div> *@
     @* <MainFooter/> *@
 </div>
