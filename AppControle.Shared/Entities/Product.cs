@@ -48,7 +48,7 @@ namespace AppControle.Shared.Entities
 
         //public ICollection<SaleDetail>? SaleDetails { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         public bool IsService { get; set; }
 
 

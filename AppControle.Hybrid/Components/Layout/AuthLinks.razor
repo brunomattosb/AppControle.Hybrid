@@ -2,30 +2,33 @@
 
 <AuthorizeView>
     <Authorized>
-        <button @onclick="DropdownToggleMenu" type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
-          <span class="sr-only">Open user menu</span>
+        <button type="button" class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+            <span class="sr-only">Open user menu</span>
             @if (!string.IsNullOrEmpty(photoUser))
             {
                 <img src="@photoUser" class="w-8 h-8 rounded-full" alt="dropdown image" />
             }
             else
             {
-                <button id="btnUserNoPhoto" type="button" class="bg-tra self-center text-xl whitespace-nowrap dark:text-white">
-                    Gerenciar Usuário
-                </button>
+                <img src="" class="w-8 h-8 rounded-full" alt="dropdown image" />
             }
-
         </button>
         <!-- Dropdown menu -->
-        <div class=" @(_dropdownMenuVisible == false ? "hidden":"") z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
+        <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
             <div class="px-4 py-3">
-                <span class="block text-sm text-gray-900 dark:text-white px-2">@context.User.Identity!.Name</span>
-                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400 px-2">@email</span>
+                <span class="block text-sm text-gray-900 dark:text-white">@context.User.Identity!.Name</span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">@email</span>
             </div>
             <ul class="py-2" aria-labelledby="user-menu-button">
                 <li>
                     <a href="/EditUser" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Editar Usuario</a>
                 </li>
+               @*  <li>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a>
+                </li>
+                <li>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a>
+                </li> *@
                 <li>
                     <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sair</a>
                 </li>
@@ -37,11 +40,9 @@
         <a href="/Register" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Registre-se</a>
 
     </NotAuthorized>
-
 </AuthorizeView>
 @code
 {
-    private bool _dropdownMenuVisible = false;
 
     private string photoUser;
 
@@ -63,9 +64,6 @@
         email = valueEmail?.Value;
     }
 
-    private void DropdownToggleMenu()
-    {
-        _dropdownMenuVisible = !_dropdownMenuVisible;
-    }
+   
 }
 

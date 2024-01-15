@@ -4,7 +4,12 @@
 @inject SweetAlertService sweetAlertService
 @attribute [Authorize(Roles = "Admin")]
 
-@if (loading)
+
+<div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
+
+    <h2 class="text-xl font-bold leading-7 text-gray-900">Criar novo produto</h2>
+</div>
+@if (loading )
 {
     <div class="text-center">
         <div role="status">

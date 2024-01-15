@@ -36,7 +36,7 @@ namespace AppControle.Shared.DTO
         public List<int>? ProductCategoryIds { get; set; }
 
         public List<string>? ProductImages { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         public bool IsService { get; set; }
     }
 }

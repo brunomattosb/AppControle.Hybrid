@@ -5,8 +5,7 @@ module.exports = {
     darkMode: 'class',
     content: [
         "./**/*.{razor,html}",
-        "node_modules/preline/dist/*.js",
-        "./node_modules/flowbite/**/*.{js,razor,html,cshtml}"
+        "./node_modules/flowbite/**/*.js"
     ],
     theme: {
         extend: {},
@@ -23,7 +22,7 @@ module.exports = {
         //require('@tailwindcss/aspect-ratio'),
         //require('@tailwindcss/container-queries'),
     ],
-}
+};
 
 //npm install -D @tailwindcss/forms
 

@@ -1,87 +1,92 @@
 ﻿@using AppControle.Hybrid.Helpers
 @inject SweetAlertService sweetAlertService
 
-<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
 
-<EditForm EditContext="editContext" OnValidSubmit="OnDataAnnotationsValidatedAsync">
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmitValidation">
     <DataAnnotationsValidator />
 
-    
-    <div class="card">
-        <div class="card-header">
-            <span>
-                <i class="oi oi-star" /> Crear Nuevo Producto
-                <a class="btn btn-sm btn-success float-end" href="/products"><i class="oi oi-arrow-thick-left" /> Regresar</a>
-                <button class="btn btn-sm btn-primary float-end mx-2" type="submit"><i class="oi oi-check" /> Guardar Cambios</button>
-            </span>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label>Nombre:</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@ProductDTO.Name" />
-                            <ValidationMessage For="@(() => ProductDTO.Name)" />
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label>Descripción:</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@ProductDTO.Description" />
-                            <ValidationMessage For="@(() => ProductDTO.Description)" />
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label>Precio:</label>
-                        <div>
-                            <InputNumber class="form-control" @bind-Value="@ProductDTO.Price" />
-                            <ValidationMessage For="@(() => ProductDTO.Price)" />
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label>Inventario:</label>
-                        <div>
-                            <InputNumber class="form-control" @bind-Value="@ProductDTO.Stock" />
-                            <ValidationMessage For="@(() => ProductDTO.Stock)" />
-                        </div>
+    <form class="space-y-12  pe-3 sm:pe-5 ps-3 sm:ps-5">
+        <div class="border-b border-t border-gray-900/10 pb-12">
+            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
+
+                <div class="sm:col-span-4 md:col-span-2">
+                    <label for="Name" class="block text-sm font-medium leading-6 text-gray-900">* Nome</label>
+                    <div class="mt-2">
+                        <InputText name="Name" id="Name" @bind-Value="@ProductDTO.Name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Name)" />
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="sm:col-span-4 md:col-span-2">
+                    <label for="Description" class="block text-sm font-medium leading-6 text-gray-900">Descrição</label>
+                    <div class="mt-2">
+                        <InputText name="Description" id="Description" @bind-Value="@ProductDTO.Description" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Description)" />
+                    </div>
+                </div>
+
+                <div class="sm:col-span-4 md:col-span-2">
+                    <label for="Price" class="block text-sm font-medium leading-6 text-gray-900">* Preço</label>
+                    <div class="mt-2">
+                        <InputNumber name="Price" id="Price" @bind-Value="@ProductDTO.Price" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Price)" />
+                    </div>
+                </div>
+
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="Stock" class="block text-sm font-medium leading-6 text-gray-900">Estoque</label>
+                    <div class="mt-2">
+                        <InputNumber name="Stock" id="Stock" @bind-Value="@ProductDTO.Stock" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Stock)" />
+                    </div>
+                </div>
+                <!-- -->
+                <div class="sm:col-span-4 md:col-span-2">
+
+                    <div class="flex items-center mb-4 space-x-1">
+                        <InputCheckbox id="checkbox-table-search-1" @bind-Value="@ProductDTO.IsService" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                        <label for="cep" class="block text-sm font-medium leading-6 text-gray-900">É serviço?</label>
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-4 ">
                     <div class="mb-3">
-                        <label>Categorías:</label>
+                        <label for="bairro" class="block text-sm font-medium leading-6 text-gray-900">Categorias</label>
                         <div>
                             <MultipleSelector NonSelected="nonSelected" Selected="selected" />
                         </div>
                     </div>
-                    <div class="mb-3">
+                   
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="bairro" class="block text-sm font-medium leading-6 text-gray-900">Bairro</label>
+                     <div class="mb-3">
                         <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
                     </div>
-                    @if (IsEdit)
+                    <!-- -->
+
+                    @* @if (IsEdit)
                     {
                         <div class="mb-3">
-                            <button type="button" class="btn btn-outline-primary" @onclick="AddImageAction"><i class="oi oi-plus" /> Agregar Imagenes</button>
-                            <button type="button" class="btn btn-outline-danger" @onclick="RemoveImageAction"><i class="oi oi-trash" /> Eliminar Última Imagén</button>
+                            <button type="button" class="btn btn-outline-primary" @onclick="AddImageAction"><i class="oi oi-plus" /> Adicionar imagem</button>
+                            <button type="button" class="btn btn-outline-danger" @onclick="RemoveImageAction"><i class="oi oi-trash" /> Remover Imagem</button>
                         </div>
-                    }
+                    } *@
                 </div>
-                @if (IsEdit && ProductDTO.ProductImages is not null)
-                {
-                    <div class="col-6">
-                        <CarouselView Images="ProductDTO.ProductImages" />
-                    </div>
-                }
-                
-            </div>
+                <!-- -- -->
 
+            </div>
         </div>
-        
+    </form>
+
+    <div class="mt-6 flex items-center justify-end gap-x-6 mb-5 me-5">
+        <button type="button" @onclick="ReturnAction" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+        <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Salvar</button>
     </div>
+
 </EditForm>
 
-
-
 @code {
+
     private EditContext editContext = null!;
     private List<MultipleSelectorModel> selected { get; set; } = new();
     private List<MultipleSelectorModel> nonSelected { get; set; } = new();
@@ -117,6 +122,8 @@
 
     public bool FormPostedSuccessfully { get; set; } = false;
 
+
+
     protected override void OnInitialized()
     {
         editContext = new(ProductDTO);
@@ -135,7 +142,7 @@
         // imageUrl = null;
     }
 
-    private async Task OnDataAnnotationsValidatedAsync()
+    private async Task OnValidSubmitValidation()
     {
         ProductDTO.ProductCategoryIds = selected.Select(x => int.Parse(x.Key)).ToList();
         await OnValidSubmit.InvokeAsync();
@@ -143,33 +150,34 @@
 
     private async Task OnBeforeInternalNavigation(LocationChangingContext context)
     {
-        var formWasEdited = editContext.IsModified();
+        // var formWasEdited = editContext.IsModified();
 
-        if (!formWasEdited)
-        {
-            return;
-        }
+        // if (!formWasEdited)
+        // {
+        //     return;
+        // }
 
-        if (FormPostedSuccessfully)
-        {
-            return;
-        }
+        // if (FormPostedSuccessfully)
+        // {
+        //     return;
+        // }
 
-        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
-            {
-                Title = "Confirmación",
-                Text = "¿Deseas abandonar la página y perder los cambios?",
-                Icon = SweetAlertIcon.Warning,
-                ShowCancelButton = true
-            });
+        // var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+        //     {
+        //         Title = "Confirmación",
+        //         Text = "¿Deseas abandonar la página y perder los cambios?",
+        //         Icon = SweetAlertIcon.Warning,
+        //         ShowCancelButton = true
+        //     });
 
-        var confirm = !string.IsNullOrEmpty(result.Value);
+        // var confirm = !string.IsNullOrEmpty(result.Value);
 
-        if (confirm)
-        {
-            return;
-        }
+        // if (confirm)
+        // {
+        //     return;
+        // }
 
-        context.PreventNavigation();
+        // context.PreventNavigation();
     }
+
 }
