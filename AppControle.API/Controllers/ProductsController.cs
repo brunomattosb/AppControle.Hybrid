@@ -186,43 +186,44 @@ namespace AppControle.API.Controllers
         //    return Ok(imageDTO);
         //}
 
-        //[HttpPut]
-        //public async Task<ActionResult> PutAsync(ProductDTO productDTO)
-        //{
-        //    try
-        //    {
-        //        var product = await _context.Products
-        //            .Include(x => x.ProductCategories)
-        //            .FirstOrDefaultAsync(x => x.Id == productDTO.Id);
-        //        if (product == null)
-        //        {
-        //            return NotFound();
-        //        }
+        [HttpPut]
+        public async Task<ActionResult> PutAsync(ProductDTO productDTO)
+        {
+            try
+            {
+                var product = await _context.Products
+                    .Include(x => x.ProductCategories)
+                    .Include(x => x.ProductImages)
+                    .FirstOrDefaultAsync(x => x.Id == productDTO.Id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
 
-        //        product.Name = productDTO.Name;
-        //        product.Description = productDTO.Description;
-        //        product.Price = productDTO.Price;
-        //        product.Stock = productDTO.Stock;
-        //        product.ProductCategories = productDTO.ProductCategoryIds!.Select(x => new ProductCategory { CategoryId = x }).ToList();
+                product.Name = productDTO.Name;
+                product.Description = productDTO.Description;
+                product.Price = productDTO.Price;
+                product.Stock = productDTO.Stock;
+                product.ProductCategories = productDTO.ProductCategoryIds!.Select(x => new ProductCategory { CategoryId = x }).ToList();
 
-        //        _context.Update(product);
-        //        await _context.SaveChangesAsync();
-        //        return Ok(productDTO);
-        //    }
-        //    catch (DbUpdateException dbUpdateException)
-        //    {
-        //        if (dbUpdateException.InnerException!.Message.ToLower().Contains("duplicate"))
-        //        {
-        //            return BadRequest("Ya existe una ciudad con el mismo nombre.");
-        //        }
+                _context.Update(product);
+                await _context.SaveChangesAsync();
+                return Ok(productDTO);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.ToLower().Contains("duplicate"))
+                {
+                    return BadRequest("Ya existe una ciudad con el mismo nombre.");
+                }
 
-        //        return BadRequest(dbUpdateException.Message);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        return BadRequest(exception.Message);
-        //    }
-        //}
+                return BadRequest(dbUpdateException.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteAsync(int id)

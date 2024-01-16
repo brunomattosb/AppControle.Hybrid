@@ -186,40 +186,40 @@
 
     }
 
-    private async Task Delete(int productId)
-    {
-        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
-            {
-                Title = "Confirmación",
-                Text = "¿Esta seguro que quieres borrar el registro?",
-                Icon = SweetAlertIcon.Question,
-                ShowCancelButton = true
-            });
+    // private async Task Delete(int productId)
+    // {
+    //     var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+    //         {
+    //             Title = "Confirma~ção",
+    //             Text = "O produto selecionado sera excluido, deseja confirmar ?",
+    //             Icon = SweetAlertIcon.Question,
+    //             ShowCancelButton = true
+    //         });
 
-        var confirm = string.IsNullOrEmpty(result.Value);
+    //     var confirm = string.IsNullOrEmpty(result.Value);
 
-        if (confirm)
-        {
-            return;
-        }
+    //     if (confirm)
+    //     {
+    //         return;
+    //     }
 
-        var responseHTTP = await repository.Delete($"api/products/{productId}");
+    //     var responseHTTP = await repository.Delete($"api/products/{productId}");
 
-        if (responseHTTP.Error)
-        {
-            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                navigationManager.NavigateTo("/");
-                return;
-            }
+    //     if (responseHTTP.Error)
+    //     {
+    //         if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+    //         {
+    //             navigationManager.NavigateTo("/");
+    //             return;
+    //         }
 
-            var mensajeError = await responseHTTP.GetErrorMessageAsync();
-            await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
-            return;
-        }
+    //         var mensajeError = await responseHTTP.GetErrorMessageAsync();
+    //         await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+    //         return;
+    //     }
 
-        await LoadAsync(1);
-    }
+    //     await LoadAsync(1);
+    // }
 
     private async Task SelectedPageAsync(int page)
     {

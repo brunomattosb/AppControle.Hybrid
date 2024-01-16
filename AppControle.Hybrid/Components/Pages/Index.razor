@@ -4,6 +4,10 @@
 
 @* @inject SweetAlertService sweetAlertService *@
 
+@* @if (Images is not null)
+{
+    <CarouselView Images="Images" />
+}  *@
 
 @* <style type="text/css">
     .card {
@@ -79,6 +83,11 @@ else
 }*@
 
 @code {
+
+    private List<string> Images;
+
+
+
     // private int CurrentPage = 1;
     // private int TotalPages;
     // private int counter = 0;
@@ -98,10 +107,14 @@ else
     // private Task<AuthenticationState> authenticationStateTask { get; set; } = null!;
 
 
-    // protected async override Task OnInitializedAsync()
-    // {
-    //     await LoadAsync();
-    // }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Images = new List<string>();
+        Images.Add("https://sales2023.blob.core.windows.net/products/450463c1-6f85-4bf5-b8f4-d6a97cb891a3jpg");
+        Images.Add("https://sales2023.blob.core.windows.net/products/62000794-9837-417e-8d76-978eb28f4251jpg");
+        Images.Add("https://sales2023.blob.core.windows.net/products/f2ae9f98-d140-4672-af7d-bc303497b297jpg");
+    }
 
     // protected async override Task OnParametersSetAsync()
     // {

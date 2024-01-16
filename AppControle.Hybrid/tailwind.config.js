@@ -13,7 +13,7 @@ module.exports = {
     plugins: [
         //Forms
         require('@tailwindcss/forms'),
-        //Flowbite - não funciona
+        //Flowbite
         require('flowbite/plugin'),
         // Iconify plugin
         addDynamicIconSelectors(),

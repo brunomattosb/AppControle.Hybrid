@@ -44,8 +44,8 @@
                 <div class="sm:col-span-4 md:col-span-2">
 
                     <div class="flex items-center mb-4 space-x-1">
-                        <InputCheckbox id="checkbox-table-search-1" @bind-Value="@ProductDTO.IsService" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                        <label for="cep" class="block text-sm font-medium leading-6 text-gray-900">É serviço?</label>
+                        <InputCheckbox id="isservice" @bind-Value="@ProductDTO.IsService" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                        <label for="isservice" class="block text-sm font-medium leading-6 text-gray-900">É serviço?</label>
                     </div>
                 </div>
                 <div class="sm:col-span-4 md:col-span-4 ">
@@ -58,21 +58,28 @@
                    
                 </div>
                 <div class="sm:col-span-4 md:col-span-2 ">
-                    <label for="Imagem" class="block text-sm font-medium leading-6 text-gray-900">Imagem</label>
-                     <div class="mb-3">
+                    <div class="mb-3">
                         <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
                     </div>
-                    <!-- -->
-
-                    @* @if (IsEdit)
+                    @if (IsEdit)
                     {
                         <div class="mb-3">
-                            <button type="button" class="btn btn-outline-primary" @onclick="AddImageAction"><i class="oi oi-plus" /> Adicionar imagem</button>
-                            <button type="button" class="btn btn-outline-danger" @onclick="RemoveImageAction"><i class="oi oi-trash" /> Remover Imagem</button>
+                            <button type="button" class="btn btn-outline-primary" @onclick="AddImageAction"><i class="oi oi-plus" /> Agregar Imagenes</button>
+                            <button type="button" class="btn btn-outline-danger" @onclick="RemoveImageAction"><i class="oi oi-trash" /> Eliminar Última Imagén</button>
                         </div>
-                    } *@
+                    }
                 </div>
                 <!-- -- -->
+                @if (IsEdit && ProductDTO.ProductImages is not null)
+                {
+                    <div class="sm:col-span-4 md:col-span-2 ">
+                        <label for="Imagem" class="block text-sm font-medium leading-6 text-gray-900">Imagem</label>
+                         <div class="mb-3">
+                            <CarouselView Images="ProductDTO.ProductImages" />
+                        </div>
+                    </div>
+                }
+                
 
             </div>
         </div>
@@ -130,25 +137,17 @@
         selected = SelectedCategories.Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name)).ToList();
         nonSelected = NonSelectedCategories.Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name)).ToList();
 
-        if(ProductDTO.ProductImages?.Count > 0)
-        {
-            imageUrl = ProductDTO.ProductImages[0];
-        }
     }
 
     private void ImageSelected(string imagenBase64)
     {
-        ProductDTO.ProductImages = new();
+        if (ProductDTO.ProductImages is null)
+        {
+            ProductDTO.ProductImages = new List<string>();
+        }
+
         ProductDTO.ProductImages!.Add(imagenBase64);
         imageUrl = null;
-
-        // if (ProductDTO.ProductImages is null)
-        // {
-        //     ProductDTO.ProductImages = new List<string>();
-        // }
-
-        // ProductDTO.ProductImages!.Add(imagenBase64);
-        // imageUrl = null;
     }
 
     private async Task OnValidSubmitValidation()
@@ -159,34 +158,34 @@
 
     private async Task OnBeforeInternalNavigation(LocationChangingContext context)
     {
-        // var formWasEdited = editContext.IsModified();
+        var formWasEdited = editContext.IsModified();
 
-        // if (!formWasEdited)
-        // {
-        //     return;
-        // }
+        if (!formWasEdited)
+        {
+            return;
+        }
 
-        // if (FormPostedSuccessfully)
-        // {
-        //     return;
-        // }
+        if (FormPostedSuccessfully)
+        {
+            return;
+        }
 
-        // var result = await sweetAlertService.FireAsync(new SweetAlertOptions
-        //     {
-        //         Title = "Confirmación",
-        //         Text = "¿Deseas abandonar la página y perder los cambios?",
-        //         Icon = SweetAlertIcon.Warning,
-        //         ShowCancelButton = true
-        //     });
+        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmación",
+                Text = "¿Deseas abandonar la página y perder los cambios?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true
+            });
 
-        // var confirm = !string.IsNullOrEmpty(result.Value);
+        var confirm = !string.IsNullOrEmpty(result.Value);
 
-        // if (confirm)
-        // {
-        //     return;
-        // }
+        if (confirm)
+        {
+            return;
+        }
 
-        // context.PreventNavigation();
+        context.PreventNavigation();
     }
 
 }

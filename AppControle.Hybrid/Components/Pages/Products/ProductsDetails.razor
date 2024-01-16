@@ -93,25 +93,23 @@ else
             <div class="md:col-span-1">
                 <label for="categories" class="block text-sm font-medium leading-6 text-gray-900">Categorias</label>
                 <select id="categories" size="5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    @foreach (var category in product.ProductCategories)
-                    {
-                        <option>@category.Category.Name</option>
-                    }
+                    @if (product.ProductCategories != null )
+                        @foreach (var category in product.ProductCategories)
+                        {
+                            <option>@category.Category.Name</option>
+                        }
                 </select>
             </div>
-
-            @if (lImage != null)
-            {
-                <CarouselView Images="lImage" />
-            }
-            
-
-
+            <div class="md:col-span-1">
+                
+                @if (lImage != null)
+                {
+                    <CarouselView Images="lImage" />
+                }
+            </div>
             
         </div>
     </div>
-
-
 }
 
 @code {
@@ -123,7 +121,8 @@ else
 
     private bool loading = true;
 
-    private List<String> lImage;
+    private List<String> lImage = new();
+
     protected async override Task OnInitializedAsync()
     {
         await LoadAsync();
@@ -195,7 +194,7 @@ else
 
         if(product?.ProductImages?.Count > 0)
         {
-            lImage = new();
+            
             foreach (var image in product?.ProductImages!)
             {
                 lImage.Add(image.Image);

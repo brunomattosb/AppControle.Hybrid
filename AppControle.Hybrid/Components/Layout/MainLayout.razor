@@ -1,10 +1,12 @@
 ﻿@inherits LayoutComponentBase
-@inject IJSRuntime Js
+@* @inject IJSRuntime Js *@
 
  
 <div class="relative min-h-screen">
-    @*  *@
+
+    
     <NavMenu />
+    
     <ErrorBoundary @ref="@errorBoundary">
         <ChildContent>
             @Body
@@ -12,7 +14,7 @@
         <ErrorContent>
             <div> <h2>Ocorreu um erro!</h2></div>
         </ErrorContent>
-    </ErrorBoundary> 
+    </ErrorBoundary>
     @* <div class="p-36"></div> *@
     @* <MainFooter/> *@
 </div>
@@ -26,11 +28,11 @@
         errorBoundary?.Recover();
     }
 
-    protected override async Task OnAfterRenderAsync(bool isFirstRender)
-    {
-        if (isFirstRender)
-        {
-            await Js.InvokeVoidAsync("window.initializeFlowbite");
-        }
-    }
+    // protected override async Task OnAfterRenderAsync(bool isFirstRender)
+    // {
+    //     if (isFirstRender)
+    //     {
+    //         await Js.InvokeVoidAsync("window.initializeFlowbite");
+    //     }
+    // }
 }
