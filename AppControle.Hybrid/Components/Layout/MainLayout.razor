@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-@* @inject IJSRuntime Js *@
+@inject IJSRuntime Js
 
  
 <div class="relative min-h-screen">
@@ -28,11 +28,11 @@
         errorBoundary?.Recover();
     }
 
-    // protected override async Task OnAfterRenderAsync(bool isFirstRender)
-    // {
-    //     if (isFirstRender)
-    //     {
-    //         await Js.InvokeVoidAsync("window.initializeFlowbite");
-    //     }
-    // }
+    protected override async Task OnAfterRenderAsync(bool isFirstRender)
+    {
+        if (isFirstRender)
+        {
+            await Js.InvokeVoidAsync("window.initializeFlowbite");
+        }
+    }
 }
