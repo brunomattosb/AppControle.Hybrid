@@ -1,35 +1,35 @@
 ﻿@inject IJSRuntime Js
 
-@if(Images?.Count > 1)
+@if (countImages > 1)
 {
     
-<div id="controls-carousel" class="relative w-full" data-carousel="static">
+    <div id="controls-carousel" class="relative w-full" data-carousel="static">
 
-    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+        <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
         
-        @foreach (var image in Images)
-        {
-            @if (image.StartsWith("https://sales2023.blob.core.windows.net/products/"))
+            @foreach (var image in Images)
             {
-                if (first)
+                @if (image.StartsWith("https://sales2023.blob.core.windows.net/products/"))
                 {
-                    <div class="hidden duration-700 ease-in-out" data-carousel-item="active">
-                        <img src="@image" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-                    </div>
-                }
-                else
-                {
-                    <div class="hidden duration-700 ease-in-out" data-carousel-item>
-                        <img src="@image" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-                    </div>
+                    if (first)
+                    {
+                        <div class="hidden duration-700 ease-in-out" data-carousel-item="active">
+                            <img src="@image" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                            <img src="@image" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+                        </div>
+                    }
+
+                    first = false;
                 }
 
-                first = false;
             }
 
-        }
-
-    </div>
+        </div>
         <!-- Slider controls -->
         <button type="button" class=" absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
             <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
@@ -51,7 +51,7 @@
 }
 else
 {
-    @if (Images?.Count == 1)
+    @if (countImages == 1)
     {
         @if (Images[0].StartsWith("https://sales2023.blob.core.windows.net/products/"))
         {
@@ -64,9 +64,6 @@ else
     }
 }
 
-
-
-
 @code {
     public bool first = true;
 
@@ -74,11 +71,18 @@ else
     [Parameter]
     public List<string> Images { get; set; } = null!;
 
+    public int countImages = 0;
+
     protected override async Task OnAfterRenderAsync(bool isFirstRender)
     {
         if (isFirstRender)
         {
             await Js.InvokeVoidAsync("window.initializeFlowbite");
         }
+    }
+    protected override void OnParametersSet()
+    {
+
+        countImages = Images?.Where(x => x.StartsWith("https://sales2023.blob.core.windows.net/products/") == true).Count() ?? 0;
     }
 }

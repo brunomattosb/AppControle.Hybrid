@@ -57,7 +57,7 @@
                     </div>
                    
                 </div>
-                <div class="sm:col-span-4 md:col-span-2 ">
+                @* <div class="sm:col-span-4 md:col-span-2 ">
                     <div class="mb-3">
                         <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
                     </div>
@@ -68,11 +68,11 @@
                             <button type="button" class="btn btn-outline-danger" @onclick="RemoveImageAction"><i class="oi oi-trash" /> Eliminar Última Imagén</button>
                         </div>
                     }
-                </div>
+                </div> *@
                 <!-- -- -->
                 @if (IsEdit && ProductDTO.ProductImages is not null)
                 {
-                    <div class="sm:col-span-4 md:col-span-2 ">
+                    <div class="sm:col-span-4 md:col-span-4 ">
                         <label for="Imagem" class="block text-sm font-medium leading-6 text-gray-900">Imagem</label>
                          <div class="mb-3">
                             <CarouselView Images="ProductDTO.ProductImages" />
@@ -97,7 +97,9 @@
     private EditContext editContext = null!;
     private List<MultipleSelectorModel> selected { get; set; } = new();
     private List<MultipleSelectorModel> nonSelected { get; set; } = new();
-    private string imageUrl;
+
+    [Parameter]
+    public string? imageUrl { get; set; } = null;
 
     [Parameter]
     public bool IsEdit { get; set; } = false;

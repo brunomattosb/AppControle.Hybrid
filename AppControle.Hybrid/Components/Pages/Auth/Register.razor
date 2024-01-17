@@ -20,6 +20,7 @@
             @* <p class="mt-1 text-sm leading-6 text-gray-600">Use um email válido onde você possa receber correspondência.</p> *@
 
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
+
                 <div class="sm:col-span-4 md:col-span-2">
                     <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">* CFP / CNPJ</label>
                     <div class="mt-2">
@@ -167,12 +168,8 @@
 
                 <!-- -->
                 <div class="sm:col-span-4">
-                    <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />       
-
+                    <InputImg ImageSelected="ImageSelected" />
                 </div>
-
-
-
 
             </div>
         </div>
@@ -192,7 +189,6 @@
     private List<Country>? countries;
     private List<State>? states;
     private List<City>? cities;
-    private string? imageUrl;
 
     [Parameter]
     [SupplyParameterFromQuery]
@@ -206,7 +202,6 @@
     private void ImageSelected(string imagenBase64)
     {
         UserDTO.Photo = imagenBase64;
-        imageUrl = null;
     }
 
     private async Task LoadCountriesAsync()
