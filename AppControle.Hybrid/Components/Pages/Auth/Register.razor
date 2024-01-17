@@ -168,7 +168,8 @@
 
                 <!-- -->
                 <div class="sm:col-span-4">
-                    <InputImg ImageSelected="ImageSelected" />
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Selecione a imagem</label>
+                    <InputFile OnChange="OnChangeInputFile" accept=".jpg,.jpeg,.png" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" />
                 </div>
 
             </div>
@@ -203,7 +204,21 @@
     {
         UserDTO.Photo = imagenBase64;
     }
+    async Task OnChangeInputFile(InputFileChangeEventArgs e)
+    {
+        var imagenes = e.GetMultipleFiles();
 
+        foreach (var imagen in imagenes)
+        {
+            var arrBytes = new byte[imagen.Size];
+            await imagen.OpenReadStream().ReadAsync(arrBytes);
+            var imageBase64 = Convert.ToBase64String(arrBytes);
+            // ImageURL = null;
+            UserDTO.Photo = imageBase64;
+            // await ImageSelected.InvokeAsync(imageBase64);
+            // StateHasChanged();
+        }
+    }
     private async Task LoadCountriesAsync()
     {
         var responseHttp = await repository.GetNoPage<List<Country>>("/api/countries/combobox");

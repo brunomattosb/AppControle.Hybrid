@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using AppControle.API.Data;
@@ -198,6 +199,20 @@ namespace AppControle.API.Controllers
                 if (product == null)
                 {
                     return NotFound();
+                }
+
+                if(product.ProductImages is null)
+                {
+                    product.ProductImages = new List<ProductImage>();
+                }
+
+                foreach(string img in productDTO.ProductImages)
+                {
+                    if (!img.StartsWith("https://sales2023.blob.core.windows.net/products/"))
+                    {
+                        var photoProduct = Convert.FromBase64String(img);
+                        product.ProductImages!.Add(new ProductImage { Image = await _fileStorage.SaveFileAsync(photoProduct, ".jpg", "products") });
+                    }
                 }
 
                 product.Name = productDTO.Name;

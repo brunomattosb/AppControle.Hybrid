@@ -2,8 +2,7 @@
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
-@attribute [Authorize(Roles = "Admin")]
-
+@attribute [Authorize]
 
 <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
 
@@ -55,6 +54,10 @@ else
 
     private async Task CreateAsync()
     {
+        if (productForm.imageBase64 is not null)
+        {
+            productDTO.ProductImages!.Add(productForm.imageBase64);
+        }
         var httpResponse = await repository.Post("/api/products", productDTO);
         if (httpResponse.Error)
         {

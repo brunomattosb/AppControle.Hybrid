@@ -26,8 +26,13 @@
 
                     first = false;
                 }
-
-            }
+                else
+                {
+                    <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                        <img src="data:image/jpeg;base64, @image" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+                    </div>                    
+                }
+        }
 
         </div>
         <!-- Slider controls -->
@@ -60,7 +65,15 @@ else
                     <img src="@Images[0]" style="width:400px" />
                 </div>
             </div>
-        }    
+        }
+        else
+        {
+            <div>
+                <div class="m-1">
+                    <img src="data:image/jpeg;base64, @Images[0]" style="width:400px" />
+                </div>
+            </div>
+        }
     }
 }
 
@@ -75,14 +88,10 @@ else
 
     protected override async Task OnAfterRenderAsync(bool isFirstRender)
     {
-        if (isFirstRender)
-        {
-            await Js.InvokeVoidAsync("window.initializeFlowbite");
-        }
+        await Js.InvokeVoidAsync("window.initializeFlowbite");
     }
     protected override void OnParametersSet()
     {
-
-        countImages = Images?.Where(x => x.StartsWith("https://sales2023.blob.core.windows.net/products/") == true).Count() ?? 0;
+        countImages = Images.Count();
     }
 }

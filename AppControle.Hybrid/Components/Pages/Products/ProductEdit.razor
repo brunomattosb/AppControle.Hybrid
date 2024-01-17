@@ -3,7 +3,7 @@
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize]
 
 @if (loading)
 {
@@ -19,7 +19,7 @@
 }
 else
 {
-    <ProductForm @ref="productForm" ProductDTO="productDTO" SelectedCategories="selectedCategories" NonSelectedCategories="nonSelectedCategories" OnValidSubmit="SaveChangesAsync" ReturnAction="Return" IsEdit=true AddImageAction="AddImageAsync" RemoveImageAction="RemoveImageAsyc" />
+    <ProductForm @ref="productForm" ProductDTO="productDTO" SelectedCategories="selectedCategories" NonSelectedCategories="nonSelectedCategories" OnValidSubmit="SaveChangesAsync" ReturnAction="Return" IsEdit=true  />
 }
 
 @code {
@@ -45,78 +45,78 @@ else
         await LoadCategoriesAsync();
     }
 
-    private async Task AddImageAsync()
-    {
-        if (productDTO.ProductImages is null)
-        {
-            return;
-        }
-        if (productDTO.ProductImages.Where(x => x.StartsWith("https://sales2023.blob.core.windows.net/products/") == false).Count() == 0 ? true : false)
-        {
-            return;
-        }
+    // private async Task AddImageAsync()
+    // {
+    //     if (productDTO.ProductImages is null)
+    //     {
+    //         return;
+    //     }
+    //     if (productDTO.ProductImages.Where(x => x.StartsWith("https://sales2023.blob.core.windows.net/products/") == false).Count() == 0 ? true : false)
+    //     {
+    //         return;
+    //     }
 
 
-        var imageDTO = new ImageDTO
-            {
-                ProductId = ProductId,
-                Images = productDTO.ProductImages!
-            };
+    //     var imageDTO = new ImageDTO
+    //         {
+    //             ProductId = ProductId,
+    //             Images = productDTO.ProductImages!
+    //         };
 
-        var httpResponse = await repository.Post<ImageDTO, ImageDTO>("/api/products/addImages", imageDTO);
-        if (httpResponse.Error)
-        {
-            var message = await httpResponse.GetErrorMessageAsync();
-            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
-            return;
-        }
-        productDTO.ProductImages = httpResponse.Response!.Images;
+    //     var httpResponse = await repository.Post<ImageDTO, ImageDTO>("/api/products/addImages", imageDTO);
+    //     if (httpResponse.Error)
+    //     {
+    //         var message = await httpResponse.GetErrorMessageAsync();
+    //         await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+    //         return;
+    //     }
+    //     productDTO.ProductImages = httpResponse.Response!.Images;
 
-        ImageSelectedFileInput = null;
+    //     ImageSelectedFileInput = null;
 
-        var toast = sweetAlertService.Mixin(new SweetAlertOptions
-            {
-                Toast = true,
-                Position = SweetAlertPosition.TopEnd,
-                ShowConfirmButton = false,
-                Timer = 5000
-            });
-        await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Imagem adicionada com sucesso!");
+    //     var toast = sweetAlertService.Mixin(new SweetAlertOptions
+    //         {
+    //             Toast = true,
+    //             Position = SweetAlertPosition.TopEnd,
+    //             ShowConfirmButton = false,
+    //             Timer = 5000
+    //         });
+    //     await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Imagem adicionada com sucesso!");
 
-        navigationManager.NavigateTo("/products/edit/" + ProductId);
-    }
+    //     navigationManager.NavigateTo("/products/edit/" + ProductId);
+    // }
 
-    private async Task RemoveImageAsyc()
-    {
-        if (productDTO.ProductImages is null || productDTO.ProductImages.Count == 0)
-        {
-            return;
-        }
+    // private async Task RemoveImageAsyc()
+    // {
+    //     if (productDTO.ProductImages is null || productDTO.ProductImages.Count == 0)
+    //     {
+    //         return;
+    //     }
 
-        var imageDTO = new ImageDTO
-            {
-                ProductId = ProductId,
-                Images = productDTO.ProductImages!
-            };
+    //     var imageDTO = new ImageDTO
+    //         {
+    //             ProductId = ProductId,
+    //             Images = productDTO.ProductImages!
+    //         };
 
-        var httpResponse = await repository.Post<ImageDTO, ImageDTO>("/api/products/removeLastImage", imageDTO);
-        if (httpResponse.Error)
-        {
-            var message = await httpResponse.GetErrorMessageAsync();
-            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
-            return;
-        }
+    //     var httpResponse = await repository.Post<ImageDTO, ImageDTO>("/api/products/removeLastImage", imageDTO);
+    //     if (httpResponse.Error)
+    //     {
+    //         var message = await httpResponse.GetErrorMessageAsync();
+    //         await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+    //         return;
+    //     }
 
-        productDTO.ProductImages = httpResponse.Response!.Images;
-        var toast = sweetAlertService.Mixin(new SweetAlertOptions
-            {
-                Toast = true,
-                Position = SweetAlertPosition.TopEnd,
-                ShowConfirmButton = false,
-                Timer = 5000
-            });
-        await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Imagén eliminada con éxito.");
-    }
+    //     productDTO.ProductImages = httpResponse.Response!.Images;
+    //     var toast = sweetAlertService.Mixin(new SweetAlertOptions
+    //         {
+    //             Toast = true,
+    //             Position = SweetAlertPosition.TopEnd,
+    //             ShowConfirmButton = false,
+    //             Timer = 5000
+    //         });
+    //     await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Imagén eliminada con éxito.");
+    // }
 
     private async Task LoadProductAsync()
     {
