@@ -5,7 +5,7 @@ module.exports = {
     darkMode: 'class',
     content: [
         "./**/*.{razor,html}",
-        //"./node_modules/flowbite/**/*.js"
+        "./node_modules/flowbite/**/*.js"
     ],
     theme: {
         extend: {},
@@ -14,7 +14,7 @@ module.exports = {
         //Forms
         require('@tailwindcss/forms'),
         //Flowbite
-        //require('flowbite/plugin'),
+        require('flowbite/plugin'),
         // Iconify plugin
         addDynamicIconSelectors(),
 

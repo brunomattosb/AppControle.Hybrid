@@ -86,10 +86,11 @@ else
 
     public int countImages = 0;
 
-    // protected override async Task OnAfterRenderAsync(bool isFirstRender)
-    // {
-    //     await Js.InvokeVoidAsync("window.initializeFlowbite");
-    // }
+    protected override async Task OnAfterRenderAsync(bool isFirstRender)
+    {
+        await Js.InvokeVoidAsync("window.initializeFlowbite");
+    }
+
     protected override void OnParametersSet()
     {
         countImages = Images.Count();
