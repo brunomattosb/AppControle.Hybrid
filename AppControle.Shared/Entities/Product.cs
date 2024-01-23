@@ -16,6 +16,7 @@ namespace AppControle.Shared.Entities
         [DataType(DataType.MultilineText)]
         [Display(Name = "Descrição")]
         [MaxLength(500, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public string Description { get; set; } = null!;
 
         [Column(TypeName = "decimal(18,2)")]
@@ -51,7 +52,9 @@ namespace AppControle.Shared.Entities
         public bool IsActive { get; set; } = true;
         public bool IsService { get; set; }
 
+        public string? UserId { get; set; }
 
+        public User? User { get; set; }
         #region Informações do Produto
         //[DisplayFormat(DataFormatString = "{0:N2}")]
         //[Display(Name = "Estoque")]

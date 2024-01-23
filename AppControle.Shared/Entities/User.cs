@@ -60,9 +60,9 @@ namespace AppControle.Shared.Entities
         [MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
         public string? Neighborhood { get; set; }
 
-        //TODO: Descomentar Cliente
         //Collections 
-        //public ICollection<Client>? Clients { get; set; }
+        public ICollection<Client>? Clients { get; set; }
+        public ICollection<Product>? Products { get; set; }
 
 
     }

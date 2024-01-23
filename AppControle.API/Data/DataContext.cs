@@ -32,9 +32,12 @@ namespace AppControle.API.Data
             modelBuilder.Entity<Country>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<State>().HasIndex("CountryId", "Name").IsUnique();
             modelBuilder.Entity<City>().HasIndex("StateId", "Name").IsUnique();
-            modelBuilder.Entity<Product>().HasIndex(x => x.Name).IsUnique();
-            modelBuilder.Entity<Client>().HasIndex(x => x.Cpf_Cnpj).IsUnique();
             modelBuilder.Entity<User>().HasIndex("Cpf_Cnpj").IsUnique();
+
+            modelBuilder.Entity<Client>()
+                .HasAlternateKey(c => new { c.Cpf_Cnpj, c.UserId });
+            modelBuilder.Entity<Product>()
+                .HasAlternateKey(c => new { c.Name, c.UserId });
 
         }
     }

@@ -11,15 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240115190957_Iniciando")]
-    partial class Iniciando
+    [Migration("20240123193938_UniqueProduct")]
+    partial class UniqueProduct
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.HasCharSet(modelBuilder, null, DelegationModes.ApplyToDatabases);
@@ -132,14 +132,14 @@ namespace AppControle.API.Migrations
                         .HasColumnType("varchar(19)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
+                    b.HasAlternateKey("Cpf_Cnpj", "UserId");
 
-                    b.HasIndex("Cpf_Cnpj")
-                        .IsUnique();
+                    b.HasIndex("CityId");
 
                     b.HasIndex("UserId");
 
@@ -224,10 +224,15 @@ namespace AppControle.API.Migrations
                     b.Property<float>("Stock")
                         .HasColumnType("float");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
+                    b.HasAlternateKey("Name", "UserId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Products");
                 });
@@ -561,8 +566,10 @@ namespace AppControle.API.Migrations
                         .IsRequired();
 
                     b.HasOne("AppControle.Shared.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .WithMany("Clients")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("City");
 
@@ -586,6 +593,17 @@ namespace AppControle.API.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.Product", b =>
+                {
+                    b.HasOne("AppControle.Shared.Entities.User", "User")
+                        .WithMany("Products")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.ProductCategory", b =>
@@ -723,6 +741,13 @@ namespace AppControle.API.Migrations
             modelBuilder.Entity("AppControle.Shared.Entities.State", b =>
                 {
                     b.Navigation("Cities");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.User", b =>
+                {
+                    b.Navigation("Clients");
+
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

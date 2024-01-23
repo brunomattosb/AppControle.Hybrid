@@ -16,6 +16,8 @@ namespace SisVendas.API.Data
         private readonly IApiService _apiService;
         private readonly IUserHelper _userHelper;
         private readonly IFileStorage _fileStorage;
+        private City city;
+        private User user;
 
         public SeedDb(DataContext context, IApiService apiService, IUserHelper userHelper, IFileStorage fileStorage)
         {
@@ -27,6 +29,9 @@ namespace SisVendas.API.Data
 
         public async Task SeedAsync()
         {
+            city = await _context.Cities!.FirstOrDefaultAsync();
+            user = await _context.Users!.FirstOrDefaultAsync(c => c.Cpf_Cnpj == "1010")!;
+
             await _context.Database.EnsureCreatedAsync();
             await CheckCategoriesAsync();
             await CheckRolesAsync();
@@ -82,7 +87,9 @@ namespace SisVendas.API.Data
                 Price = price,
                 Stock = stock,
                 ProductCategories = new List<ProductCategory>(),
-                ProductImages = new List<ProductImage>()
+                ProductImages = new List<ProductImage>(),
+                User = user,
+                UserId = user.Id,
             };
 
             foreach (var categoryName in categories)
@@ -141,10 +148,7 @@ namespace SisVendas.API.Data
         }
         private async Task CheckClientsAsync()
         {
-            City city = await _context.Cities!.FirstOrDefaultAsync();
-            User user = await _context.Users!.FirstOrDefaultAsync(c => c.Cpf_Cnpj == "1010")!;
-
-
+            
             if (!_context.Clients.Any())
             {
                 _context.Clients.Add(new Client
@@ -369,7 +373,8 @@ namespace SisVendas.API.Data
                     CityId = city.Id,
 
                     User = user,
-                    UserId = user.Id
+                    UserId = user.Id,
+                    
                 });
                 await _context.SaveChangesAsync();
             }
@@ -414,6 +419,7 @@ namespace SisVendas.API.Data
                     Address = address,
                     City = city,
                     UserType = userType,
+                    
                 };
 
                 await _userHelper.AddUserAsync(user, "123456");

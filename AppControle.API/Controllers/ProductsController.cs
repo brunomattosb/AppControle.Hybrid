@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AppControle.API.Data;
 using AppControle.API.Extensions;
@@ -25,7 +26,6 @@ namespace AppControle.API.Controllers
     {
         private readonly DataContext _context;
         private readonly IFileStorage _fileStorage;
-
         public ProductsController(DataContext context, IFileStorage fileStorage)
         {
             _context = context;
@@ -41,10 +41,18 @@ namespace AppControle.API.Controllers
                 .Include(x => x.ProductCategories)
                 .AsQueryable();
 
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            if (user == null)
+            {
+                return BadRequest("User not valid.");
+            }
+
             if (!string.IsNullOrWhiteSpace(filter))
             {
                 queryable = queryable.Where(x => x.Name.ToLower().Contains(filter.ToLower()));
             }
+            queryable = queryable.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
+
             await HttpContext.InsertParamsInPageResponse(queryable, pagination.QuantityPerPage);
             return Ok(await queryable
                 .OrderBy(x => x.Name)
@@ -72,10 +80,17 @@ namespace AppControle.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAsync(int id)
         {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            if (user == null)
+            {
+                return BadRequest("User not valid.");
+            }
+
             var product = await _context.Products
                 .Include(x => x.ProductImages)
                 .Include(x => x.ProductCategories!)
                 .ThenInclude(x => x.Category)
+                .Where(x => x.User!.Id == user.Id)
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (product == null)
             {
@@ -90,6 +105,12 @@ namespace AppControle.API.Controllers
         {
             try
             {
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+                if (user == null)
+                {
+                    return BadRequest("Usuario no válido");
+
+                }
                 Product newProduct = new()
                 {
                     Name = productDTO.Name,
@@ -97,9 +118,11 @@ namespace AppControle.API.Controllers
                     Price = productDTO.Price,
                     Stock = productDTO.Stock,
                     ProductCategories = new List<ProductCategory>(),
-                    ProductImages = new List<ProductImage>()
+                    ProductImages = new List<ProductImage>(),
+                    User = user,
+                    UserId = user.Id,
                 };
-
+                
                 foreach (var productImage in productDTO.ProductImages!)
                 {
                     var photoProduct = Convert.FromBase64String(productImage);
@@ -192,9 +215,16 @@ namespace AppControle.API.Controllers
         {
             try
             {
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+                if (user == null)
+                {
+                    return BadRequest("Usuario no válido");
+
+                }
                 var product = await _context.Products
                     .Include(x => x.ProductCategories)
                     .Include(x => x.ProductImages)
+                    .Where(x => x.User!.Id == user.Id)
                     .FirstOrDefaultAsync(x => x.Id == productDTO.Id);
                 if (product == null)
                 {
@@ -243,6 +273,7 @@ namespace AppControle.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
+            //TODO: Validar se userid é igual ao do token
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
             if (product == null)
             {

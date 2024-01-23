@@ -63,12 +63,18 @@ namespace AppControle.API.Controllers
             {
                 return NotFound();
             }
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            if (user == null)
+            {
+                return BadRequest("User not valid.");
+            }
 
             var client = await _context.Clients
                 .Include(u => u.City!)
                 .ThenInclude(c => c.State!)
                 .ThenInclude(s => s.Country!)
                 .Include(u => u.User!)
+                .Where(x => x.User!.Id == user.Id)
                 .FirstOrDefaultAsync(x => x.Id == id && x.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
 
             if (client == null)
@@ -85,6 +91,17 @@ namespace AppControle.API.Controllers
         public async Task<IActionResult> PutClient(Client client)
         {
             _context.Entry(client).State = EntityState.Modified;
+
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            if (user == null)
+            {
+                return BadRequest("User not valid.");
+            }
+            if(client.UserId != user.Id)
+            {
+
+                return BadRequest("User not valid.");
+            }
 
             try
             {
@@ -179,11 +196,6 @@ namespace AppControle.API.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool ClientExists(int id)
-        {
-            return (_context.Clients?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
     }

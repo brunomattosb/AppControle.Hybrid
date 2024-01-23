@@ -27,7 +27,7 @@ namespace AppControle.Hybrid
     		builder.Logging.AddDebug();
 #endif
 
-            builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7261/") });
+            builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri("https://localhost:44380/") });
             builder.Services.AddScoped<IRepository, Repository>();
             //Modal
             //builder.Services.AddBlazoredModal();
