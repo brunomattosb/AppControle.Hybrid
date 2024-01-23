@@ -31,14 +31,9 @@ namespace AppControle.Shared.Entities
 
         public ICollection<ProductCategory>? ProductCategories { get; set; }
 
-        [Display(Name = "Categorias")]
-        public int ProductCategoriesNumber => ProductCategories == null ? 0 : ProductCategories.Count;
-
-
         public ICollection<ClientService>? ClientServices { get; set; }
 
         [Display(Name = "Serviços")]
-        public int ClientServicesNumber => ClientServices == null ? 0 : ClientServices.Count;
         public ICollection<ProductImage>? ProductImages { get; set; }
 
 
@@ -67,14 +62,7 @@ namespace AppControle.Shared.Entities
         #endregion
 
         #region Info. Adicionais
-        ////Category
-        //public int CategoryId { get; set; }
-        //[JsonIgnore]
-        //public Category? Category { get; set; } = new Category();
-        ////Brand
-        //public int BrandId { get; set; }
-        //[JsonIgnore]
-        //public Brand? Brand { get; set; } = new Brand();
+
 
         //[Required]
         //[Column(TypeName = "decimal(10,2)")]

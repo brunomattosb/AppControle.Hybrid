@@ -124,8 +124,99 @@ else
         </div>
     </div>
 
+    if (client?.ClientService?.Count != 0)
+    {
+        @* Tabela CLientes Produtos *@
+        <div class="p-5 h-screen bg-gray-100">
 
+            <p class="text-xl mb-2">Serviços prestados</p>
+
+            <!-- Tabela -->
+            <div class="relative overflow-x-auto rounded-lg shadow hidden md:block">
+                <GenericList MyList="client.ClientService?.ToList()">
+                    <Body>
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nome
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Data de registro
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Saldo
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var servico in client.ClientService!)
+                                {
+                                    @* <tr>
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            @servico.
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            @client.RegisterDate
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @client.Balance.ToString("C")
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <a href="/clients/details/@client.Id" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Detalhar</a>
+                                        </td>
+                                    </tr> *@
+                                }
+                            </tbody>
+                        </table>
+
+                    </Body>
+                </GenericList>
+            </div>
+
+            @* <!-- Box -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+                <GenericList MyList="lClients">
+                    <Body>
+                        @foreach (var client in lClients!)
+                        {
+                            <div class="bg-white space-y-3 p-4 rounded-lg shadow">
+                                <div class="flex items-center space-x-2 text-sm">
+                                    <div>
+                                        <a href="#" class="text-gray-500">Registro:</a>
+                                    </div>
+                                    <div class="text-gray-500">@client.RegisterDate</div>
+                                
+                                </div>
+                                <div class="text-sm text-gray-700">
+                                    @client.Name
+                                </div>
+                                <div class="text-sm font-medium text-black">
+                                    Saldo: @client.Balance.ToString("C")
+                                </div>
+                                <a href="/clients/details/@client.Id" class="mt-2 font-bold text-blue-500 hover:underline">Detalhar</a>
+                            </div>
+                        }
+                    </Body>
+                </GenericList>
+            </div> *@
+        </div>
+    }
+
+    <div class="grid grid-cols-2 mb-5">
+        <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
+            <span>
+                <a class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" >
+                    <iconify-icon icon="mingcute:back-2-line"></iconify-icon> Adicionar Serviço
+                </a>
+            </span>
+        </div>        
+    </div>
 }
+
 
 @code {
     private Client? client;
