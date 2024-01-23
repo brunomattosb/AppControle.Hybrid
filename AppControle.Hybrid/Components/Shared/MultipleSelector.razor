@@ -32,9 +32,11 @@
     private string removeAllText = "<<";
 
     [Parameter]
+    [EditorRequired]
     public List<MultipleSelectorModel> NonSelected { get; set; } = new();
 
     [Parameter]
+    [EditorRequired]
     public List<MultipleSelectorModel> Selected { get; set; } = new();
 
     private void Select(MultipleSelectorModel item)

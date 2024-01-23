@@ -5,8 +5,18 @@
 @inject SweetAlertService sweetAlertService
 
 
-<div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
-    <h2 class="text-xl font-bold leading-7 text-gray-900">Editar cliente</h2>
+<div class="grid grid-cols-2">
+    <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
+        <span>
+            <a class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" href="/clients/details/@ClientId">
+                <iconify-icon icon="mingcute:back-2-line"></iconify-icon> Voltar
+            </a>
+        </span>
+    </div>
+
+    <div class="mt-5 grid-cols-1 flex justify-end pe-3 sm:pe-5 mb-2 space-x-1">
+        <h2 class="text-xl font-bold leading-7 text-gray-900">Novo cliente</h2>
+    </div>
 </div>
 @if (client is null)
 {
@@ -24,9 +34,6 @@ else
 {
     <ClientsForm @ref="clientsForm" Client="client" OnValidSubmit="EditAsync" ReturnAction="Return" />
 }
-
-
-
 
 @code {
     private Client? client;

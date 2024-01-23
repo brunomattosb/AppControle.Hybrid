@@ -5,6 +5,36 @@
 @inject SweetAlertService sweetAlertService
 @attribute [Authorize]
 
+
+
+<div class="grid grid-cols-2">
+    <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
+        <span>
+            <a class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" href="/Clients">
+                <iconify-icon icon="mingcute:back-2-line"></iconify-icon> Voltar
+            </a>
+        </span>
+    </div>
+
+    <div class="mt-5 grid-cols-1 flex justify-end pe-3 sm:pe-5 mb-2 space-x-1">
+        <AuthorizeView>
+            <Authorized>
+                <div @onclick=@(() => EditAsync())>
+                    <a class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        @* <iconify-icon icon="mdi:password-outline"></iconify-icon> *@ Editar
+                    </a>
+                </div>
+
+                <div @onclick=@(() => DeleteAsync())>
+                    <a class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        @* <iconify-icon icon="mdi:password-outline"></iconify-icon> *@ Excluir
+                    </a>
+                </div>
+            </Authorized>
+        </AuthorizeView>
+
+    </div>
+</div>
 @if (client is null)
 {
     <div class="text-center">
@@ -20,34 +50,6 @@
 else
 {
 
-    <div class="grid grid-cols-2">
-        <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
-            <span>
-                <a class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" href="/Clients">
-                    <iconify-icon icon="mingcute:back-2-line"></iconify-icon> Voltar
-                </a>
-            </span>
-        </div>
-
-        <div class="mt-5 grid-cols-1 flex justify-end pe-3 sm:pe-5 mb-2 space-x-1">
-            <AuthorizeView>
-                <Authorized>
-                    <div @onclick=@(() => EditAsync())>
-                        <a class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" >
-                            @* <iconify-icon icon="mdi:password-outline"></iconify-icon> *@ Editar
-                        </a>
-                    </div>
-
-                    <div @onclick=@(() => DeleteAsync())>
-                        <a class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                            @* <iconify-icon icon="mdi:password-outline"></iconify-icon> *@ Excluir
-                        </a>
-                    </div>
-                </Authorized>
-            </AuthorizeView>
-            
-        </div>
-    </div>
 
     <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
         <h2 class="text-xl font-bold leading-7 text-gray-900">Dados do cliente</h2>

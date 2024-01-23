@@ -1,4 +1,5 @@
-﻿@using AppControle.Hybrid.Helpers
+﻿
+@inject IRepository repository
 @inject SweetAlertService sweetAlertService
 
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
@@ -6,7 +7,9 @@
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmitValidation">
     <DataAnnotationsValidator />
 
-    <form class="space-y-12  pe-3 sm:pe-5 ps-3 sm:ps-5">
+
+    <form class="mt-5 space-y-12  pe-3 sm:pe-5 ps-3 sm:ps-5">
+
         <div class="border-b border-t border-gray-900/10 pb-12">
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
 
@@ -17,7 +20,7 @@
                         <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Name)" />
                     </div>
                 </div>
-                <div class="sm:col-span-4 md:col-span-2">
+                <div class="sm:col-span-4 md:col-span-4">
                     <label for="Description" class="block text-sm font-medium leading-6 text-gray-900">Descrição</label>
                     <div class="mt-2">
                         <InputText name="Description" id="Description" @bind-Value="@ProductDTO.Description" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
@@ -32,30 +35,41 @@
                         <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Price)" />
                     </div>
                 </div>
+                <!-- -->
 
-                <div class="sm:col-span-4 md:col-span-2 ">
+                @* <div class="sm:col-span-4 md:col-span-2 ">
                     <label for="Stock" class="block text-sm font-medium leading-6 text-gray-900">Estoque</label>
                     <div class="mt-2">
                         <InputNumber name="Stock" id="Stock" @bind-Value="@ProductDTO.Stock" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                         <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Stock)" />
                     </div>
-                </div>
-                <!-- -->
-                <div class="sm:col-span-4 md:col-span-2">
-
-                    <div class="flex items-center mb-4 space-x-1">
-                        <InputCheckbox id="isservice" @bind-Value="@ProductDTO.IsService" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                        <label for="isservice" class="block text-sm font-medium leading-6 text-gray-900">É serviço?</label>
+                </div> *@
+                @if(teste)
+                {
+                    
+                <div class="sm:col-span-4 md:col-span-2 grid content-center place-items-end">
+                    <div class="mt-2">
+                        <ProductsCategoryModal @ref="ProductsCategoryModal" lCategory="@lCategory" />
                     </div>
                 </div>
+                }
+
                 <div class="sm:col-span-4 md:col-span-4 ">
                     <div class="mb-3">
                         <label for="bairro" class="block text-sm font-medium leading-6 text-gray-900">Categorias</label>
                         <div>
-                            <MultipleSelector NonSelected="nonSelected" Selected="selected" />
+                            <MultipleSelector NonSelected="@NonSelectedCategories" Selected="@SelectedCategories" />
                         </div>
                     </div>
-                   
+                </div>
+
+                @* <div class="sm:col-span-4 md:col-span-2">
+
+                    <div class="flex items-center mb-4 space-x-1">
+                        <InputCheckbox id="isservice" @bind-Value="@ProductDTO.IsService" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                        <label for="isservice" class="block text-sm font-medium leading-6 text-gray-900">É serviço?</label>
+
+                    </div>
                 </div>
                 <div class="sm:col-span-4 md:col-span-2 ">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Selecione a imagem</label>
@@ -65,9 +79,9 @@
                 {
                     <div class="mb-3">
                         <button type="button" class="" @onclick="AddImageToList">Adicionar imagem</button>
-                        @* <button type="button" class="btn btn-outline-danger" @onclick="RemoveImageAction"><i class="oi oi-trash" /> Eliminar Última Imagén</button> *@
+                        <button type="button" class="btn btn-outline-danger" @onclick="RemoveImageAction"><i class="oi oi-trash" /> Eliminar Última Imagén</button>
                     </div>
-                }
+                } 
                 
                 <!-- -- -->
                 @if (IsEdit && ProductDTO.ProductImages is not null)
@@ -78,8 +92,7 @@
                             <CarouselView Images="@ProductDTO.ProductImages" />
                         </div>
                     </div>
-                }
-                
+                } *@
 
             </div>
         </div>
@@ -95,9 +108,8 @@
 @code {
 
     private EditContext editContext = null!;
-    private List<MultipleSelectorModel> selected { get; set; } = new();
-    private List<MultipleSelectorModel> nonSelected { get; set; } = new();
-
+    public Category Category { get; set; } = new();
+    private ProductsCategoryModal? ProductsCategoryModal;
     [Parameter]
     public string? imageBase64 { get; set; } = null;
 
@@ -122,12 +134,9 @@
     // [Parameter]
     // public EventCallback RemoveImageAction { get; set; }
 
-    [Parameter]
-    public List<Category> SelectedCategories { get; set; } = new();
-
-    [Parameter]
-    [EditorRequired]
-    public List<Category> NonSelectedCategories { get; set; } = new();
+    public List<Category> lCategory { get; set; } = new();
+    public List<MultipleSelectorModel> SelectedCategories = new();
+    public List<MultipleSelectorModel> NonSelectedCategories = new();
 
     public bool FormPostedSuccessfully { get; set; } = false;
 
@@ -149,17 +158,56 @@
             ProductDTO.ProductImages?.Add(imageBase64);
         }
     }
-    protected override void OnInitialized()
+    private bool teste = true;
+    protected async override Task OnInitializedAsync()
     {
-        editContext = new(ProductDTO);
-        selected = SelectedCategories.Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name)).ToList();
-        nonSelected = NonSelectedCategories.Select(x => new MultipleSelectorModel(x.Id.ToString(), x.Name)).ToList();
+        await LoadCategory();
+    }
+    private async Task LoadCategory()
+    {
+        var httpResponse = await repository.GetNoPage<List<Category>>("/api/categories");
+        if (httpResponse.Error)
+        {
+            var message = await httpResponse.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        lCategory = httpResponse.Response!;
+
+        MultipleSelectorModel SelectorModel;
+        foreach (var category in lCategory)
+        {
+            SelectorModel = new MultipleSelectorModel(category.Id.ToString(), category.Name);
+            if (IsEdit)
+            {
+                var found = ProductDTO!.ProductCategoryIds!.FirstOrDefault(x => x == category.Id);
+                if (found != 0)
+                {
+                    SelectedCategories.Add(SelectorModel);
+                }
+                else
+                {
+                    NonSelectedCategories.Add(SelectorModel);
+                }
+            }
+            else
+            {
+                SelectorModel = new MultipleSelectorModel(category.Id.ToString(), category.Name);
+                NonSelectedCategories.Add(SelectorModel);
+            }
+        }
 
     }
+    protected override void OnInitialized()
+    {
 
+        editContext = new(ProductDTO);
+
+    }
     private async Task OnValidSubmitValidation()
     {
-        ProductDTO.ProductCategoryIds = selected.Select(x => int.Parse(x.Key)).ToList();
+        ProductDTO.ProductCategoryIds = SelectedCategories.Select(x => int.Parse(x.Key)).ToList();
         await OnValidSubmit.InvokeAsync();
     }
 
@@ -194,5 +242,5 @@
 
         context.PreventNavigation();
     }
-
+    
 }
