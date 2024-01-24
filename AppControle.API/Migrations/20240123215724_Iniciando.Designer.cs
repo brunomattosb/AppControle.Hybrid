@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240123193938_UniqueProduct")]
-    partial class UniqueProduct
+    [Migration("20240123215724_Iniciando")]
+    partial class Iniciando
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -153,6 +153,9 @@ namespace AppControle.API.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Payday")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")

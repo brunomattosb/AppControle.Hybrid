@@ -75,6 +75,7 @@ namespace AppControle.API.Controllers
                 .ThenInclude(s => s.Country!)
                 .Include(u => u.User!)
                 .Include(u => u.ClientService!)
+                .ThenInclude(x => x.Product)
                 .Where(x => x.User!.Id == user.Id)
                 .FirstOrDefaultAsync(x => x.Id == id && x.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
 

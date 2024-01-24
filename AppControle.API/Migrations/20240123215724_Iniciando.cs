@@ -297,16 +297,18 @@ namespace AppControle.API.Migrations
                     Stock = table.Column<float>(type: "float", nullable: false),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     IsService = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: true)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
+                    table.UniqueConstraint("AK_Products_Name_UserId", x => new { x.Name, x.UserId });
                     table.ForeignKey(
                         name: "FK_Products_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -319,6 +321,7 @@ namespace AppControle.API.Migrations
                     ClientId = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Payday = table.Column<int>(type: "int", nullable: false),
                     Remarks = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
                 },
                 constraints: table =>
@@ -478,12 +481,6 @@ namespace AppControle.API.Migrations
                 name: "IX_ProductImages_ProductId",
                 table: "ProductImages",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_Name",
-                table: "Products",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_UserId",

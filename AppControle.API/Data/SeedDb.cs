@@ -29,8 +29,7 @@ namespace SisVendas.API.Data
 
         public async Task SeedAsync()
         {
-            city = await _context.Cities!.FirstOrDefaultAsync();
-            user = await _context.Users!.FirstOrDefaultAsync(c => c.Cpf_Cnpj == "1010")!;
+            
 
             await _context.Database.EnsureCreatedAsync();
             await CheckCategoriesAsync();
@@ -41,8 +40,10 @@ namespace SisVendas.API.Data
             await CheckUserAsync("3030", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
             await CheckUserAsync("4040", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
             await CheckUserAsync("5050", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
-            await CheckProductsAsync();
+            city = await _context.Cities!.FirstOrDefaultAsync();
+            user = await _context.Users!.FirstOrDefaultAsync(c => c.Cpf_Cnpj == "1010")!;
 
+            await CheckProductsAsync();
             await CheckClientsAsync();
         }
 
@@ -148,7 +149,9 @@ namespace SisVendas.API.Data
         }
         private async Task CheckClientsAsync()
         {
-            
+            ClientService cli = new();
+            cli.Product = await _context.Products.FirstOrDefaultAsync();
+
             if (!_context.Clients.Any())
             {
                 _context.Clients.Add(new Client
@@ -163,8 +166,13 @@ namespace SisVendas.API.Data
                     CityId = city.Id,
 
                     User = user,
-                    UserId = user.Id
-                }); _context.Clients.Add(new Client
+                    UserId = user.Id,
+                    ClientService = new List<ClientService>()
+                    {
+                        cli,
+                    },
+                });
+                _context.Clients.Add(new Client
                 {
                     Name = "Client 2",
                     Cpf_Cnpj = "06960118806",
