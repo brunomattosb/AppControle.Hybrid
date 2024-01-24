@@ -13,24 +13,24 @@ namespace AppControle.Shared.DTO
         public int Id { get; set; }
 
         [Display(Name = "Nome")]
-        [MaxLength(50, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [MaxLength(50, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
+        [Required(ErrorMessage = "O campo {0} é obligatorio.")]
         public string Name { get; set; } = null!;
 
         [DataType(DataType.MultilineText)]
-        [Display(Name = "Descripción")]
-        [MaxLength(500, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
+        [Display(Name = "Descrição")]
+        [MaxLength(500, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public string Description { get; set; } = null!;
 
         [Column(TypeName = "decimal(18,2)")]
         [DisplayFormat(DataFormatString = "{0:C2}")]
-        [Display(Name = "Precio")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Display(Name = "Preço")]
+        [Required(ErrorMessage = "O campo {0} é obligatorio.")]
         public decimal Price { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N2}")]
-        [Display(Name = "Inventario")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Display(Name = "Estoque")]
+        [Required(ErrorMessage = "O campo {0} é obligatorio.")]
         public float Stock { get; set; }
 
         public List<int>? ProductCategoryIds { get; set; }

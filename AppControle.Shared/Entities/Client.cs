@@ -16,24 +16,24 @@ namespace AppControle.Shared.Entities
         public int Id { get; set; }
 
         [Display(Name = "Email")]
-        [MaxLength(50, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        [MaxLength(50, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public string? Email { get; set; }
 
         [Display(Name = "Nome / Razão Social")]
-        [MaxLength(100, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        [MaxLength(100, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         [Required(ErrorMessage = "O campo {0} é obligatório.")]
         public string? Name { get; set; }
 
         [Display(Name = "Nome Fantasia")]
-        [MaxLength(50, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        [MaxLength(50, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public string? FantasyName { get; set; }
 
         [Display(Name = "RG / IE")]
-        [MaxLength(19, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        [MaxLength(19, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public string? Rg_Ie { get; set; }
 
         [Display(Name = "CPF / CNPJ")]
-        [MaxLength(14, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        [MaxLength(14, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         [Required(ErrorMessage = "O campo {0} é obligatório.")]
         public string? Cpf_Cnpj { get; set; }
 
@@ -57,24 +57,24 @@ namespace AppControle.Shared.Entities
         public DateTime RegisterDate { get; set; }
 
         [Display(Name = "CEP")]
-        [MaxLength(8, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        [MaxLength(8, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public string? AddressCep { get; set; }
 
         [Display(Name = "Logradouro")]
-        [MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        [MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public string? Address { get; set; }
 
         [Display(Name = "Número")]
-        //[MaxLength(6, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        //[MaxLength(6, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public int AddressNumber { get; set; }
 
         [DataType(DataType.MultilineText)]
-        [MaxLength(100, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        [MaxLength(100, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         [Display(Name = "Comentarios")]
         public string? Remarks { get; set; }
 
         [Display(Name = "Bairro")]
-        [MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        [MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public string? Neighborhood { get; set; }
 
         public City? City { get; set; }
@@ -84,7 +84,7 @@ namespace AppControle.Shared.Entities
 
         [Display(Name = "Telefone")]
         [DisplayFormat(DataFormatString = "{0:###-###-####}")]
-        //[MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        //[MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public long? PhoneNumber { get; set; }
 
         public string? UserId { get; set; }

@@ -6,14 +6,14 @@ namespace AppControle.Shared.Entities
     {
         public int Id { get; set; }
 
-        [Display(Name = "Categoría")]
-        [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Display(Name = "Categoria")]
+        [MaxLength(100, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
+        [Required(ErrorMessage = "O campo {0} é obligatorio.")]
         public string Name { get; set; } = null!;
 
         public ICollection<ProductCategory>? ProductCategories { get; set; }
 
-        [Display(Name = "Productos")]
+        [Display(Name = "Produtos")]
         public int ProductCategoriesNumber => ProductCategories == null ? 0 : ProductCategories.Count;
     }
 }

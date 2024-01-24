@@ -1,5 +1,4 @@
-﻿
-@inject IRepository repository
+﻿@inject IRepository repository
 @inject SweetAlertService sweetAlertService
 
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
@@ -36,62 +35,62 @@
                     </div>
                 </div>
                 <!-- -->
-
                 @* <div class="sm:col-span-4 md:col-span-2 ">
-                    <label for="Stock" class="block text-sm font-medium leading-6 text-gray-900">Estoque</label>
-                    <div class="mt-2">
-                        <InputNumber name="Stock" id="Stock" @bind-Value="@ProductDTO.Stock" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                        <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Stock)" />
-                    </div>
+                <label for="Stock" class="block text-sm font-medium leading-6 text-gray-900">Estoque</label>
+                <div class="mt-2">
+                <InputNumber name="Stock" id="Stock" @bind-Value="@ProductDTO.Stock" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Stock)" />
+                </div>
                 </div> *@
-                @if(teste)
-                {
-                    
+
+
                 <div class="sm:col-span-4 md:col-span-2 grid content-center place-items-end">
                     <div class="mt-2">
-                        <ProductsCategoryModal @ref="ProductsCategoryModal" lCategory="@lCategory" />
+                        <button @onclick=@(()=>ShowModalCategory()) class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                            Adicionar categoria
+                        </button>
                     </div>
                 </div>
-                }
+
 
                 <div class="sm:col-span-4 md:col-span-4 ">
                     <div class="mb-3">
                         <label for="bairro" class="block text-sm font-medium leading-6 text-gray-900">Categorias</label>
                         <div>
-                            <MultipleSelector NonSelected="@NonSelectedCategories" Selected="@SelectedCategories" />
+                            <MultipleSelector NonSelected="NonSelectedCategories" Selected="SelectedCategories" />
                         </div>
                     </div>
                 </div>
 
                 @* <div class="sm:col-span-4 md:col-span-2">
 
-                    <div class="flex items-center mb-4 space-x-1">
-                        <InputCheckbox id="isservice" @bind-Value="@ProductDTO.IsService" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                        <label for="isservice" class="block text-sm font-medium leading-6 text-gray-900">É serviço?</label>
+                <div class="flex items-center mb-4 space-x-1">
+                <InputCheckbox id="isservice" @bind-Value="@ProductDTO.IsService" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                <label for="isservice" class="block text-sm font-medium leading-6 text-gray-900">É serviço?</label>
 
-                    </div>
+                </div>
                 </div>
                 <div class="sm:col-span-4 md:col-span-2 ">
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Selecione a imagem</label>
-                    <InputFile OnChange="OnChangeInputFile"  accept=".jpg,.jpeg,.png" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" />
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Selecione a imagem</label>
+                <InputFile OnChange="OnChangeInputFile"  accept=".jpg,.jpeg,.png" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" />
                 </div>
                 @if (IsEdit)
                 {
-                    <div class="mb-3">
-                        <button type="button" class="" @onclick="AddImageToList">Adicionar imagem</button>
-                        <button type="button" class="btn btn-outline-danger" @onclick="RemoveImageAction"><i class="oi oi-trash" /> Eliminar Última Imagén</button>
-                    </div>
-                } 
-                
+                <div class="mb-3">
+                <button type="button" class="" @onclick="AddImageToList">Adicionar imagem</button>
+                <button type="button" class="btn btn-outline-danger" @onclick="RemoveImageAction"><i class="oi oi-trash" /> Eliminar Última Imagén</button>
+                </div>
+                }
+
                 <!-- -- -->
                 @if (IsEdit && ProductDTO.ProductImages is not null)
                 {
-                    <div class="sm:col-span-4 md:col-span-4 ">
-                        <label for="Imagem" class="block text-sm font-medium leading-6 text-gray-900">Imagem</label>
-                         <div class="mb-3">
-                            <CarouselView Images="@ProductDTO.ProductImages" />
-                        </div>
-                    </div>
+                <div class="sm:col-span-4 md:col-span-4 ">
+                <label for="Imagem" class="block text-sm font-medium leading-6 text-gray-900">Imagem</label>
+                <div class="mb-3">
+                <CarouselView Images="@ProductDTO.ProductImages" />
+                </div>
+                </div>
                 } *@
 
             </div>
@@ -108,8 +107,7 @@
 @code {
 
     private EditContext editContext = null!;
-    public Category Category { get; set; } = new();
-    private ProductsCategoryModal? ProductsCategoryModal;
+
     [Parameter]
     public string? imageBase64 { get; set; } = null;
 
@@ -128,17 +126,15 @@
     [Parameter]
     public EventCallback ReturnAction { get; set; }
 
-    // [Parameter]
-    // public EventCallback AddImageAction { get; set; }
-
-    // [Parameter]
-    // public EventCallback RemoveImageAction { get; set; }
-
     public List<Category> lCategory { get; set; } = new();
+
     public List<MultipleSelectorModel> SelectedCategories = new();
     public List<MultipleSelectorModel> NonSelectedCategories = new();
 
     public bool FormPostedSuccessfully { get; set; } = false;
+
+    [CascadingParameter]
+    IModalService CategoryModal { get; set; } = default!;
 
     async Task OnChangeInputFile(InputFileChangeEventArgs e)
     {
@@ -153,12 +149,11 @@
     }
     private void AddImageToList()
     {
-        if(imageBase64 is not null)
+        if (imageBase64 is not null)
         {
             ProductDTO.ProductImages?.Add(imageBase64);
         }
     }
-    private bool teste = true;
     protected async override Task OnInitializedAsync()
     {
         await LoadCategory();
@@ -174,7 +169,8 @@
         }
 
         lCategory = httpResponse.Response!;
-
+        SelectedCategories = new();
+        NonSelectedCategories = new();
         MultipleSelectorModel SelectorModel;
         foreach (var category in lCategory)
         {
@@ -242,5 +238,19 @@
 
         context.PreventNavigation();
     }
-    
+    private async void ShowModalCategory()
+    {
+        IModalReference modalReference;
+
+        modalReference = CategoryModal.Show<ProductsCategoryModal>(string.Empty, new ModalParameters().Add("lCategory", lCategory));
+
+        var result = await modalReference.Result;
+
+        if (result.Confirmed)
+        {
+            await LoadCategory();
+            StateHasChanged();
+        }
+    }
+
 }

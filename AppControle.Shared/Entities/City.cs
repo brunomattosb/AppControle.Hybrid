@@ -13,12 +13,12 @@ namespace AppControle.Shared.Entities
 
         [Display(Name = "Cidade")]
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [MaxLength(100, ErrorMessage = "O campo {0} não pode ter mais de {1} caractéres")]
+        [MaxLength(100, ErrorMessage = "O campo {0} não pode ter mais de {1} caracteres")]
         public string Name { get; set; } = null!;
 
         [Display(Name = "Código da Cidade")]
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [MaxLength(10, ErrorMessage = "O campo {0} não pode ter mais de {1} caractéres")]
+        [MaxLength(10, ErrorMessage = "O campo {0} não pode ter mais de {1} caracteres")]
         public int CodCity { get; set; }
 
         public int StateId { get; set; }

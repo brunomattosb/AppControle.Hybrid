@@ -35,7 +35,7 @@ namespace AppControle.Shared.Entities
         public int Payday { get; set; }
 
         [DataType(DataType.MultilineText)]
-        [MaxLength(150, ErrorMessage = "O campo {0} deve ter no máximo {1} caractéres.")]
+        [MaxLength(150, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         [Display(Name = "Comentarios")]
         public string? Remarks { get; set; }
     }

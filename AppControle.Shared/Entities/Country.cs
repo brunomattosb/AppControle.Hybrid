@@ -13,7 +13,7 @@ namespace AppControle.Shared.Entities
 
         [Display(Name = "País")]
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [MaxLength(100, ErrorMessage = "O campo {0} não pode termais de {1} caractéres")]
+        [MaxLength(100, ErrorMessage = "O campo {0} não pode termais de {1} caracteres")]
         public string Name { get; set; } = null!;
 
         public ICollection<State>? States { get; set; }
