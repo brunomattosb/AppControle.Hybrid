@@ -51,7 +51,7 @@ namespace AppControle.API.Controllers
             {
                 queryable = queryable.Where(x => x.Name.ToLower().Contains(filter.ToLower()));
             }
-            queryable = queryable.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            queryable = queryable.Where(s => s.User!.Email == User.FindFirstValue(  ClaimTypes.Email)!);
 
             await HttpContext.InsertParamsInPageResponse(queryable, pagination.QuantityPerPage);
             return Ok(await queryable
@@ -59,22 +59,22 @@ namespace AppControle.API.Controllers
                 .Paginar(pagination)
                 .ToListAsync());
         }
-        //[AllowAnonymous]
-        //[HttpGet("combobox")]
-        //public async Task<ActionResult<IEnumerable<Product>>> GetCombo()
-        //{
-        //    if (_context.Products == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var queryable = _context.Products
-        //        .Where(x=>x.IsService == true)
-        //        .AsQueryable();
+        [AllowAnonymous]
+        [HttpGet("combobox")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetCombo()
+        {
+            if (_context.Products == null)
+            {
+                return NotFound();
+            }
+            var queryable = _context.Products
+                .Where(x => x.IsService == true)
+                .AsQueryable();
 
-        //    return Ok(await queryable
-        //        .OrderBy(x => x.Name)
-        //        .ToListAsync());
-        //}
+            return Ok(await queryable
+                .OrderBy(x => x.Name)
+                .ToListAsync());
+        }
 
         [HttpGet("{id:int}")]
         [AllowAnonymous]

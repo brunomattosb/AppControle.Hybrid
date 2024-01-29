@@ -93,6 +93,8 @@ namespace AppControle.Shared.Entities
 
         public ICollection<ClientService>? ClientService { get; set; }
 
+        [Display(Name = "Mensalidades")]
+        public decimal MonthlyPayment => ClientService == null ? 0 : ClientService.Sum(x=>x.Product?.Price - x.Discount) ?? 0;
 
     }
 }

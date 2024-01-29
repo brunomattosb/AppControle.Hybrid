@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\AppControle.Hybrid\Components\Pages\Client\ClientServModal.razor" Link="ClientServModal.razor" />
     <None Include="Images\.DS_Store" />
   </ItemGroup>
 

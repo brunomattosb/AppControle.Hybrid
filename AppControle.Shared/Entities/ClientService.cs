@@ -12,19 +12,19 @@ namespace AppControle.Shared.Entities
     {
         public int Id { get; set; }
 
-        public Product Product { get; set; } = null!;
+        public Product? Product { get; set; } = null!;
 
         public int ProductId { get; set; }
 
-        public Client Client { get; set; } = null!;
+        public Client? Client { get; set; } = null!;
 
         public int ClientId { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         [DisplayFormat(DataFormatString = "{0:C2}")]
-        [Display(Name = "Preço")]
+        [Display(Name = "Desconto")]
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        public decimal Price { get; set; }
+        public decimal Discount { get; set; } = 0;
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]

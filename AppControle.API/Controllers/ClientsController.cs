@@ -1,5 +1,6 @@
 ﻿using AppControle.API.Data;
 using AppControle.API.Extensions;
+using AppControle.Shared.DTO;
 using AppControle.Shared.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +44,10 @@ namespace AppControle.API.Controllers
                 queryable = queryable.Where(x => x.Name!.Contains(filter));
             }
 
-            queryable = queryable.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            queryable = queryable
+                .Include(c => c.ClientService!)
+                .ThenInclude(c => c.Product)
+                .Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
 
 
             await HttpContext.InsertParamsInPageResponse(queryable, pagination.QuantityPerPage);
@@ -87,9 +91,9 @@ namespace AppControle.API.Controllers
             return client;
         }
 
-        // PUT: api/Clients/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut()]
+		// PUT: api/Clients/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut()]
         public async Task<IActionResult> PutClient(Client client)
         {
             _context.Entry(client).State = EntityState.Modified;
@@ -179,7 +183,25 @@ namespace AppControle.API.Controllers
 
 
         }
+        // DELETE: api/Clients/5
+        [HttpDelete("deleteclientservice/{id}")]
+        public async Task<IActionResult> DeleteClientService(int id)
+        {
+            if (_context.ClientService == null)
+            {
+                return NotFound();
+            }
+            var service = await _context.ClientService.FindAsync(id);
+            if (service == null)
+            {
+                return NotFound();
+            }
 
+            _context.ClientService.Remove(service);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
         // DELETE: api/Clients/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClient(int id)
@@ -199,6 +221,41 @@ namespace AppControle.API.Controllers
 
             return NoContent();
         }
+		// POST: api/Clients
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost("saveclientservice")]
+		public async Task<ActionResult<ClientService>> PostClientService(ClientService clientProd)
+		{
+			try
+			{
+                clientProd.StartDate = DateTime.Now;
 
-    }
+                if (_context.ClientService == null)
+				{
+					return Problem("Entity set 'DataContext.Client'  is null.");
+				}
+				_context.ClientService.Add(clientProd);
+				await _context.SaveChangesAsync();
+
+				return Ok();
+			}
+			catch (DbUpdateException dbUpdateException)
+			{
+				if (dbUpdateException.InnerException!.Message.ToLower().Contains("duplicate"))
+				{
+					return BadRequest("Já existe um cliente com o mesmo CPF.");
+				}
+				else
+				{
+					return BadRequest(dbUpdateException.InnerException.Message);
+				}
+			}
+			catch (Exception exception)
+			{
+				return BadRequest(exception.Message);
+			}
+
+
+		}
+	}
 }

@@ -1,6 +1,6 @@
 ﻿
 
-<CascadingBlazoredModal Position="ModalPosition.Middle" HideHeader="true" DisableBackgroundCancel="true" AnimationType="ModalAnimationType.FadeInOut">
+<CascadingBlazoredModal DisableBackgroundCancel="true">
     <Router AppAssembly="@typeof(MauiProgram).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Components.Layout.MainLayout)">
