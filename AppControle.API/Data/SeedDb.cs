@@ -18,6 +18,7 @@ namespace SisVendas.API.Data
         private readonly IFileStorage _fileStorage;
         private City city;
         private User user;
+        private Client client;
 
         public SeedDb(DataContext context, IApiService apiService, IUserHelper userHelper, IFileStorage fileStorage)
         {
@@ -42,11 +43,88 @@ namespace SisVendas.API.Data
             await CheckUserAsync("5050", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
             city = await _context.Cities!.FirstOrDefaultAsync();
             user = await _context.Users!.FirstOrDefaultAsync(c => c.Cpf_Cnpj == "1010")!;
-
             await CheckProductsAsync();
             await CheckClientsAsync();
+            client = await _context.Clients!.FirstOrDefaultAsync()!;
+            await CheckMonthlyFeeAsync();
         }
 
+        private async Task CheckMonthlyFeeAsync()
+        {
+            if(!_context.MonthlyFee.Any())
+            {
+                _context.MonthlyFee.Add(new MonthlyFee
+                {
+                    Client = client,
+                    ClientId = client.Id,
+                    PaymentMethod = PaymentMethod.Dinheiro,
+                    Reference = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                    Value = 500,
+                    DueDate = DateTime.Now.AddDays(10),
+
+                });
+                _context.MonthlyFee.Add(new MonthlyFee
+                {
+                    Client = client,
+                    ClientId = client.Id,
+                    PaymentMethod = PaymentMethod.Dinheiro,
+                    Reference = DateTime.Now,
+                    Value = 500,
+                    User = user,
+                    UserId = user.Id,
+                    DueDate = DateTime.Now.AddDays(15),
+
+                }); _context.MonthlyFee.Add(new MonthlyFee
+                {
+                    Client = client,
+                    ClientId = client.Id,
+                    Payday = DateTime.Now.AddDays(1),
+                    PaymentMethod = PaymentMethod.Dinheiro,
+                    Reference = DateTime.Now,
+                    Value = 500,
+                    DueDate = DateTime.Now.AddDays(7),
+                    User = user,
+                    UserId = user.Id,
+
+                }); _context.MonthlyFee.Add(new MonthlyFee
+                {
+                    Client = client,
+                    ClientId = client.Id,
+                    PaymentMethod = PaymentMethod.Dinheiro,
+                    Reference = DateTime.Now,
+                    Value = 500,
+                    DueDate = DateTime.Now.AddDays(100),
+                    User = user,
+                    UserId = user.Id,
+
+                }); _context.MonthlyFee.Add(new MonthlyFee
+                {
+                    Client = client,
+                    ClientId = client.Id,
+                    PaymentMethod = PaymentMethod.Dinheiro,
+                    Reference = DateTime.Now,
+                    Value = 500,
+                    DueDate = DateTime.Now.AddDays(34),
+                    User = user,
+                    UserId = user.Id,
+
+                }); _context.MonthlyFee.Add(new MonthlyFee
+                {
+                    Client = client,
+                    ClientId = client.Id,
+                    PaymentMethod = PaymentMethod.Dinheiro,
+                    Reference = DateTime.Now,
+                    Value = 500,
+                    DueDate = DateTime.Now.AddDays(200),
+                    User = user,
+                    UserId = user.Id,
+
+                });
+                await _context.SaveChangesAsync();
+            }
+        }
         private async Task CheckProductsAsync()
         {
             if (!_context.Products.Any())

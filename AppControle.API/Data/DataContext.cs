@@ -20,7 +20,7 @@ namespace AppControle.API.Data
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ClientService> ClientService { get; set; }
-
+        public DbSet<MonthlyFee> MonthlyFee { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

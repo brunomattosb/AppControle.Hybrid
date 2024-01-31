@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240126004902_AddDiscount")]
-    partial class AddDiscount
+    [Migration("20240131182157_updateo")]
+    partial class updateo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,9 +158,6 @@ namespace AppControle.API.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Payday")
-                        .HasColumnType("int");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
@@ -197,6 +194,42 @@ namespace AppControle.API.Migrations
                         .IsUnique();
 
                     b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.MonthlyFee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("Payday")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("Reference")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MonthlyFee");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.Product", b =>
@@ -598,6 +631,21 @@ namespace AppControle.API.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("AppControle.Shared.Entities.MonthlyFee", b =>
+                {
+                    b.HasOne("AppControle.Shared.Entities.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId");
+
+                    b.HasOne("AppControle.Shared.Entities.User", "User")
+                        .WithMany("MonthlyFees")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AppControle.Shared.Entities.Product", b =>
                 {
                     b.HasOne("AppControle.Shared.Entities.User", "User")
@@ -749,6 +797,8 @@ namespace AppControle.API.Migrations
             modelBuilder.Entity("AppControle.Shared.Entities.User", b =>
                 {
                     b.Navigation("Clients");
+
+                    b.Navigation("MonthlyFees");
 
                     b.Navigation("Products");
                 });

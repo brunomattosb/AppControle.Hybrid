@@ -312,6 +312,29 @@ namespace AppControle.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MonthlyFee",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Reference = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    DueDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Payday = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    ClientId = table.Column<int>(type: "int", nullable: true),
+                    PaymentMethod = table.Column<int>(type: "int", nullable: true),
+                    Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MonthlyFee", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MonthlyFee_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ClientService",
                 columns: table => new
                 {
@@ -319,9 +342,8 @@ namespace AppControle.API.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    Payday = table.Column<int>(type: "int", nullable: false),
                     Remarks = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
                 },
                 constraints: table =>
@@ -468,6 +490,11 @@ namespace AppControle.API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_MonthlyFee_ClientId",
+                table: "MonthlyFee",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductCategories_CategoryId",
                 table: "ProductCategories",
                 column: "CategoryId");
@@ -514,6 +541,9 @@ namespace AppControle.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "ClientService");
+
+            migrationBuilder.DropTable(
+                name: "MonthlyFee");
 
             migrationBuilder.DropTable(
                 name: "ProductCategories");

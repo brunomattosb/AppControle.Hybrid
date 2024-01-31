@@ -13,6 +13,24 @@
             </a>
 
         </div>
+
+        <div class="flex">
+            <div class="">
+                <label for="Month" class="block text-sm font-medium leading-6 text-gray-900">Mês</label>
+                <div class="mt-2">
+                    <InputNumber name="Month" id="Month" @bind-Value="@Month" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                </div>
+            </div>
+            <div class="">
+                <label for="Year" class="block text-sm font-medium leading-6 text-gray-900">Ano</label>
+                <div class="mt-2">
+                    <InputNumber name="Year" id="Year" @bind-Value="@Year" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                </div>
+            </div>
+
+        </div>
+
+
         <div class="inline-flex rounded-md shadow-sm" role="group">
 
             <div class="relative">
@@ -29,43 +47,31 @@
     </div>
     <p class="text-xl mb-2">Mensalidades geradas</p>
 
-    Aqui vai ser uma tabela com todas as mensalidades geradas de um selecionado mes
-    @* <!-- Tabela -->
+    <!-- Tabela -->
     <div class="relative overflow-x-auto rounded-lg shadow hidden md:block">
-        <GenericList MyList="lClients">
+        <GenericList MyList="lMonthlyFee">
         <Body>
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Nome
+                        Cliente
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Data de registro
+                        Data de vencimento
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Saldo
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                    
-                    </th>
+  
                 </tr>
             </thead>
             <tbody>
-                @foreach (var client in lClients!)
+                @foreach (var monthlyfee in lMonthlyFee!)
                 {
                     <tr>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    @client.Name
+                            @monthlyfee.Client.Name
                         </th>
                         <td class="px-6 py-4">
-                                    @client.RegisterDate
-                        </td>
-                        <td class="px-6 py-4">
-                                    @client.Balance.ToString("C")
-                        </td>
-                        <td class="px-6 py-4">
-                                    <a href="/clients/details/@client.Id" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Detalhar</a>
+                            @monthlyfee.DueDate
                         </td>
                     </tr>
                 }
@@ -75,7 +81,7 @@
         </Body>
         </GenericList>
     </div>
-
+    @*
     <!-- Box -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
         <GenericList MyList="lClients">
@@ -102,41 +108,44 @@
         </Body>
         </GenericList>
     </div>
-
+    *@
     <Pagination CurrentPage="CurrentPage"
                 QuantityTotalPages="TotalPages"
                 Ray="2"
-                SelectedPage="SelectedPageAsync" /> *@
+                SelectedPage="SelectedPageAsync" /> 
 </div>
 
 
 
 @code {
+    private int Month;
+    private int Year;
+
     private int CurrentPage = 1;
     private int TotalPages;
-    // public List<Client>? lClients { get; set; }
+    public List<MonthlyFee>? lMonthlyFee { get; set; }
     public string Filter = string.Empty;
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     await LoadAsync();
-    // }
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAsync();
+    }
 
     private async Task LoadAsync(int page = 1, int quantityPerPage = 5)
     {
-    //     try
-    //     {
-    //         var responseHttp = await repository.Get<List<Client>>($"/api/clients?Page={page}&QuantityPerPage={quantityPerPage}&filter={Filter}");
-    //         if (!responseHttp.Error)
-    //         {
-    //             TotalPages = responseHttp.TotalPages;
-    //             lClients = responseHttp.Response;
-    //         }
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         await sweetAlertService.FireAsync("Error", e.Message, SweetAlertIcon.Error);
-    //     }
+        try
+        {
+            var responseHttp = await repository.Get<List<MonthlyFee>>($"/api/monthlyfees?Page={page}&QuantityPerPage={quantityPerPage}&filter={Filter}");
+            if (!responseHttp.Error)
+            {
+                TotalPages = responseHttp.TotalPages;
+                lMonthlyFee = responseHttp.Response;
+            }
+        }
+        catch (Exception e)
+        {
+            await sweetAlertService.FireAsync("Error", e.Message, SweetAlertIcon.Error);
+        }
 
     }
 

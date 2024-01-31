@@ -31,9 +31,6 @@ namespace AppControle.Shared.Entities
         [Display(Name = "Data de Inicio")]
         public DateTime? StartDate { get; set; }
 
-        [Display(Name = "Dia de pagamento")]
-        public int Payday { get; set; }
-
         [DataType(DataType.MultilineText)]
         [MaxLength(150, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         [Display(Name = "Comentarios")]
