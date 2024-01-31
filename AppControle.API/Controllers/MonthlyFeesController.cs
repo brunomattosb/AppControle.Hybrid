@@ -23,7 +23,7 @@ namespace SisVendas.API.Data.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MonthlyFee>>> GetCategories([FromQuery] Pagination pagination, [FromQuery] string? filter)
+        public async Task<ActionResult<IEnumerable<MonthlyFee>>> GetCategories([FromQuery] Pagination pagination, [FromQuery] string? filter, [FromQuery] int? month, [FromQuery] int? year)
         {
             var queryable = _context.MonthlyFee
                 .Include(x => x.Client)
@@ -40,6 +40,9 @@ namespace SisVendas.API.Data.Controllers
                 queryable = queryable.Where(x => x.Client.Name.ToLower().Contains(filter.ToLower()));
             }
             queryable = queryable.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
+
+            queryable = queryable.Where(s => s.Reference!.Value.Month == month!);
+            queryable = queryable.Where(s => s.Reference!.Value.Year == year!);
 
             await HttpContext.InsertParamsInPageResponse(queryable, pagination.QuantityPerPage);
             return Ok(await queryable

@@ -7,27 +7,16 @@
 <div class="p-5 h-screen bg-gray-100">
     <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <div>
-            <a href="/monthlypaymentsgenerate" data-dropdown-toggle="dropdownAction" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button">
+            <a href="/monthlypayments/generate" data-dropdown-toggle="dropdownAction" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button">
                 <span class="sr-only">Action button</span>
                 Gerar mensalidades               
             </a>
 
         </div>
 
-        <div class="flex">
-            <div class="">
-                <label for="Month" class="block text-sm font-medium leading-6 text-gray-900">Mês</label>
-                <div class="mt-2">
-                    <InputNumber name="Month" id="Month" @bind-Value="@Month" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                </div>
-            </div>
-            <div class="">
-                <label for="Year" class="block text-sm font-medium leading-6 text-gray-900">Ano</label>
-                <div class="mt-2">
-                    <InputNumber name="Year" id="Year" @bind-Value="@Year" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                </div>
-            </div>
-
+        <div>
+            <label for="Month" class="block text-sm font-medium leading-6 text-gray-900">Selecione o mês</label>
+            <InputDate name="Month" id="Month" @bind-Value="selectedDate" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
         </div>
 
 
@@ -58,9 +47,17 @@
                         Cliente
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Data de referência
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Valor
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Data de vencimento
                     </th>
   
+                    <th scope="col" class="px-6 py-3">
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -68,10 +65,18 @@
                 {
                     <tr>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            @monthlyfee.Client.Name
+                            @monthlyfee.Client!.Name
                         </th>
                         <td class="px-6 py-4">
-                            @monthlyfee.DueDate
+                            @monthlyfee.Reference!.Value.Date
+                        </td>
+                        <td class="px-6 py-4">
+                            @monthlyfee.Value.ToString("C")
+                        </td>
+                        <td class="px-6 py-4">
+                                    @monthlyfee.DueDate!.Value.Date
+                        </td>
+                        <td class="px-6 py-4">
                         </td>
                     </tr>
                 }
@@ -112,14 +117,22 @@
     <Pagination CurrentPage="CurrentPage"
                 QuantityTotalPages="TotalPages"
                 Ray="2"
-                SelectedPage="SelectedPageAsync" /> 
+                SelectedPage="SelectedPageAsync" />
+
+    <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+        <div>
+            <a href="/monthlypayments/report" data-dropdown-toggle="dropdownAction" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button">
+                <span class="sr-only">Action button</span>
+                Relatório
+            </a>
+        </div>
+    </div>
 </div>
 
 
 
 @code {
-    private int Month;
-    private int Year;
+    private DateTime? selectedDate = DateTime.Now;
 
     private int CurrentPage = 1;
     private int TotalPages;
@@ -131,11 +144,16 @@
         await LoadAsync();
     }
 
+    private void OnBlurAsync(FocusEventArgs args)
+    {
+        // Lógica a ser executada quando o campo perde o foco
+        Console.WriteLine("Campo perdeu o foco");
+    }
     private async Task LoadAsync(int page = 1, int quantityPerPage = 5)
     {
         try
         {
-            var responseHttp = await repository.Get<List<MonthlyFee>>($"/api/monthlyfees?Page={page}&QuantityPerPage={quantityPerPage}&filter={Filter}");
+            var responseHttp = await repository.Get<List<MonthlyFee>>($"/api/monthlyfees?Page={page}&QuantityPerPage={quantityPerPage}&filter={Filter}&month={selectedDate.Value.Month}&year={selectedDate!.Value.Year}");
             if (!responseHttp.Error)
             {
                 TotalPages = responseHttp.TotalPages;
