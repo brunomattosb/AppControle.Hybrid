@@ -1,4 +1,4 @@
-﻿@page "/monthlypayments/generate"
+﻿@page "/monthlypayments/resume"
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
@@ -116,7 +116,7 @@
                 <div class="border-b border-t border-gray-900/10 pb-12 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
                     <div class="md:col-span-1">
                         <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">CFP / CNPJ</label>
-                        <label class="">@Cpf_Cnpj</label>
+                        <label class="">@resume?.total.ToString("C")</label>
                     </div>
                     @*
             <div class="md:col-span-1">
@@ -198,7 +198,7 @@
     private int CurrentPage = 1;
     private int TotalPages;
     public List<MonthlyFee>? lMonthlyFee { get; set; }
-
+    private MonthlyFeeResumeDTO? resume;
     public string Filter = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -215,14 +215,17 @@
     {
         try
         {
-            var responseHttp = await repository.Get<List<MonthlyFee>>($"/api/monthlyfees?Page={page}&QuantityPerPage={quantityPerPage}&filter={Filter}&month={selectedDate.Value.Month}&year={selectedDate!.Value.Year}");
+            var responseHttp = await repository.Get<List<MonthlyFee>>($"/api/monthlyfees?Page={page}&QuantityPerPage={quantityPerPage}&filter={Filter}&month={selectedDate!.Value.Month}&year={selectedDate!.Value.Year}");
             if (!responseHttp.Error)
             {
                 TotalPages = responseHttp.TotalPages;
                 lMonthlyFee = responseHttp.Response;
-
-                Buscar o resumo
-
+            }
+            //Resumo
+            var resumeResponse = await repository.Get<MonthlyFeeResumeDTO>($"/api/monthlyfees/rsume?month={selectedDate!.Value.Month}&year={selectedDate!.Value.Year}");
+            if (!resumeResponse.Error)
+            {
+                resume = resumeResponse.Response;
             }
         }
         catch (Exception e)
@@ -231,7 +234,6 @@
         }
 
     }
-
     private async Task SelectedPageAsync(int page)
     {
         CurrentPage = page;

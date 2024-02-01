@@ -1,10 +1,12 @@
 ﻿using AppControle.API.Data;
 using AppControle.API.Extensions;
+using AppControle.Shared.DTO;
 using AppControle.Shared.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Claims;
 
 namespace SisVendas.API.Data.Controllers
@@ -23,7 +25,7 @@ namespace SisVendas.API.Data.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MonthlyFee>>> GetCategories([FromQuery] Pagination pagination, [FromQuery] string? filter, [FromQuery] int? month, [FromQuery] int? year)
+        public async Task<ActionResult<IEnumerable<MonthlyFee>>> GetMonthlyFee([FromQuery] Pagination pagination, [FromQuery] string? filter, [FromQuery] int? month, [FromQuery] int? year)
         {
             var queryable = _context.MonthlyFee
                 .Include(x => x.Client)
@@ -50,24 +52,44 @@ namespace SisVendas.API.Data.Controllers
                 .Paginar(pagination)
                 .ToListAsync());
         }
+        [HttpGet("resume")]
+        public async Task<ActionResult<MonthlyFeeResumeDTO>> GetMonthlyFeeResume([FromQuery] int? month, [FromQuery] int? year)
+        {
+            var queryable = _context.MonthlyFee
+                .Include(x => x.Client)
+                .AsQueryable();
 
-        // GET: api/Cities/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<City>> GetCity(int id)
-        //{
-        //    if (_context.Cities == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var City = await _context.Cities.FirstOrDefaultAsync(x => x.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            if (user == null)
+            {
+                return BadRequest("User not valid.");
+            }
+            queryable = queryable.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
 
-        //    if (City == null)
-        //    {
-        //        return NotFound();
-        //    }
+            queryable = queryable.Where(s => s.Reference!.Value.Month == month!);
+            queryable = queryable.Where(s => s.Reference!.Value.Year == year!);
 
-        //    return City;
-        //}
+
+            
+
+
+            var monthlyFee = await queryable
+                .GroupBy(c => c.UserId)
+                .Select(g => new MonthlyFeeResumeDTO()
+                {
+                    total = g.Sum(x => x.Value),
+                    totalPayment = g.Sum(x => x.Payday == null ? 0 : x.Value),
+                    totalPayable = g.Sum(x => x.Payday != null ? 0 : x.Value)
+                })
+                .FirstOrDefaultAsync();
+
+            if (monthlyFee == null)
+            {
+                return NotFound();
+            }
+
+            return monthlyFee;
+        }
 
         // PUT: api/Cities/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
