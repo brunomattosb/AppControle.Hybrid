@@ -29,16 +29,16 @@ namespace AppControle.Shared.Entities
         [Display(Name = "Estoque")]
         public float Stock { get; set; } = 0;
 
-        public ICollection<ProductCategory>? ProductCategories { get; set; }
+        public ICollection<ProductCategory>? lProductCategories { get; set; }
 
-        public ICollection<ClientService>? ClientServices { get; set; }
+        public ICollection<ClientService>? lClientServices { get; set; }
 
         [Display(Name = "Serviços")]
-        public ICollection<ProductImage>? ProductImages { get; set; }
+        public ICollection<ProductImage>? lProductImages { get; set; }
 
 
         [Display(Name = "Imagem")]
-        public string MainImage => (ProductImages == null || ProductImages.Count == 0) ? string.Empty : ProductImages.FirstOrDefault()!.Image;
+        public string MainImage => (lProductImages == null || lProductImages.Count == 0) ? string.Empty : lProductImages.FirstOrDefault()!.Image;
 
         //public ICollection<TemporalSale>? TemporalSales { get; set; }
 

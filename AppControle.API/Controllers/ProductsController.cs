@@ -121,6 +121,9 @@ namespace AppControle.API.Controllers
                     ProductImages = new List<ProductImage>(),
                     User = user,
                     UserId = user.Id,
+                    IsActive = productDTO.IsActive,
+                    IsService = productDTO.IsService,
+                    
                 };
                 
                 foreach (var productImage in productDTO.ProductImages!)

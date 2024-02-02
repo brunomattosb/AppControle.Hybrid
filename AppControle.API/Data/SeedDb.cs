@@ -169,6 +169,7 @@ namespace SisVendas.API.Data
                 ProductImages = new List<ProductImage>(),
                 User = user,
                 UserId = user.Id,
+                IsService = true,
             };
 
             foreach (var categoryName in categories)

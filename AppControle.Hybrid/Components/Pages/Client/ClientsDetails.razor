@@ -124,7 +124,7 @@ else
 
             <div class="md:col-span-1">
                 <label class="form-label fw-bold">Mensalidade</label>
-                <label class="">@($"{client.MonthlyPayment:C2}")</label>
+                <label class="">@($"{client.MonthlyFee:C2}")</label>
             </div>
         </div>
     </div>
@@ -202,8 +202,7 @@ else
                                 <div class="text-sm font-medium text-black">
                                     Saldo: @((servico.Product.Price - servico.Discount).ToString("C"))
                                 </div>
-                                <a class="mt-2 font-bold text-blue-500 hover:underline">Remover</a>
-                                
+                                <a @onclick=@(() => RemoverServicoClientAsync(servico.Id)) type="button" class="font-medium text-red-600 dark:text-red-500 hover:underline">Remover</a>
                             </div>
                         }
                     </Body>

@@ -16,7 +16,7 @@ namespace AppControle.Shared.Entities
         [MaxLength(100, ErrorMessage = "O campo {0} não pode termais de {1} caracteres")]
         public string Name { get; set; } = null!;
 
-        public ICollection<State>? States { get; set; }
+        public ICollection<State>? lStates { get; set; }
 
     }
 }

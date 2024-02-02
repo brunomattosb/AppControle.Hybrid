@@ -69,10 +69,6 @@ namespace SisVendas.API.Data.Controllers
             queryable = queryable.Where(s => s.Reference!.Value.Month == month!);
             queryable = queryable.Where(s => s.Reference!.Value.Year == year!);
 
-
-            
-
-
             var monthlyFee = await queryable
                 .GroupBy(c => c.UserId)
                 .Select(g => new MonthlyFeeResumeDTO()
@@ -89,6 +85,57 @@ namespace SisVendas.API.Data.Controllers
             }
 
             return monthlyFee;
+        }
+        [HttpGet("getvaluesmonthlyfees")]
+        public async Task<ActionResult<MonthlyFeeCreateDTO>> GetValuesMonthlyFees( int? month, [FromQuery] int? year)
+        {
+            var queryableMonthfy = _context.MonthlyFee
+                .Include(x => x.Client)
+                .AsQueryable();
+
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            if (user == null)
+            {
+                return BadRequest("User not valid.");
+            }
+            queryableMonthfy = queryableMonthfy.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
+
+            queryableMonthfy = queryableMonthfy.Where(s => s.Reference!.Value.Month == month!);
+            queryableMonthfy = queryableMonthfy.Where(s => s.Reference!.Value.Year == year!);
+
+            
+            var monthlyFee = await queryableMonthfy
+                .Select(x => new MonthlyFeeCreateDTO {
+                    Client = x.Client,
+                    //ClientId = x.ClientId,
+                    Value = x.Value
+                })
+                .ToListAsync();
+            
+            var queryableClientsValue = _context.Clients
+                .Include(x => x.lMonthlyFees)
+                .AsQueryable();
+            try
+            {
+                var ClientsValue = await queryableClientsValue
+               //.Select(x => new MonthlyFeeCreateDTO
+               //{
+               //    Client = x.Client,
+               //    //ClientId = x.ClientId,
+               //    Value = x.Value
+               //})
+               .ToListAsync();
+            }catch (Exception ex)
+            {
+                var a = 1;
+            }
+
+            if (monthlyFee == null)
+            {
+                return NotFound();
+            }
+
+            return NotFound();
         }
 
         // PUT: api/Cities/5

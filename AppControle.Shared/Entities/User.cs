@@ -61,9 +61,9 @@ namespace AppControle.Shared.Entities
         public string? Neighborhood { get; set; }
 
         //Collections 
-        public ICollection<Client>? Clients { get; set; }
-        public ICollection<Product>? Products { get; set; }
-        public ICollection<MonthlyFee>? MonthlyFees { get; set; }
+        public ICollection<Client>? lClients { get; set; }
+        public ICollection<Product>? lProducts { get; set; }
+        public ICollection<MonthlyFee>? lMonthlyFees { get; set; }
 
 
     }

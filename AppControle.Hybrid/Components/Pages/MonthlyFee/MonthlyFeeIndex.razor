@@ -1,14 +1,13 @@
-﻿@page "/monthlypayments/resume"
+﻿@page "/monthlyfee"
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
 @attribute [Authorize]
 
-<div class="p-5 h-screen bg-gray-100">
+<div class="p-5 bg-gray-100 h-screen">
     <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <div>
-            <a href="/monthlypayments/generate" data-dropdown-toggle="dropdownAction" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button">
-                <span class="sr-only">Action button</span>
+            <a href="/monthlyfee/create" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button">
                 Gerar mensalidades
             </a>
 
@@ -36,10 +35,11 @@
     </div>
     <p class="text-xl mb-2">Mensalidades geradas</p>
 
-    <!-- Tabela -->
-    <div class="relative overflow-x-auto rounded-lg shadow hidden md:block">
-        <GenericList MyList="lMonthlyFee">
-            <Body>
+    <GenericList MyList="lMonthlyFee">
+        <Body>
+            <!-- Tabela -->
+            <div class="relative overflow-x-auto rounded-lg shadow hidden md:block">
+
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -47,15 +47,14 @@
                                 Cliente
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Data de referência
+                                Valor
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Valor
+                                Status
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Data de vencimento
                             </th>
-
                             <th scope="col" class="px-6 py-3">
                             </th>
                         </tr>
@@ -67,25 +66,79 @@
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     @monthlyfee.Client!.Name
                                 </th>
-                                <td class="px-6 py-4">
-                                    @monthlyfee.Reference!.Value.Date
-                                </td>
+       
                                 <td class="px-6 py-4">
                                     @monthlyfee.Value.ToString("C")
                                 </td>
+                                <th scope="col" class="px-6 py-3 text-gray-700 whitespace-nowrap">
+                                    @if (monthlyfee.Payday == null)
+                                    {
+                                        <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">A Pagar</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Pago</span>
+                                    }
+                                </th>
+
                                 <td class="px-6 py-4">
                                     @monthlyfee.DueDate!.Value.Date
                                 </td>
-                                <td class="px-6 py-4">
-                                </td>
+                                <td class="px-6 pl-1 py-4">
+
+                                    <a @onclick=@(()=>OpenModalDetailsAsync(monthlyfee)) class="mt-2 font-bold text-blue-500 hover:underline">
+                                        detalhar
+                                    </a>
+                                    </td>
                             </tr>
                         }
                     </tbody>
                 </table>
 
-            </Body>
-        </GenericList>
-    </div>
+
+            </div>
+            <!-- Box -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+                @foreach (var monthlyfee in lMonthlyFee!)
+                {
+                    <div class="bg-white space-y-3 p-4 rounded-lg shadow">
+                        <div class="flex items-center space-x-2 text-sm">
+
+                            <div class="text-gray-500">Venc. @monthlyfee.DueDate!.Value.Date</div>
+                            <div>
+                                @if (monthlyfee.Payday == null)
+                                {
+                                    <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">A Pagar</span>
+                                }
+                                else
+                                {
+                                    <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Pago</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sm">
+
+                            @if (monthlyfee.Payday! != null)
+                            {
+
+                                <div class="text-gray-500">Pago. @monthlyfee.Payday!.Value.Date</div>
+                            }
+
+                        </div>
+                        <div class="text-sm text-gray-700">
+                            @monthlyfee.Client!.Name
+                        </div>
+                        <div class="text-sm font-medium text-black">
+                            @monthlyfee.Value.ToString("C")
+                        </div>
+                        <a @onclick=@(()=>OpenModalDetailsAsync(monthlyfee)) class="mt-2 font-bold text-blue-500 hover:underline">
+                            Detalhar
+                        </a>
+                    </div>
+                }
+            </div>
+        </Body>
+    </GenericList>
     <Pagination CurrentPage="CurrentPage"
                 QuantityTotalPages="TotalPages"
                 Ray="2"
@@ -105,29 +158,32 @@
     }
     else
     {
-        if (lMonthlyFee.Count != 0)
+        if (lMonthlyFee.Count != 0 && currentDate is not null)
         {
 
             <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
-                <h2 class="text-xl font-bold leading-7 text-gray-900">Relatório do mês @selectedDate!.Value.Month/@selectedDate.Value.Year</h2>
+                <h2 class="text-xl font-bold leading-7 text-gray-900">Relatório do mês @currentDate!.Value.Month/@currentDate.Value.Year</h2>
             </div>
 
             <div class="space-y-12  pe-3 sm:pe-5 ps-3 sm:ps-5 mt-5">
                 <div class="border-b border-t border-gray-900/10 pb-12 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
                     <div class="md:col-span-1">
-                        <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">CFP / CNPJ</label>
+                        <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Valor total:</label>
                         <label class="">@resume?.total.ToString("C")</label>
                     </div>
-                    @*
-            <div class="md:col-span-1">
-            <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Cliente: </label>
-            <label class="">@client.Name</label>
-            </div>
 
-            <div class="md:col-span-1">
-            <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">RG / IE</label>
-            <label class="">@client.Rg_Ie</label>
-            </div>
+                    <div class="md:col-span-1">
+                        <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Total pago: </label>
+                        <label class="">@resume?.totalPayment</label>
+                    </div>
+                    <div class="md:col-span-1">
+                        <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Total a pagar</label>
+                        <label class="">@resume?.totalPayable</label>
+                    </div>
+                    @*
+
+
+
 
             <div class="md:col-span-1">
             <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
@@ -181,7 +237,7 @@
 
             <div class="md:col-span-1">
             <label class="form-label fw-bold">Mensalidade</label>
-            <label class="">@($"{client.MonthlyPayment:C2}")</label>
+            <label class="">@($"{client.MonthlyFee:C2}")</label>
             </div>*@
 
                 </div>
@@ -194,12 +250,16 @@
 
 @code {
     private DateTime? selectedDate = DateTime.Now;
+    private DateTime? currentDate = DateTime.Now;
 
     private int CurrentPage = 1;
     private int TotalPages;
     public List<MonthlyFee>? lMonthlyFee { get; set; }
     private MonthlyFeeResumeDTO? resume;
     public string Filter = string.Empty;
+
+    [CascadingParameter]
+    IModalService MonthlyFeeModal { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
@@ -215,6 +275,8 @@
     {
         try
         {
+            lMonthlyFee = null;
+            resume = null;
             var responseHttp = await repository.Get<List<MonthlyFee>>($"/api/monthlyfees?Page={page}&QuantityPerPage={quantityPerPage}&filter={Filter}&month={selectedDate!.Value.Month}&year={selectedDate!.Value.Year}");
             if (!responseHttp.Error)
             {
@@ -222,7 +284,7 @@
                 lMonthlyFee = responseHttp.Response;
             }
             //Resumo
-            var resumeResponse = await repository.Get<MonthlyFeeResumeDTO>($"/api/monthlyfees/rsume?month={selectedDate!.Value.Month}&year={selectedDate!.Value.Year}");
+            var resumeResponse = await repository.GetNoPage<MonthlyFeeResumeDTO>($"/api/monthlyfees/resume?month={selectedDate!.Value.Month}&year={selectedDate!.Value.Year}");
             if (!resumeResponse.Error)
             {
                 resume = resumeResponse.Response;
@@ -232,7 +294,6 @@
         {
             await sweetAlertService.FireAsync("Error", e.Message, SweetAlertIcon.Error);
         }
-
     }
     private async Task SelectedPageAsync(int page)
     {
@@ -242,8 +303,23 @@
 
     private async Task ApplyFilterAsync()
     {
+        currentDate = selectedDate;
         int page = 1;
         await LoadAsync(page);
         await SelectedPageAsync(page);
+    }
+    private async void OpenModalDetailsAsync(MonthlyFee monthlyFee)
+    {
+        IModalReference modalReference;
+
+        modalReference = MonthlyFeeModal.Show<MonthlyFeeDetailsModal>(string.Empty, new ModalParameters().Add("MonthlyFee", monthlyFee));
+
+        var result = await modalReference.Result;
+
+        if (result.Confirmed)
+        {
+            await LoadAsync();
+            StateHasChanged();
+        }
     }
 }

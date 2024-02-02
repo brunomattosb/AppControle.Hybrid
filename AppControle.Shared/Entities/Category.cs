@@ -11,7 +11,7 @@ namespace AppControle.Shared.Entities
         [Required(ErrorMessage = "O campo {0} é obligatorio.")]
         public string Name { get; set; } = null!;
 
-        public ICollection<ProductCategory>? ProductCategories { get; set; }
+        public ICollection<ProductCategory>? lProductCategories { get; set; }
 
         [Display(Name = "Produtos")]
         public int ProductCategoriesNumber => ProductCategories == null ? 0 : ProductCategories.Count;

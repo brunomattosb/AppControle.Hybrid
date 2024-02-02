@@ -21,7 +21,7 @@ namespace AppControle.Shared.Entities
 
         public Country? Country { get; set; }
 
-        public ICollection<City>? Cities { get; set; }
+        public ICollection<City>? lCities { get; set; }
 
     }
 }

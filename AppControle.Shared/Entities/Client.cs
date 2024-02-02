@@ -91,10 +91,11 @@ namespace AppControle.Shared.Entities
 
         public User? User { get; set; }
 
-        public ICollection<ClientService>? ClientService { get; set; }
+        public ICollection<ClientService>? lClientService { get; set; }
+        public ICollection<MonthlyFee>? lMonthlyFees { get; set; }
 
         [Display(Name = "Mensalidades")]
-        public decimal MonthlyPayment => ClientService == null ? 0 : ClientService.Sum(x=>x.Product?.Price - x.Discount) ?? 0;
+        public decimal MonthlyFeeAmount => lClientService == null ? 0 : lClientService.Sum(x=>x.Product?.Price - x.Discount) ?? 0;
 
     }
 }

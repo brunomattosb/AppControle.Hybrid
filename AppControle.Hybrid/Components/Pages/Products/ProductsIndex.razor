@@ -4,7 +4,7 @@
 @inject SweetAlertService sweetAlertService
 @attribute [Authorize]
 
-<div class="p-5 bg-gray-100 h-full w-full">
+<div class="p-5 bg-gray-100 h-screen">
     <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <div>
             <a href="/products/create" data-dropdown-toggle="dropdownAction" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button">
@@ -30,115 +30,115 @@
     <p class="text-xl mb-2">Serviços</p>
 
     <GenericList MyList="lProducts">
-    <Body>
-    <!-- Tabela -->
-    <div class="relative overflow-x-auto rounded-lg shadow hidden md:block">
-        
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Nome
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Descrição
-                    </th>
-                    @* <th scope="col" class="px-6 py-3">
-                        Estoque
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Serviço?
-                    </th> *@
-                    <th scope="col" class="px-6 py-3">
-                        Ativo?
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                                
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var Product in lProducts)
-                {
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        @* <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+        <Body>
+            <!-- Tabela -->
+            <div class="relative overflow-x-auto rounded-lg shadow hidden md:block">
+
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Nome
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Descrição
+                            </th>
+                            @* <th scope="col" class="px-6 py-3">
+                            Estoque
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                            Serviço?
+                            </th> *@
+                            <th scope="col" class="px-6 py-3">
+                                Ativo?
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Product in lProducts)
+                        {
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                @* <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                             <img src="@Product.MainImage" class="w-8 h-8 rounded-full" alt="dropdown image" />
                             <div class="ps-3">
-                                <div class="text-base font-semibold">@Product.Name</div>
-                                <div class="font-normal text-gray-500">@Product.Price.ToString("C")</div>
+                            <div class="text-base font-semibold">@Product.Name</div>
+                            <div class="font-normal text-gray-500">@Product.Price.ToString("C")</div>
                             </div>
-                        </th> *@
-                        <td class="px-6 py-4">
-                            @Product.Name
-                        </td>
-                        <td class="px-6 py-4">
-                            @Product.Description
-                        </td>
-                        @* <td class="px-6 py-4">
+                            </th> *@
+                                <td class="px-6 py-4">
+                                    @Product.Name
+                                </td>
+                                <td class="px-6 py-4">
+                                    @Product.Description
+                                </td>
+                                @* <td class="px-6 py-4">
                             @Product.Stock
-                        </td> 
-                        <td class="w-4 p-4">
+                            </td>
+                            <td class="w-4 p-4">
 
                             <div class="flex items-center">
-                                <InputCheckbox disabled id="checkbox-table-search-1" @bind-Value="@Product.IsService" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                            <InputCheckbox disabled id="checkbox-table-search-1" @bind-Value="@Product.IsService" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                             </div>
-                        </td> *@
-                        <td class="w-4 p-4">
-                            @if (Product.IsActive)
-                            {
-                                <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Ativo</span>
-                            }
-                            else
-                            {
-                                <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">Desativado</span>
-                            }
-                        </td>
+                            </td> *@
+                                <td class="w-4 p-4">
+                                    @if (Product.IsActive)
+                                    {
+                                        <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Ativo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">Desativado</span>
+                                    }
+                                </td>
 
-                        <td class="px-6 py-4">
-                            <a href="/products/details/@Product.Id" type="button" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Detalhar</a>
-                        </td>
-                    </tr>
-                }
+                                <td class="px-6 py-4">
+                                    <a href="/products/details/@Product.Id" class="mt-2 font-bold text-blue-500 hover:underline">Detalhar</a>
+                                </td>
+                            </tr>
+                        }
 
-            </tbody>
-        </table>
-    </div>
-    <!-- Box -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden ">
-        @foreach (var Product in lProducts)
-        {
-         
-            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"> 
-           
-                @* <img class="p-8 rounded-t-sm w-36 h-36" src="@Product.MainImage" alt="product image" /> *@
-                
-                <div class="px-5 pb-5 mt-1">
-                <p>
-                            <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">@Product.Name</h5>
-                </p>
-                <div class="flex items-center mt-2.5 mb-5 space-x-1">
-                    <p>
-                        <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">@Product.Description</h5>
-                    </p>
-                    @if (Product.IsActive)
-                    {
-                        <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Ativo</span>
-                    }
-                    else 
-                    {
-                        <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">Desativado</span>
-                    }
-                </div>
-                <div class="flex items-center justify-between">
-                    <span class="text-3xl font-bold text-gray-900 dark:text-white">@Product.Price.ToString("C")</span>
-                </div>
-                <a href="/products/details/@Product.Id" class="mt-2 font-bold text-blue-500 hover:underline">Detalhar</a>
-                </div> 
+                    </tbody>
+                </table>
             </div>
-        }           
-    </div>
-    </Body>
+            <!-- Box -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden ">
+                @foreach (var Product in lProducts)
+                {
+
+                    <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+
+                        @* <img class="p-8 rounded-t-sm w-36 h-36" src="@Product.MainImage" alt="product image" /> *@
+
+                        <div class="px-5 pb-5 mt-1">
+                            <p>
+                                <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">@Product.Name</h5>
+                            </p>
+                            <div class="flex items-center mt-2.5 mb-5 space-x-1">
+                                <p>
+                                    <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">@Product.Description</h5>
+                                </p>
+                                @if (Product.IsActive)
+                                {
+                                    <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Ativo</span>
+                                }
+                                else
+                                {
+                                    <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">Desativado</span>
+                                }
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-bold text-gray-900 dark:text-white">@Product.Price.ToString("C")</span>
+                            </div>
+                            <a href="/products/details/@Product.Id" class="mt-2 font-bold text-blue-500 hover:underline">Detalhar</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </Body>
     </GenericList>
 
     <Pagination CurrentPage="CurrentPage"
