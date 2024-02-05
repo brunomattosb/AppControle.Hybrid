@@ -61,7 +61,7 @@ namespace SisVendas.API.Data.Controllers
                 return NotFound();
             }
             var State = await _context.States
-                .Include(x => x.Cities!)
+                .Include(x => x.lCities!)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (State == null)

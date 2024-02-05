@@ -180,7 +180,7 @@ else
         var categories = httpResponse.Response!;
         foreach (var category in categories!)
         {
-            var found = product!.ProductCategories!.FirstOrDefault(x => x.CategoryId == category.Id);
+            var found = product!.lProductCategories!.FirstOrDefault(x => x.CategoryId == category.Id);
             if (found != null)
             {
                 selectedCategories.Add(category);

@@ -45,7 +45,7 @@ namespace AppControle.API.Controllers
             }
 
             queryable = queryable
-                .Include(c => c.ClientService!)
+                .Include(c => c.lClientService!)
                 .ThenInclude(c => c.Product)
                 .Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
 
@@ -78,7 +78,7 @@ namespace AppControle.API.Controllers
                 .ThenInclude(c => c.State!)
                 .ThenInclude(s => s.Country!)
                 .Include(u => u.User!)
-                .Include(u => u.ClientService!)
+                .Include(u => u.lClientService!)
                 .ThenInclude(x => x.Product)
                 .Where(x => x.User!.Id == user.Id)
                 .FirstOrDefaultAsync(x => x.Id == id && x.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);

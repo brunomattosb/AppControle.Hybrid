@@ -14,6 +14,6 @@ namespace AppControle.Shared.Entities
         public ICollection<ProductCategory>? lProductCategories { get; set; }
 
         [Display(Name = "Produtos")]
-        public int ProductCategoriesNumber => ProductCategories == null ? 0 : ProductCategories.Count;
+        public int ProductCategoriesNumber => lProductCategories == null ? 0 : lProductCategories.Count;
     }
 }

@@ -98,7 +98,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwt:Key"]!)),
         ClockSkew = TimeSpan.Zero
     });
-
 var app = builder.Build();
 
 //Seeds

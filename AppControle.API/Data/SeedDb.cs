@@ -165,8 +165,8 @@ namespace SisVendas.API.Data
                 Name = name,
                 Price = price,
                 Stock = stock,
-                ProductCategories = new List<ProductCategory>(),
-                ProductImages = new List<ProductImage>(),
+                lProductCategories = new List<ProductCategory>(),
+                lProductImages = new List<ProductImage>(),
                 User = user,
                 UserId = user.Id,
                 IsService = true,
@@ -177,7 +177,7 @@ namespace SisVendas.API.Data
                 var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == categoryName);
                 if (category != null)
                 {
-                    prodcut.ProductCategories.Add(new ProductCategory { Category = category });
+                    prodcut.lProductCategories.Add(new ProductCategory { Category = category });
                 }
             }
 
@@ -195,7 +195,7 @@ namespace SisVendas.API.Data
 
                 var fileBytes = File.ReadAllBytes(filePath);
                 var imagePath = await _fileStorage.SaveFileAsync(fileBytes, "jpg", "products");
-                prodcut.ProductImages.Add(new ProductImage { Image = imagePath });
+                prodcut.lProductImages.Add(new ProductImage { Image = imagePath });
             }
 
             _context.Products.Add(prodcut);
@@ -246,7 +246,7 @@ namespace SisVendas.API.Data
 
                     User = user,
                     UserId = user.Id,
-                    ClientService = new List<ClientService>()
+                    lClientService = new List<ClientService>()
                     {
                         cli,
                     },
@@ -536,7 +536,7 @@ namespace SisVendas.API.Data
                             Country? country = await _context.Countries!.FirstOrDefaultAsync(c => c.Name == countryResponse.Name!)!;
                             if (country == null)
                             {
-                                country = new() { Name = countryResponse.Name!, States = new List<State>() };
+                                country = new() { Name = countryResponse.Name!, lStates = new List<State>() };
                                 Response responseStates = await _apiService.GetListAsync<ResponseApiCities>("/v1", $"/countries/{countryResponse.Iso2}/states");
                                 if (responseStates.IsSuccess)
                                 {
@@ -544,10 +544,10 @@ namespace SisVendas.API.Data
                                     foreach (ResponseApiCities stateResponse in states!)
                                     {
                                         
-                                        State state = country.States!.FirstOrDefault(s => s.Name == stateResponse.Name!)!;
+                                        State state = country.lStates!.FirstOrDefault(s => s.Name == stateResponse.Name!)!;
                                         if (state == null)
                                         {
-                                            state = new() { Name = stateResponse.Name!, Cities = new List<City>() };
+                                            state = new() { Name = stateResponse.Name!, lCities = new List<City>() };
                                             Response responseCities = await _apiService.GetListAsync<ResponseApiCities>("/v1", $"/countries/{countryResponse.Iso2}/states/{stateResponse.Iso2}/cities");
                                             if (responseCities.IsSuccess)
                                             {
@@ -558,13 +558,13 @@ namespace SisVendas.API.Data
                                                     {
                                                         continue;
                                                     }
-                                                    City city = state.Cities!.FirstOrDefault(c => c.Name == cityResponse.Name!)!;
+                                                    City city = state.lCities!.FirstOrDefault(c => c.Name == cityResponse.Name!)!;
                                                     if (city == null)
                                                     {
-                                                        state.Cities.Add(new City() { Name = cityResponse.Name! });
+                                                        state.lCities.Add(new City() { Name = cityResponse.Name! });
                                                     }
 
-                                                    country.States.Add(state);
+                                                    country.lStates.Add(state);
                                                     //_context.Countries.Add(country);
                                                     //await _context.SaveChangesAsync();
                                                     //return;
@@ -572,14 +572,14 @@ namespace SisVendas.API.Data
 
                                             }
                                             
-                                            if (state.Cities.Count > 0)
+                                            if (state.lCities.Count > 0)
                                             {
-                                                country.States.Add(state);
+                                                country.lStates.Add(state);
                                             }
                                         }
                                     }
                                 }
-                                if (country.States.Count > 0)
+                                if (country.lStates.Count > 0)
                                 {
                                     _context.Countries.Add(country);
                                     await _context.SaveChangesAsync();

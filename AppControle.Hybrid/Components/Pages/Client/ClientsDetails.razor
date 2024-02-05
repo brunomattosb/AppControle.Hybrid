@@ -124,12 +124,12 @@ else
 
             <div class="md:col-span-1">
                 <label class="form-label fw-bold">Mensalidade</label>
-                <label class="">@($"{client.MonthlyFee:C2}")</label>
+                <label class="">@($"{client.MonthlyFeeAmount:C2}")</label>
             </div>
         </div>
     </div>
 
-    if (client?.ClientService?.Count != 0)
+    if (client?.lClientService?.Count != 0)
     {
         @* Tabela CLientes Produtos *@
         <div class="p-5 bg-gray-100">
@@ -138,7 +138,7 @@ else
 
             <!-- Tabela -->
             <div class="relative overflow-x-auto rounded-lg shadow hidden md:block">
-                <GenericList MyList="client?.ClientService?.ToList()">
+                <GenericList MyList="client?.lClientService?.ToList()">
                     <Body>
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -158,7 +158,7 @@ else
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var servico in client?.ClientService!)
+                                @foreach (var servico in client?.lClientService!)
                                 {
                                     <tr>
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -184,9 +184,9 @@ else
 
             <!-- Box -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-                <GenericList MyList="client?.ClientService?.ToList()">
+                <GenericList MyList="client?.lClientService?.ToList()">
                     <Body>
-                        @foreach (var servico in client?.ClientService!)
+                        @foreach (var servico in client?.lClientService!)
                         {
                             <div class="bg-white space-y-3 p-4 rounded-lg shadow">
                                 <div class="flex items-center space-x-2 text-sm">

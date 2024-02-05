@@ -93,8 +93,8 @@ else
             <div class="md:col-span-1">
                 <label for="categories" class="block text-sm font-medium leading-6 text-gray-900">Categorias</label>
                 <select id="categories" size="5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    @if (product.ProductCategories != null )
-                        @foreach (var category in product.ProductCategories)
+                    @if (product.lProductCategories != null )
+                        @foreach (var category in product.lProductCategories)
                         {
                             <option>@category.Category.Name</option>
                         }
@@ -192,10 +192,10 @@ else
         }
         product = responseHppt.Response;
 
-        if(product?.ProductImages?.Count > 0)
+        if(product?.lProductImages?.Count > 0)
         {
             
-            foreach (var image in product?.ProductImages!)
+            foreach (var image in product?.lProductImages!)
             {
                 lImage.Add(image.Image);
             }

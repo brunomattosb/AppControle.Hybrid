@@ -20,8 +20,8 @@ namespace AppControle.Hybrid.Helpers
                 Name = product.Name,
                 Price = product.Price,
                 Stock = product.Stock,
-                ProductCategoryIds = product.ProductCategories!.Select(x => x.CategoryId).ToList(),
-                ProductImages = product.ProductImages!.Select(x => x.Image).ToList()
+                ProductCategoryIds = product.lProductCategories!.Select(x => x.CategoryId).ToList(),
+                ProductImages = product.lProductImages!.Select(x => x.Image).ToList()
             };
         }
     }
