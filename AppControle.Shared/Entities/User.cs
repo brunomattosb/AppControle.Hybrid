@@ -64,6 +64,7 @@ namespace AppControle.Shared.Entities
         public ICollection<Client>? lClients { get; set; }
         public ICollection<Product>? lProducts { get; set; }
         public ICollection<MonthlyFee>? lMonthlyFees { get; set; }
+        public ICollection<Category>? Category { get; set; }
 
 
     }

@@ -16,7 +16,8 @@ namespace AppControle.Shared.Entities
 
         public int? ClientId { get; set; }
 
-        public Client? Client { get; set; }
+        public string? Cpf_Cnpj { get; set; }
+        public string? Name { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         [DisplayFormat(DataFormatString = "{0:C2}")]
@@ -24,7 +25,7 @@ namespace AppControle.Shared.Entities
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public decimal Value { get; set; }
 
-        public bool ExistsGenerated { get; set; }
+        public ICollection<ClientService>? lClientService { get; set; }
 
     }
 }

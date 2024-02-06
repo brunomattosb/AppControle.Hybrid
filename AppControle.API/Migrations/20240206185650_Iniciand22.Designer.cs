@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240131180005_Iniciando")]
-    partial class Iniciando
+    [Migration("20240206185650_Iniciand22")]
+    partial class Iniciand22
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,15 @@ namespace AppControle.API.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Name", "UserId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Categories");
                 });
@@ -217,12 +225,17 @@ namespace AppControle.API.Migrations
                     b.Property<DateTime?>("Reference")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<decimal>("Value")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("MonthlyFee");
                 });
@@ -577,10 +590,21 @@ namespace AppControle.API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("AppControle.Shared.Entities.Category", b =>
+                {
+                    b.HasOne("AppControle.Shared.Entities.User", "User")
+                        .WithMany("Category")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AppControle.Shared.Entities.City", b =>
                 {
                     b.HasOne("AppControle.Shared.Entities.State", "State")
-                        .WithMany("Cities")
+                        .WithMany("lCities")
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -597,7 +621,7 @@ namespace AppControle.API.Migrations
                         .IsRequired();
 
                     b.HasOne("AppControle.Shared.Entities.User", "User")
-                        .WithMany("Clients")
+                        .WithMany("lClients")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -610,13 +634,13 @@ namespace AppControle.API.Migrations
             modelBuilder.Entity("AppControle.Shared.Entities.ClientService", b =>
                 {
                     b.HasOne("AppControle.Shared.Entities.Client", "Client")
-                        .WithMany("ClientService")
+                        .WithMany("lClientService")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AppControle.Shared.Entities.Product", "Product")
-                        .WithMany("ClientServices")
+                        .WithMany("lClientServices")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -629,16 +653,22 @@ namespace AppControle.API.Migrations
             modelBuilder.Entity("AppControle.Shared.Entities.MonthlyFee", b =>
                 {
                     b.HasOne("AppControle.Shared.Entities.Client", "Client")
-                        .WithMany()
+                        .WithMany("lMonthlyFees")
                         .HasForeignKey("ClientId");
 
+                    b.HasOne("AppControle.Shared.Entities.User", "User")
+                        .WithMany("lMonthlyFees")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Client");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.Product", b =>
                 {
                     b.HasOne("AppControle.Shared.Entities.User", "User")
-                        .WithMany("Products")
+                        .WithMany("lProducts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -649,13 +679,13 @@ namespace AppControle.API.Migrations
             modelBuilder.Entity("AppControle.Shared.Entities.ProductCategory", b =>
                 {
                     b.HasOne("AppControle.Shared.Entities.Category", "Category")
-                        .WithMany("ProductCategories")
+                        .WithMany("lProductCategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AppControle.Shared.Entities.Product", "Product")
-                        .WithMany("ProductCategories")
+                        .WithMany("lProductCategories")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -668,7 +698,7 @@ namespace AppControle.API.Migrations
             modelBuilder.Entity("AppControle.Shared.Entities.ProductImage", b =>
                 {
                     b.HasOne("AppControle.Shared.Entities.Product", "Product")
-                        .WithMany("ProductImages")
+                        .WithMany("lProductImages")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -679,7 +709,7 @@ namespace AppControle.API.Migrations
             modelBuilder.Entity("AppControle.Shared.Entities.State", b =>
                 {
                     b.HasOne("AppControle.Shared.Entities.Country", "Country")
-                        .WithMany("States")
+                        .WithMany("lStates")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -690,7 +720,7 @@ namespace AppControle.API.Migrations
             modelBuilder.Entity("AppControle.Shared.Entities.User", b =>
                 {
                     b.HasOne("AppControle.Shared.Entities.City", "City")
-                        .WithMany("Users")
+                        .WithMany("lUsers")
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -751,43 +781,49 @@ namespace AppControle.API.Migrations
 
             modelBuilder.Entity("AppControle.Shared.Entities.Category", b =>
                 {
-                    b.Navigation("ProductCategories");
+                    b.Navigation("lProductCategories");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.City", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("lUsers");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.Client", b =>
                 {
-                    b.Navigation("ClientService");
+                    b.Navigation("lClientService");
+
+                    b.Navigation("lMonthlyFees");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.Country", b =>
                 {
-                    b.Navigation("States");
+                    b.Navigation("lStates");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.Product", b =>
                 {
-                    b.Navigation("ClientServices");
+                    b.Navigation("lClientServices");
 
-                    b.Navigation("ProductCategories");
+                    b.Navigation("lProductCategories");
 
-                    b.Navigation("ProductImages");
+                    b.Navigation("lProductImages");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.State", b =>
                 {
-                    b.Navigation("Cities");
+                    b.Navigation("lCities");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.User", b =>
                 {
-                    b.Navigation("Clients");
+                    b.Navigation("Category");
 
-                    b.Navigation("Products");
+                    b.Navigation("lClients");
+
+                    b.Navigation("lMonthlyFees");
+
+                    b.Navigation("lProducts");
                 });
 #pragma warning restore 612, 618
         }

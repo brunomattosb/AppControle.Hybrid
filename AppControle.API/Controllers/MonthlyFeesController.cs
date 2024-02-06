@@ -87,55 +87,50 @@ namespace SisVendas.API.Data.Controllers
             return monthlyFee;
         }
         [HttpGet("getvaluesmonthlyfees")]
-        public async Task<ActionResult<MonthlyFeeCreateDTO>> GetValuesMonthlyFees( int? month, [FromQuery] int? year)
+        public async Task<ActionResult<IEnumerable<MonthlyFeeCreateDTO>>> GetValuesMonthlyFees( int? month, [FromQuery] int? year)
         {
-            var queryableMonthfy = _context.MonthlyFee
-                .Include(x => x.Client)
+            //primeiro eu busco todas as mensalidades geradas no mês selecionadoi
+            //var queryableMonthfy = _context.MonthlyFee
+            //    .Include(x => x.Client)
+            //    .AsQueryable();
+            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            //if (user == null)
+            //{
+            //    return BadRequest("User not valid.");
+            //}
+            //queryableMonthfy = queryableMonthfy.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            //queryableMonthfy = queryableMonthfy.Where(s => s.Reference!.Value.Month == month!);
+            //queryableMonthfy = queryableMonthfy.Where(s => s.Reference!.Value.Year == year!);
+            //var monthlyFee = await queryableMonthfy
+            //    .Select(x => new MonthlyFeeCreateDTO {
+            //        Client = x.Client,
+            //        Value = x.Value
+            //    })
+            //    .ToListAsync();
+
+            //Depois             
+            var queryable = _context.Clients
+                .Include(x => x.lClientService!)
                 .AsQueryable();
-
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            if (user == null)
+          
+            var ClientsValue = await queryable
+            .Select(x => new MonthlyFeeCreateDTO
             {
-                return BadRequest("User not valid.");
-            }
-            queryableMonthfy = queryableMonthfy.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
+                ClientId = x.Id,
+                Name = x.Name,
+                Cpf_Cnpj = x.Cpf_Cnpj,
+                lClientService = x.lClientService,
+                Value = x.lClientService!.Sum(x=>x.Product!.Price - x.Discount)
+            })
+            .Where(x=>x.lClientService!.Count() != 0)
+            .ToListAsync();
 
-            queryableMonthfy = queryableMonthfy.Where(s => s.Reference!.Value.Month == month!);
-            queryableMonthfy = queryableMonthfy.Where(s => s.Reference!.Value.Year == year!);
-
-            
-            var monthlyFee = await queryableMonthfy
-                .Select(x => new MonthlyFeeCreateDTO {
-                    Client = x.Client,
-                    //ClientId = x.ClientId,
-                    Value = x.Value
-                })
-                .ToListAsync();
-            
-            var queryableClientsValue = _context.Clients
-                .Include(x => x.lMonthlyFees)
-                .AsQueryable();
-            try
-            {
-                var ClientsValue = await queryableClientsValue
-               //.Select(x => new MonthlyFeeCreateDTO
-               //{
-               //    Client = x.Client,
-               //    //ClientId = x.ClientId,
-               //    Value = x.Value
-               //})
-               .ToListAsync();
-            }catch (Exception ex)
-            {
-                var a = 1;
-            }
-
-            if (monthlyFee == null)
+            if (ClientsValue == null)
             {
                 return NotFound();
             }
 
-            return NotFound();
+            return ClientsValue;
         }
 
         // PUT: api/Cities/5

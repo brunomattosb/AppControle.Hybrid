@@ -15,5 +15,9 @@ namespace AppControle.Shared.Entities
 
         [Display(Name = "Produtos")]
         public int ProductCategoriesNumber => lProductCategories == null ? 0 : lProductCategories.Count;
+
+        public string? UserId { get; set; }
+
+        public User? User { get; set; }
     }
 }

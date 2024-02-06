@@ -38,6 +38,8 @@ namespace AppControle.API.Data
                 .HasAlternateKey(c => new { c.Cpf_Cnpj, c.UserId });
             modelBuilder.Entity<Product>()
                 .HasAlternateKey(c => new { c.Name, c.UserId });
+            modelBuilder.Entity<Category>()
+                .HasAlternateKey(c => new { c.Name, c.UserId });
 
         }
     }

@@ -27,19 +27,6 @@ namespace AppControle.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
                 {
@@ -244,6 +231,27 @@ namespace AppControle.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.UniqueConstraint("AK_Categories_Name_UserId", x => new { x.Name, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_Categories_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
                 {
@@ -322,11 +330,17 @@ namespace AppControle.API.Migrations
                     Payday = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     ClientId = table.Column<int>(type: "int", nullable: true),
                     PaymentMethod = table.Column<int>(type: "int", nullable: true),
-                    Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MonthlyFee", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MonthlyFee_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_MonthlyFee_Clients_ClientId",
                         column: x => x.ClientId,
@@ -458,6 +472,11 @@ namespace AppControle.API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categories_UserId",
+                table: "Categories",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cities_StateId_Name",
                 table: "Cities",
                 columns: new[] { "StateId", "Name" },
@@ -493,6 +512,11 @@ namespace AppControle.API.Migrations
                 name: "IX_MonthlyFee_ClientId",
                 table: "MonthlyFee",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonthlyFee_UserId",
+                table: "MonthlyFee",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductCategories_CategoryId",

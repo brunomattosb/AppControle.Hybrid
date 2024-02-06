@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AppControle.API.Data;
 using AppControle.API.Extensions;
@@ -33,7 +34,14 @@ namespace AppControle.API.Controllers
             {
                 return NotFound();
             }
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            if (user == null)
+            {
+                return BadRequest("User not valid.");
+            }
+
             var queryable = _context.Categories.AsQueryable();
+            queryable = queryable.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
 
             if (!string.IsNullOrEmpty(filter))
             {
@@ -96,6 +104,14 @@ namespace AppControle.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            if (user == null)
+            {
+                return BadRequest("User not valid.");
+            }
+            category.User = user;
+            category.UserId = user.Id;
+
             _context.Add(category);
             try
             {

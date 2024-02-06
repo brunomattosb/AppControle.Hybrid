@@ -33,7 +33,7 @@ namespace SisVendas.API.Data
             
 
             await _context.Database.EnsureCreatedAsync();
-            await CheckCategoriesAsync();
+           
             await CheckRolesAsync();
             await CheckCountriesAsync();
             await CheckUserAsync("1010", "Juan", "Zuluaga", "zulu@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "JuanZuluaga.jpeg", UserType.Admin);
@@ -43,6 +43,7 @@ namespace SisVendas.API.Data
             await CheckUserAsync("5050", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
             city = await _context.Cities!.FirstOrDefaultAsync();
             user = await _context.Users!.FirstOrDefaultAsync(c => c.Cpf_Cnpj == "1010")!;
+            await CheckCategoriesAsync();
             await CheckProductsAsync();
             await CheckClientsAsync();
             client = await _context.Clients!.FirstOrDefaultAsync()!;
@@ -205,24 +206,24 @@ namespace SisVendas.API.Data
         {
             if (!_context.Categories.Any())
             {
-                _context.Categories.Add(new Category { Name = "Apple" });
-                _context.Categories.Add(new Category { Name = "Autos" });
-                _context.Categories.Add(new Category { Name = "Belleza" });
-                _context.Categories.Add(new Category { Name = "Calzado" });
-                _context.Categories.Add(new Category { Name = "Comida" });
-                _context.Categories.Add(new Category { Name = "Cosmeticos E Remedios em geral Testte grande" });
-                _context.Categories.Add(new Category { Name = "Deportes" });
-                _context.Categories.Add(new Category { Name = "Erótica" });
-                _context.Categories.Add(new Category { Name = "Ferreteria" });
-                _context.Categories.Add(new Category { Name = "Gamer" });
-                _context.Categories.Add(new Category { Name = "Hogar" });
-                _context.Categories.Add(new Category { Name = "Jardín" });
-                _context.Categories.Add(new Category { Name = "Jugetes" });
-                _context.Categories.Add(new Category { Name = "Lenceria" });
-                _context.Categories.Add(new Category { Name = "Mascotas" });
-                _context.Categories.Add(new Category { Name = "Nutrición" });
-                _context.Categories.Add(new Category { Name = "Ropa" });
-                _context.Categories.Add(new Category { Name = "Tecnología" });
+                _context.Categories.Add(new Category { Name = "Apple" , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Autos"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Belleza"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Calzado"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Comida"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Cosmeticos E Remedios em geral Testte grande"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Deportes"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Erótica"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Ferreteria"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Gamer"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Hogar"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Jardín"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Jugetes"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Lenceria"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Mascotas"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Nutrición"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Ropa"  , UserId = user.Id , User = user});
+                _context.Categories.Add(new Category { Name = "Tecnología"  , UserId = user.Id , User = user});
                 await _context.SaveChangesAsync();
             }
         }
