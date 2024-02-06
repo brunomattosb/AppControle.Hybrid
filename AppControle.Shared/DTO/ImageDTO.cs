@@ -10,7 +10,7 @@ namespace AppControle.Shared.DTO
     public class ImageDTO
     {
         [Required]
-        public int ProductId { get; set; }
+        public int ProductId { get; set; } 
 
         [Required]
         public List<string> Images { get; set; } = null!;
