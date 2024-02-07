@@ -26,13 +26,13 @@
             <div class="">
                 <label for="reference" class="block text-sm font-medium leading-6 text-gray-900">Referência</label>
                 <div class="mt-2">
-                    <InputDate format="dd/MM/yyyy" culture="pt-BR" id="inputBirth" @bind-Value="@ReferenceDate" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                    <InputDate id="inputBirth" @bind-Value="@ReferenceDate" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                 </div>
             </div>
             <div class="">
                 <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Vencimento</label>
                 <div class="mt-2">
-                    <InputDate format="dd/MM/yyyy" culture="pt-BR" id="inputBirth" @bind-Value="@DueDate" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                    <InputDate id="inputBirth" @bind-Value="@DueDate" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
                         <tr>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center h-5">
-                                    <input id="selectedAll" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required>
+                                    <InputCheckbox id="selectedAll" @bind-Value="selectedAll" @oninput="HandleCheckboxChange" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" />
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -119,18 +119,28 @@
 
 </div>
 
-
 @code {
     private List<MonthlyFeeCreateDTO> lMonthlyFeeCreateDTO = new();
     private DateTime? selectedDate = DateTime.Now;
     private DateTime ReferenceDate = DateTime.Now;
     private DateTime DueDate = DateTime.Now;
-
+    private bool selectedAll;
     protected override async Task OnInitializedAsync()
     {
         await LoadAsync();
     }
+    private void HandleCheckboxChange(ChangeEventArgs e)
+    {
+        selectedAll = (bool)e.Value;
+        // Lógica que você deseja executar quando o checkbox é alterado
+        Console.WriteLine("Checkbox foi alterado!");
 
+        // O valor atualizado do checkbox é passado diretamente como um bool
+        // 
+
+        // Se precisar do valor do checkbox, você pode usar a propriedade isChecked
+        Console.WriteLine($"Novo valor do checkbox: {selectedAll}");
+    }
     private async Task LoadAsync()
     {
         try

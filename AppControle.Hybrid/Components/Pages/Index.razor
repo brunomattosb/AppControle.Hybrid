@@ -2,9 +2,20 @@
 @inject IRepository repository
 @inject NavigationManager navigationManager
 
+
+@page "/example"
+
+<h3>Exemplo de InputDate com Formatação de Data</h3>
+
+<input @bind="DueDate" @bind:format="dd-MM-yyyy" />
+
+
+@code {
+    private DateTime DueDate { get; set; } = DateTime.Now;
+}
 @* <style type="text/css">
     .card {
-        display: flex;
+        display: flex;s
         flex-direction: column;
         justify-content: space-between;
         border: 1px solid lightgray;
