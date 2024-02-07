@@ -268,7 +268,7 @@ namespace AppControle.API.Migrations
                     RegisterDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     AddressCep = table.Column<string>(type: "varchar(8)", maxLength: 8, nullable: true),
                     Address = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true),
-                    AddressNumber = table.Column<int>(type: "int", nullable: false),
+                    AddressNumber = table.Column<int>(type: "int", nullable: true),
                     Remarks = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
                     Neighborhood = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true),
                     CityId = table.Column<int>(type: "int", nullable: false),

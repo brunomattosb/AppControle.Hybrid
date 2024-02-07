@@ -1,6 +1,7 @@
 ﻿using AppControle.API.Data;
 using AppControle.API.Extensions;
 using AppControle.Shared.DTO;
+using AppControle.Shared.DTO.Request;
 using AppControle.Shared.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -171,34 +172,45 @@ namespace SisVendas.API.Data.Controllers
         //}
 
         // POST: api/Cities
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<City>> PostCity(City City)
-        //{
-        //    if (_context.Cities == null)
-        //    {
-        //        return Problem("Entity set 'AppDbContext.Cities'  is null.");
-        //    }
-        //    try
-        //    {
-        //        _context.Cities.Add(City);
-        //        await _context.SaveChangesAsync();
+        //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<City>> PostCity(MonthlyFeeRequestCreate LmonthlyFee)
+        {
+            if (_context.MonthlyFee == null)
+            {
+                return Problem("Entity set 'AppDbContext.Cities'  is null.");
+            }
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            if (user == null)
+            {
+                return BadRequest("User not valid.");
+            }
 
-        //        return CreatedAtAction("GetCity", new { id = City.Id }, City);
-        //    }
-        //    catch (DbUpdateException e)
-        //    {
-        //        if (e.InnerException!.Message.Contains("Duplicate"))
-        //        {
-        //            return BadRequest("Já existe um Cidade com o mesmo nome.");
-        //        }
-        //        return BadRequest(e.InnerException.Message);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
+            try
+            {
+                foreach (var monthliFe in LmonthlyFee.lMonthliFee)
+                {
+
+                    _context.MonthlyFee.Add(new MonthlyFee
+                    {
+                        ClientId = monthliFe.ClientId,
+                        DueDate = LmonthlyFee.DueDate,
+                        Reference = LmonthlyFee.Reference,
+                        UserId = user.Id,
+                        Value = monthliFe.Value,
+                    });
+                }
+                await _context.SaveChangesAsync();
+
+                //return CreatedAtAction("GetCity", new { id = City.Id }, City);
+            }
+
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            return Ok();
+        }
 
         // DELETE: api/Cities/5
         //[HttpDelete("{id}")]

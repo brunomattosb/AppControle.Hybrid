@@ -1,12 +1,12 @@
 ﻿
 
 <nav class="bg-white border-gray-200 dark:bg-gray-900">
-    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="" class="flex items-center space-x-3 rtl:space-x-reverse">
+    <div class="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto p-4">
+        <a href="" class="flex items-center space-x-3 rtl:space-x-reverse justify-between">
             @* <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" /> *@
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">SisVendas</span>
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Controle</span>
         </a>
-        <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+        <div class="flex items-center md:order-2 space-x-1 md:space-x-2 rtl:space-x-reverse">
             <AuthLinks />
             <button data-collapse-toggle="navbar-user" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-user" aria-expanded="false">
                 <span class="sr-only">Open main menu</span>
@@ -20,15 +20,25 @@
                 <li>
                     <a href="/" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Home</a>
                 </li>
-                <li>
-                    <a href="/clients" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Clientes</a>
-                </li>
-                <li>
-                    <a href="/products" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Serviços</a>
-                </li>
-                <li>
-                    <a href="/monthlyfee" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Mensalidade</a>
-                </li>
+                <AuthorizeView Roles="Admin">
+                    <Authorized>
+                        <li>
+                            <NavLink href="/clients" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Clientes</NavLink>
+                        </li>
+                        <li>
+                            <NavLink href="/products" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Serviços</NavLink>
+                        </li>
+                        <li>
+                            <NavLink href="/monthlyfee" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Mensalidade</NavLink>
+                        </li>
+                    </Authorized>
+                </AuthorizeView>
+                @* <AuthorizeView Roles="User">
+                    <Authorized>
+
+                    </Authorized>
+                </AuthorizeView> *@
+               
             </ul>
         </div>
     </div>

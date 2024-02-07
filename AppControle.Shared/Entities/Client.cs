@@ -54,7 +54,7 @@ namespace AppControle.Shared.Entities
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}")]
         [Display(Name = "Data de Registro")]
-        public DateTime RegisterDate { get; set; }
+        public DateTime RegisterDate { get; set; } 
 
         [Display(Name = "CEP")]
         [MaxLength(8, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
@@ -66,7 +66,7 @@ namespace AppControle.Shared.Entities
 
         [Display(Name = "Número")]
         //[MaxLength(6, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
-        public int AddressNumber { get; set; }
+        public int? AddressNumber { get; set; }
 
         [DataType(DataType.MultilineText)]
         [MaxLength(100, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]

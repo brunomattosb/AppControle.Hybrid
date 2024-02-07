@@ -1,5 +1,5 @@
 ﻿using AppControle.API.Data;
-using AppControle.Shared.DTO;
+using AppControle.Shared.DTO.AccountDTOs;
 using AppControle.Shared.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

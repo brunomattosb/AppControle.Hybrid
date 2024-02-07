@@ -24,6 +24,7 @@ namespace AppControle.API.Controllers
         public CategoriesController(DataContext context)
         {
             _context = context;
+
         }
 
         // GET: api/Categories
@@ -61,11 +62,24 @@ namespace AppControle.API.Controllers
             {
                 return NotFound();
             }
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            if (user == null)
+            {
+                return BadRequest("User not valid.");
+            }
             var category = await _context.Categories.FindAsync(id);
 
+            
             if (category == null)
             {
                 return NotFound();
+            }
+            else
+            {
+                if (category.UserId != user.Id)
+                {
+                    return BadRequest("User not valid.");
+                }
             }
 
             return category;

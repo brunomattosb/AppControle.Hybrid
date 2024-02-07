@@ -25,6 +25,7 @@ namespace AppControle.Shared.Entities
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public decimal Value { get; set; }
 
+        public bool isSelected { get;set; }
         public ICollection<ClientService>? lClientService { get; set; }
 
     }

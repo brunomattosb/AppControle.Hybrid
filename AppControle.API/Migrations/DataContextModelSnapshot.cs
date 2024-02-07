@@ -85,7 +85,7 @@ namespace AppControle.API.Migrations
                         .HasMaxLength(8)
                         .HasColumnType("varchar(8)");
 
-                    b.Property<int>("AddressNumber")
+                    b.Property<int?>("AddressNumber")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Balance")

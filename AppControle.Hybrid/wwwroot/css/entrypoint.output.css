@@ -1126,6 +1126,10 @@ input[type="range"]::-ms-fill-lower {
   position: static;
 }
 
+.fixed {
+  position: fixed;
+}
+
 .absolute {
   position: absolute;
 }
@@ -2056,6 +2060,10 @@ input[type="range"]::-ms-fill-lower {
   color: rgb(114 59 19 / var(--tw-text-opacity));
 }
 
+.opacity-75 {
+  opacity: 0.75;
+}
+
 .shadow {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
@@ -2590,6 +2598,12 @@ input[type="range"]::-ms-fill-lower {
     --tw-space-x-reverse: 0;
     margin-right: calc(0px * var(--tw-space-x-reverse));
     margin-left: calc(0px * calc(1 - var(--tw-space-x-reverse)));
+  }
+
+  .md\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 0;
+    margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+    margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
   }
 
   .md\:space-x-8 > :not([hidden]) ~ :not([hidden]) {

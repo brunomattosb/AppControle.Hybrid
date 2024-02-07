@@ -2,6 +2,7 @@
 using AppControle.API.Extensions;
 using AppControle.API.Helpers;
 using AppControle.Shared.DTO;
+using AppControle.Shared.DTO.AccountDTOs;
 using AppControle.Shared.Entities;
 using AppControleAPI.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -328,26 +329,26 @@ namespace AppControle.API.Controllers
             }
 
         }
-        [HttpGet("all")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult> GetAll([FromQuery] Pagination pagination, [FromQuery] string? filter)
-        {
-            var queryable = _context.Users
-                .Include(u => u.City)
-                .AsQueryable();
+        //[HttpGet("all")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //public async Task<ActionResult> GetAll([FromQuery] Pagination pagination, [FromQuery] string? filter)
+        //{
+        //    var queryable = _context.Users
+        //        .Include(u => u.City)
+        //        .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(filter))
-            {
-                queryable = queryable.Where(x => x.Name!.ToLower().Contains(filter.ToLower()));
-            }
-            await HttpContext.InsertParamsInPageResponse(queryable, pagination.QuantityPerPage);
-            return Ok(await queryable
-                .OrderBy(x => x.Name)
-                //.OrderBy(x => x.FirstName)
-                //.ThenBy(x => x.LastName)
-                .Paginar(pagination)
-                .ToListAsync());
-        }
+        //    if (!string.IsNullOrWhiteSpace(filter))
+        //    {
+        //        queryable = queryable.Where(x => x.Name!.ToLower().Contains(filter.ToLower()));
+        //    }
+        //    await HttpContext.InsertParamsInPageResponse(queryable, pagination.QuantityPerPage);
+        //    return Ok(await queryable
+        //        .OrderBy(x => x.Name)
+        //        //.OrderBy(x => x.FirstName)
+        //        //.ThenBy(x => x.LastName)
+        //        .Paginar(pagination)
+        //        .ToListAsync());
+        //}
 
     }
 }

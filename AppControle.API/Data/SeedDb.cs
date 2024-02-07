@@ -244,7 +244,7 @@ namespace SisVendas.API.Data
                     Neighborhood = "Bairro Um",
                     City = city,
                     CityId = city.Id,
-
+                    RegisterDate = DateTime.Now,
                     User = user,
                     UserId = user.Id,
                     lClientService = new List<ClientService>()
@@ -263,6 +263,7 @@ namespace SisVendas.API.Data
                     City = city,
                     CityId = city.Id,
 
+                    RegisterDate = DateTime.Now,
                     User = user,
                     UserId = user.Id
                 });
@@ -272,6 +273,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960118805",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
@@ -286,6 +288,7 @@ namespace SisVendas.API.Data
                     Name = "Teste cliente nome",
                     Cpf_Cnpj = "06960118803",
 
+                    RegisterDate = DateTime.Now,
 
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
@@ -301,6 +304,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960118804",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
@@ -315,6 +319,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960118802",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
@@ -329,6 +334,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960118801",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
@@ -343,6 +349,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960118800",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
@@ -357,6 +364,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960118839",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
@@ -371,6 +379,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960118838",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
@@ -385,6 +394,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960118837",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
@@ -399,6 +409,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960118835",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
@@ -413,6 +424,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960412835",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
@@ -427,6 +439,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960118834",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
@@ -440,6 +453,7 @@ namespace SisVendas.API.Data
                     Name = "Teste cliente nome",
                     Cpf_Cnpj = "06960118833",
 
+                    RegisterDate = DateTime.Now,
 
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
@@ -455,6 +469,7 @@ namespace SisVendas.API.Data
                     Cpf_Cnpj = "06960118832",
 
 
+                    RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,

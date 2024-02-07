@@ -261,8 +261,7 @@
 
     private async Task CountryChangedAsync(ChangeEventArgs e)
     {
-        var selectedCountry = Convert.ToInt32(e.Value!);
-        await LoadStatesAsyn(selectedCountry);
+        await LoadStatesAsyn(Convert.ToInt32(e.Value!));
     }
     
     private async Task LoadStatesAsyn(int countryId)

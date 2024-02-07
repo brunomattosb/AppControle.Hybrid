@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppControle.Shared.DTO
+namespace AppControle.Shared.DTO.AccountDTOs
 {
     public class ChangePasswordDTO
     {

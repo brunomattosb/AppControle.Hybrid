@@ -1,4 +1,4 @@
-﻿using AppControle.Shared.DTO;
+﻿using AppControle.Shared.DTO.AccountDTOs;
 using AppControle.Shared.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

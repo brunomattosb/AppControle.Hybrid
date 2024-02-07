@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240206221452_Iniciando")]
+    [Migration("20240207184014_Iniciando")]
     partial class Iniciando
     {
         /// <inheritdoc />
@@ -88,7 +88,7 @@ namespace AppControle.API.Migrations
                         .HasMaxLength(8)
                         .HasColumnType("varchar(8)");
 
-                    b.Property<int>("AddressNumber")
+                    b.Property<int?>("AddressNumber")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Balance")

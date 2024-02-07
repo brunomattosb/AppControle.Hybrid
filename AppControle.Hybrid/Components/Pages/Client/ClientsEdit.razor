@@ -65,6 +65,11 @@ else
     {
         client.City = null;
         client.User = null;
+        foreach (var cli in client?.lClientService!)
+        {
+            cli.Product = null;
+        }
+
         var responseHttp = await repository.Put("/api/clients", client);
         if (responseHttp.Error)
         {
