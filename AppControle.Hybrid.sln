@@ -5,11 +5,15 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.Hybrid", "AppControle.Hybrid\AppControle.Hybrid.csproj", "{168DB395-31F3-4621-9AC3-31D9CF3B935F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.Shared", "AppControle.Shared\AppControle.Shared.csproj", "{5E20F4E7-33AD-4158-8AE2-FC0A60E1BF3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.SharedBase", "AppControle.SharedBase\AppControle.SharedBase.csproj", "{5E20F4E7-33AD-4158-8AE2-FC0A60E1BF3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.API", "AppControle.API\AppControle.API.csproj", "{977EC182-EA6C-4AA5-BA6E-12F31D1CD6C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.APIBase", "AppControle.APIbase\AppControle.APIBase.csproj", "{977EC182-EA6C-4AA5-BA6E-12F31D1CD6C2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.WebApp", "AppControle.WebApp\AppControle.WebApp.csproj", "{0898EFD5-675A-4020-8F99-07B2B6F227B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.API", "AppControle.API\AppControle.API.csproj", "{7A5C8ECD-BBCF-4C7E-8E5F-93C62134F512}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppControle.Shared", "AppControle.Shared\AppControle.Shared.csproj", "{C0305391-CD1D-4754-8F2B-CC65D6B7F394}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +39,14 @@ Global
 		{0898EFD5-675A-4020-8F99-07B2B6F227B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0898EFD5-675A-4020-8F99-07B2B6F227B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0898EFD5-675A-4020-8F99-07B2B6F227B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A5C8ECD-BBCF-4C7E-8E5F-93C62134F512}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A5C8ECD-BBCF-4C7E-8E5F-93C62134F512}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A5C8ECD-BBCF-4C7E-8E5F-93C62134F512}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A5C8ECD-BBCF-4C7E-8E5F-93C62134F512}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0305391-CD1D-4754-8F2B-CC65D6B7F394}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0305391-CD1D-4754-8F2B-CC65D6B7F394}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0305391-CD1D-4754-8F2B-CC65D6B7F394}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0305391-CD1D-4754-8F2B-CC65D6B7F394}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

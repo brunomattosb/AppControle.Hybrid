@@ -1,25 +1,18 @@
-using AppControle.API.Data;
-using AppControle.API.Helpers;
-using AppControle.API.Services;
-using AppControle.Shared.Entities;
-using AppControleAPI.Helpers;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
+using AppControle.API.Context;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MySqlConnector;
 using SisVendas.API.Data;
-using System.Text;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers()
-    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+//MySQL
+string? mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
+//Seeds
+builder.Services.AddTransient<SeedDb>();
 // Add services to the container.
 builder.Services.AddControllers();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -54,64 +47,9 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-//Mail
-builder.Services.AddScoped<IMailHelper, MailHelper>();
-//Azure
-builder.Services.AddScoped<IFileStorage, FileStorage>();
-//MySQL
-//builder.Services.AddTransient<MySqlConnection>(_ => new MySqlConnection(builder.Configuration.GetConnectionString("ConnectionStrings:Default")));
-string mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
-//Seeds
-builder.Services.AddTransient<SeedDb>();
-//API
-builder.Services.AddScoped<IApiService, ApiService>();
-//Orders
-//builder.Services.AddScoped<IOrdersHelper, OrdersHelper>();
-//Auth
-builder.Services.AddScoped<IUserHelper, UserHelper>();
-builder.Services.AddIdentity<User, IdentityRole>(x =>
-{
-    x.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
-    x.SignIn.RequireConfirmedEmail = true;
-    x.User.RequireUniqueEmail = true;
-    x.Password.RequireDigit = false;
-    x.Password.RequiredUniqueChars = 0;
-    x.Password.RequireLowercase = false;
-    x.Password.RequireNonAlphanumeric = false;
-    x.Password.RequireUppercase = false;
-    x.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); //TODO: Change to 5 minutes
-    x.Lockout.MaxFailedAccessAttempts = 6;
-    x.Lockout.AllowedForNewUsers = true;
-    x.Password.RequiredLength = 6;
 
-}).AddEntityFrameworkStores<DataContext>()
-    .AddDefaultTokenProviders();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(x => x.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwt:Key"]!)),
-        ClockSkew = TimeSpan.Zero
-    });
+
 var app = builder.Build();
-
-//Seeds
-SeedData(app);
-void SeedData(WebApplication app)
-{
-    IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-
-    using (IServiceScope? scope = scopedFactory!.CreateScope())
-    {
-        SeedDb? service = scope.ServiceProvider.GetService<SeedDb>();
-        service!.SeedAsync().Wait();
-    }
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -126,17 +64,24 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+//TODO: Diz que melhora a segurança.. confirmar
 app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyHeader()
     .SetIsOriginAllowed(origin => true)
     .AllowCredentials());
+//Seeds
+
+SeedData(app);
+void SeedData(WebApplication app)
+{
+    IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+    using (IServiceScope? scope = scopedFactory!.CreateScope())
+    {
+        SeedDb? service = scope.ServiceProvider.GetService<SeedDb>();
+        service!.SeedAsync().Wait();
+    }
+}
 
 app.Run();
-
-
-
-//public void ConfigureServices(IServiceCollection services)
-//{
-//    services.AddTransient<MySqlConnection>(_ => new MySqlConnection(Configuration["ConnectionStrings:Default"]));
-//}
