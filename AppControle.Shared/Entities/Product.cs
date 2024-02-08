@@ -35,7 +35,6 @@ public class Product : UserUnion
     [Display(Name = "Estoque")]
     public float Stock { get; set; } = 0;
 
-    [JsonIgnore]
     public ICollection<ProductCategory>? lProductCategories { get; set; }
 
     public bool IsActive { get; set; } = true;

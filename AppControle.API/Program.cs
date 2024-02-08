@@ -2,8 +2,13 @@ using AppControle.API.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SisVendas.API.Data;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+//Ignoiree Ref.Cycles
+builder.Services.AddControllers()
+    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+//Ignore navigations var
 
 //MySQL
 string? mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");

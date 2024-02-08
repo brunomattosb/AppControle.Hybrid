@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AppControle.API.Context;
 using AppControle.Shared.Entities;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 
 namespace AppControle.API.Controllers
 {
@@ -43,6 +36,8 @@ namespace AppControle.API.Controllers
 
             var lCategories = await queryable
                 .OrderBy(x => x.Name)
+                //TODO: Estudar mais sobre o asnotraking
+                .AsNoTracking()
                 .ToListAsync();
 
             if(lCategories is null)
