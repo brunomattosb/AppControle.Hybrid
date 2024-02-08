@@ -64,7 +64,7 @@ namespace AppControle.Shared.Entities
         [MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public string? Address { get; set; }
 
-        [Display(Name = "Número")]
+        [Display(Name = "Numero")]
         //[MaxLength(6, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public int? AddressNumber { get; set; }
 
@@ -97,5 +97,10 @@ namespace AppControle.Shared.Entities
         [Display(Name = "Mensalidades")]
         public decimal ServicesValue => lClientService == null ? 0 : lClientService.Sum(x=>x.Product?.Price - x.Discount) ?? 0;
 
+        [Display(Name = "Dia vencimento mensalidade")]
+        [Range(1, 31)]
+        [Required(ErrorMessage = "O Campo {0} é obligatório.")]
+        //[MaxLength(6, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
+        public int? MonthlyFeeDueDate { get; set; }
     }
 }

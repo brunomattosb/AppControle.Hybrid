@@ -1,4 +1,4 @@
-﻿@page "/EditUser"
+﻿@* @page "/EditUser"
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
@@ -41,7 +41,6 @@ else
     <form class="space-y-12  pe-3 sm:pe-5 ps-3 sm:ps-5">
         <div class="border-b border-t border-gray-900/10 pb-12">
             
-            @* <p class="mt-1 text-sm leading-6 text-gray-600">Use um email válido onde você possa receber correspondência.</p> *@
 
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
                 <div class="sm:col-span-4 md:col-span-2">
@@ -332,3 +331,4 @@ else
     }
 }
 
+ *@

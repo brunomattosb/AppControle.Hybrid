@@ -1,4 +1,4 @@
-﻿@page "/Login"
+﻿@* @page "/Login"
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService 
 @inject NavigationManager navigationManager
@@ -59,4 +59,4 @@
         await loginService.LoginAsync(responseHttp.Response!.Token, remember);
         navigationManager.NavigateTo("/");
     }
-}
+} *@

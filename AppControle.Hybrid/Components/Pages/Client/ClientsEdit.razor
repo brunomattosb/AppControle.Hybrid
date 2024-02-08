@@ -1,4 +1,4 @@
-﻿@page "/clients/edit/{ClientId:int}"
+﻿@* @page "/clients/edit/{ClientId:int}"
 @using System.Net
 @inject IRepository repository
 @inject NavigationManager navigationManager
@@ -97,3 +97,4 @@ else
         navigationManager.NavigateTo($"/clients/details/{@client.Id}");
     }
 }
+ *@

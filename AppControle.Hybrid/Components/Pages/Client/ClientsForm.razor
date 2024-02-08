@@ -1,4 +1,4 @@
-﻿@inject SweetAlertService sweetAlertService
+﻿@* @inject SweetAlertService sweetAlertService
 @inject IRepository repository
 
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
@@ -124,7 +124,7 @@
                 </div>
                 <!-- -->
                 <div class="sm:col-span-4 md:col-span-2 ">
-                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                    <label class="block text-sm font-medium leading-6 text-gray-900">Email</label>
                     <div class="mt-2">
                         <InputText name="email" id="email" @bind-Value="@Client.Email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                         <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.Email)" />
@@ -132,35 +132,43 @@
                 </div>
 
                 <div class="sm:col-span-4 md:col-span-2 ">
-                    <label for="addressnuphoneNumbermber" class="block text-sm font-medium leading-6 text-gray-900">Telefone</label>
+                    <label  class="block text-sm font-medium leading-6 text-gray-900">Telefone</label>
                     <div class="mt-2">
                         <InputNumber name="phoneNumber" id="phoneNumber" @bind-Value="@Client.PhoneNumber" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                         <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.PhoneNumber)" />
                     </div>
                 </div>
                 <div class="sm:col-span-4 md:col-span-2 ">
-                    <label for="addressnuphoneNumbermber" class="block text-sm font-medium leading-6 text-gray-900">* Gênero</label>
+                    <label  class="block text-sm font-medium leading-6 text-gray-900">* Gênero</label>
                     <div class="mt-2">
                         <select class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:text-sm sm:leading-6" @onchange="GenderChangeAsync">
                             <option value="0">-- Selecione um gênero --</option>
                             <option value="1" selected="@(Client.Gender! == GenderType.Masculino)">Masculino</option>
                             <option value="2" selected="@(Client.Gender! == GenderType.Feminino)">Feminino</option>
                         </select>
-                        <ValidationMessage For="@(() => Client.Gender)" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.Gender)" />
                     </div>
                 </div>
                 <div class="sm:col-span-4 md:col-span-2 ">
                     <label for="addressnuphoneNumbermber" class="block text-sm font-medium leading-6 text-gray-900">Telefone</label>
                     <div class="mt-2">
-                        <InputDate id="inputBirth" @bind-Value="@Client.BirthData" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                        <ValidationMessage For="@(() => Client.BirthData)" />
+                        <InputDate id="addressnuphoneNumbermber" @bind-Value="@Client.BirthData" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.BirthData)" />
                     </div>
                 </div>
                 <!-- -->
                 <div class="sm:col-span-4 md:col-span-5 ">
-                    <label for="inputName" class="form-label">Comentário</label>
-                    <InputTextArea class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" id="inputName" @bind-Value="@Client.Remarks" />
-                    <ValidationMessage For="@(() => Client.Remarks)" />
+                    <label for="Remarks" class="form-label">Comentário</label>
+                    <InputTextArea class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" id="Remarks" @bind-Value="@Client.Remarks" />
+                    <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.Remarks)" />
+                </div>
+
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label class="block text-sm font-medium leading-6 text-gray-900">Dia do vencimento da mensalidade</label>
+                    <div class="mt-2">
+                        <InputNumber @bind-Value="@Client.MonthlyFeeDueDate" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.MonthlyFeeDueDate)" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -297,3 +305,4 @@
     }
     #endregion
 }
+ *@

@@ -1,4 +1,4 @@
-﻿@page "/products/details/{ProductId:int}"
+﻿@* @page "/products/details/{ProductId:int}"
 @using System.Net
 @using AppControle.Hybrid.Helpers
 @inject IRepository repository
@@ -100,13 +100,7 @@ else
                         }
                 </select>
             </div>
-            @* <div class="md:col-span-1">
-                
-                @if (lImage != null)
-                {
-                    <CarouselView Images="lImage" />
-                }
-            </div> *@
+
             
         </div>
     </div>
@@ -203,3 +197,4 @@ else
         loading = false;
     }
 }
+ *@

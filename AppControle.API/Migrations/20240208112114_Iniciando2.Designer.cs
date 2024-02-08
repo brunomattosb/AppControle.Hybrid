@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240207184014_Iniciando")]
-    partial class Iniciando
+    [Migration("20240208112114_Iniciando2")]
+    partial class Iniciando2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,6 +114,9 @@ namespace AppControle.API.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<int?>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MonthlyFeeDueDate")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")

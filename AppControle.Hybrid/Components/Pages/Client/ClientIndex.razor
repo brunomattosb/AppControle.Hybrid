@@ -1,4 +1,4 @@
-﻿@page "/clients"
+﻿@* @page "/clients"
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
@@ -87,9 +87,6 @@
                                 <a href="#" class="text-gray-500">Registro:</a>
                             </div>
                             <div class="text-gray-500">@client.RegisterDate</div>
-                            @* <div>
-                        <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Delivered</span>
-                        </div> *@
                         </div>
                         <div class="text-sm text-gray-700">
                             @client.Name
@@ -104,7 +101,6 @@
         </GenericList>
     </div>
 
-    @* Pagination *@
     <Pagination CurrentPage="CurrentPage"
                 QuantityTotalPages="TotalPages"
                 Ray="2"
@@ -156,7 +152,7 @@
     }
 }
 
-
+ *@
 
 @*
 //TODO: Table padrão

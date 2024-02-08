@@ -1,4 +1,4 @@
-﻿@page "/products/create"
+﻿@* @page "/products/create"
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
@@ -19,18 +19,6 @@
 
         <h2 class="text-xl font-bold leading-7 text-gray-900">Novo serviço</h2>
     </div>
-    @* <div class="mt-5 grid-cols-1 flex justify-end pe-3 sm:pe-5 mb-2 space-x-1">
-        <div @onclick=@(() => EditAsync())>
-            <a class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                Editar
-            </a>
-        </div>
-        <div @onclick=@(() => DeleteAsync())>
-            <a class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                Excluir
-            </a>
-        </div>
-    </div> *@
 </div>
 
 <ProductForm @ref="productForm" ProductDTO="productDTO"  OnValidSubmit="CreateAsync" ReturnAction="Return" />
@@ -83,4 +71,4 @@
         productForm!.FormPostedSuccessfully = true;
         navigationManager.NavigateTo($"/products");
     }
-}
+} *@

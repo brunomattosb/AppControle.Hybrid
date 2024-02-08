@@ -1,4 +1,4 @@
-﻿@page "/monthlyfee"
+﻿@* @page "/monthlyfee"
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
@@ -180,65 +180,7 @@
                         <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Total a pagar</label>
                         <label class="">@resume?.totalPayable</label>
                     </div>
-                    @*
 
-
-
-
-            <div class="md:col-span-1">
-            <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
-            <label class="">@client.Email</label>
-            </div>
-
-            <div class="md:col-span-1">
-            <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Nome Fantasia</label>
-            <label class="">@client.FantasyName</label>
-            </div>
-
-            <div class="md:col-span-1">
-            <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Endereço</label>
-            <label class="">@client.Address @client.AddressNumber, @client.City!.Name, @client.City.State!.Name, @client.City.State.Country!.Name</label>
-            </div>
-
-            <div class="md:col-span-1">
-            <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">CEP</label>
-            <label class="">@client.AddressCep</label>
-            </div>
-
-            <div class="md:col-span-1">
-            <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Comentário</label>
-            <label class="">@client.Remarks</label>
-            </div>
-
-            <div class="md:col-span-1">
-            <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Data de Nascimento</label>
-            <label class="">@client.BirthData</label>
-            </div>
-
-            <div class="md:col-span-1">
-            <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Gênero</label>
-            <label class="">@client.Gender</label>
-            </div>
-
-            <div class="md:col-span-1">
-            <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Bairro</label>
-            <label class="">@client.Neighborhood</label>
-            </div>
-
-            <div class="md:col-span-1">
-            <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Telefone</label>
-            <label class="">@client.PhoneNumber</label>
-            </div>
-
-            <div class="md:col-span-1">
-            <label class="form-label fw-bold">Saldo</label>
-            <label class="">@($"{client.Balance:C2}")</label>
-            </div>
-
-            <div class="md:col-span-1">
-            <label class="form-label fw-bold">Mensalidade</label>
-            <label class="">@($"{client.MonthlyFee:C2}")</label>
-            </div>*@
 
                 </div>
             </div>
@@ -322,4 +264,4 @@
             StateHasChanged();
         }
     }
-}
+} *@

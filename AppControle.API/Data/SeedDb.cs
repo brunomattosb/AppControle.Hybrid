@@ -238,11 +238,11 @@ namespace SisVendas.API.Data
                 {
                     Name = "Client 1",
                     Cpf_Cnpj = "38713376845",
-
-
+                    MonthlyFeeDueDate = 20,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro Um",
                     City = city,
+                    AddressNumber = 1,
                     CityId = city.Id,
                     RegisterDate = DateTime.Now,
                     User = user,
@@ -256,229 +256,46 @@ namespace SisVendas.API.Data
                 {
                     Name = "Client 2",
                     Cpf_Cnpj = "06960118806",
-
-
+                    MonthlyFeeDueDate = 20,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
                     CityId = city.Id,
-
+                    AddressNumber = 1,
                     RegisterDate = DateTime.Now,
                     User = user,
                     UserId = user.Id
                 });
                 _context.Clients.Add(new Client
                 {
-                    Name = "Teste cliente nome",
+                    Name = "Teste cliente",
                     Cpf_Cnpj = "06960118805",
-
-
+                    MonthlyFeeDueDate = 20,
                     RegisterDate = DateTime.Now,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
                     CityId = city.Id,
-
+                    AddressNumber = 1,
                     User = user,
                     UserId = user.Id
                 });
 
                 _context.Clients.Add(new Client
                 {
-                    Name = "Teste cliente nome",
+                    Name = "Teste ",
                     Cpf_Cnpj = "06960118803",
-
+                    MonthlyFeeDueDate = 20,
                     RegisterDate = DateTime.Now,
-
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro dois",
                     City = city,
                     CityId = city.Id,
-
+                    AddressNumber = 1,
                     User = user,
                     UserId = user.Id
                 });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960118804",
-
-
-                    RegisterDate = DateTime.Now,
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id
-                });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960118802",
-
-
-                    RegisterDate = DateTime.Now,
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id
-                });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960118801",
-
-
-                    RegisterDate = DateTime.Now,
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id
-                });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960118800",
-
-
-                    RegisterDate = DateTime.Now,
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id
-                });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960118839",
-
-
-                    RegisterDate = DateTime.Now,
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id
-                });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960118838",
-
-
-                    RegisterDate = DateTime.Now,
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id
-                });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960118837",
-
-
-                    RegisterDate = DateTime.Now,
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id
-                });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960118835",
-
-
-                    RegisterDate = DateTime.Now,
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id
-                });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960412835",
-
-
-                    RegisterDate = DateTime.Now,
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id
-                });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960118834",
-
-
-                    RegisterDate = DateTime.Now,
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id
-                });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960118833",
-
-                    RegisterDate = DateTime.Now,
-
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id
-                });
-                _context.Clients.Add(new Client
-                {
-                    Name = "Teste cliente nome",
-                    Cpf_Cnpj = "06960118832",
-
-
-                    RegisterDate = DateTime.Now,
-                    BirthData = DateTime.Now,
-                    Neighborhood = "Bairro dois",
-                    City = city,
-                    CityId = city.Id,
-
-                    User = user,
-                    UserId = user.Id,
-                    
-                });
+                
                 await _context.SaveChangesAsync();
             }
         }
