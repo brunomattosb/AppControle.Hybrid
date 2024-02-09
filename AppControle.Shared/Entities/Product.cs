@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using System.Collections.ObjectModel;
+using AppControle.API.Validations;
 
 namespace AppControle.Shared.Entities;
-public class Product : UserUnion
+public class Product : UserUnion//, IValidatableObject
 {
     public Product()
     {
@@ -39,6 +39,8 @@ public class Product : UserUnion
 
     public bool IsActive { get; set; } = true;
     public bool IsService { get; set; }
+
+
 
     #region Não Utilizados
     //public ICollection<TemporalSale>? TemporalSales { get; set; }
@@ -226,4 +228,29 @@ public class Product : UserUnion
 
     #endregion
 
+    //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    //{
+    //    if (!string.IsNullOrEmpty(this.Name))
+    //    {
+    //        var primeiraLetra = this.Name[0].ToString();
+    //        if (primeiraLetra != primeiraLetra.ToUpper())
+    //        {
+    //            yield return new
+    //                ValidationResult("A primeira letra do produto deve ser maiúscula",
+    //                new[]
+    //                { nameof(this.Name) }
+    //                );
+    //        }
+    //    }
+
+    //    if (this.Stock <= 0)
+    //    {
+    //        yield return new
+    //               ValidationResult("O estoque deve ser maior que zero",
+    //               new[]
+    //               { nameof(this.Stock) }
+    //               );
+    //    }
+    //}
 }
+

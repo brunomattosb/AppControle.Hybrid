@@ -124,7 +124,7 @@ namespace AppControle.API.Controllers
         }
 
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int:min(1)}")]
         public async Task<IActionResult> PutProduct(int id, ProductDTO productDTO)
         {
             if (id != productDTO.Id)
@@ -258,7 +258,7 @@ namespace AppControle.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int:min(1)}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);

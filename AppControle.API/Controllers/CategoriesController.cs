@@ -57,7 +57,7 @@ namespace AppControle.API.Controllers
             }            
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int:min(1)}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
             //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
@@ -84,7 +84,7 @@ namespace AppControle.API.Controllers
         }
 
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int:min(1)}")]
         public async Task<IActionResult> PutCategory(int id, Category category)
         {
             if (id != category.Id)
@@ -164,7 +164,7 @@ namespace AppControle.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int:min(1)}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);

@@ -63,7 +63,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -75,7 +75,6 @@ app.UseCors(x => x
     .SetIsOriginAllowed(origin => true)
     .AllowCredentials());
 //Seeds
-
 SeedData(app);
 void SeedData(WebApplication app)
 {
@@ -89,3 +88,5 @@ void SeedData(WebApplication app)
 }
 
 app.Run();
+
+BindingAddress extinsion aq
