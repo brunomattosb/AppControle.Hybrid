@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using AppControle.API.Context;
 using AppControle.Shared.Entities;
+using System;
 
 namespace AppControle.API.Controllers
 {
@@ -34,17 +35,26 @@ namespace AppControle.API.Controllers
                 queryable = queryable.Where(x => x.Name!.Contains(filter));
             }
 
-            var lCategories = await queryable
+            try
+            {
+                var lCategories = await queryable
                 .OrderBy(x => x.Name)
                 //TODO: Estudar mais sobre o asnotraking
                 .AsNoTracking()
                 .ToListAsync();
 
-            if(lCategories is null)
-            {
-                return NotFound();
+                if (lCategories is null)
+                {
+                    return NotFound();
+                }
+                return lCategories;
             }
-            return lCategories;
+            catch(Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, 
+                    "Ocorreu um problema ao tratar a sua solicitação, entre em contato com o suporte!");
+                //TODO: Excessoes é custoso.. ver uma opção melhor!
+            }            
         }
 
         [HttpGet("{id:int}")]
@@ -75,7 +85,7 @@ namespace AppControle.API.Controllers
 
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> PutProduto(int id, Category category)
+        public async Task<IActionResult> PutCategory(int id, Category category)
         {
             if (id != category.Id)
             {
