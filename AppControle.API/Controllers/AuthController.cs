@@ -1,7 +1,12 @@
 ﻿using AppControle.API.Context;
+using AppControle.API.Services;
+using AppControle.Shared.DTO;
+using AppControle.Shared.DTO.AccountDTOs;
 using AppControle.Shared.Entities;
+using AppControle.Shared.Response;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -13,24 +18,247 @@ namespace AppControle.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AccountsController : ControllerBase
+public class AuthController : ControllerBase
 {
     //private readonly IUserHelper _userHelper;
+    private readonly ITokenService _tokenService;
     private readonly IConfiguration _configuration;
+    private readonly UserManager<User> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
     //private readonly IFileStorage _fileStorage;
-    //private readonly IMailHelper _mailHelper;
+    private readonly IMailService _mailHelper;
     private readonly DataContext _context;
     private readonly string _container;
 
-    public AccountsController(IConfiguration configuration, DataContext context)// , IUserHelper userHelper,  IFileStorage fileStorage, IMailHelper mailHelper)
+    public AuthController(ITokenService tokenService, IConfiguration configuration, DataContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IMailService mailHelper)//  IFileStorage fileStorage, )
     {
+        _mailHelper = mailHelper;
         //_userHelper = userHelper;
+        _tokenService = tokenService;
         _configuration = configuration;
         //_fileStorage = fileStorage;
         //_mailHelper = mailHelper;
         _context = context;
         _container = "users";
+        _userManager = userManager;
+        _roleManager = roleManager;
     }
+
+    [HttpPost("Login")]
+    public async Task<ActionResult> Login([FromBody] LoginDTO model)
+    {
+        var user = await _userManager.FindByEmailAsync(model.Email);
+
+
+        if (user is not null && await _userManager.CheckPasswordAsync(user, model.Password!)) 
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+
+
+            //TODO:Verificar claims
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, user.Email!),
+                    new Claim(ClaimTypes.Role, user.UserType.ToString()),
+                    //new Claim("Document", user.Cpf_Cnpj!),
+                    new Claim(ClaimTypes.Name, user.Name!),
+                    new Claim(ClaimTypes.Sid, user.Id),
+                    //new Claim("Address", user.Address!),
+                    new Claim("Photo", user.Photo ?? string.Empty),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    //new Claim("CityId", user.CityId.ToString())
+            };
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var token = _tokenService.GenerateAccessToken(claims, _configuration);
+            
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            _ = int.TryParse(_configuration["JWT:RefreshTokenValidityInMinutes"],
+                               out int refreshTokenValidityInMinutes);
+
+            user.RefreshTokenExpiryTime =
+                            DateTime.Now.AddMinutes(refreshTokenValidityInMinutes);
+
+            user.RefreshToken = refreshToken;
+
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                RefreshToken = refreshToken,
+                Expiration = token.ValidTo
+            });
+        }
+        return Unauthorized();
+    }
+    [HttpPost]
+    [Route("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterDTO model)
+    {
+        //TODO: Verificar isso aqui..
+        // VERIFICAR ESSE CODIGO
+
+        var userExists = await _userManager.FindByEmailAsync(model.Email!);
+
+        if (userExists != null)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                   new Response { IsSuccess = false , Message = "Usuario já cadastrado!" });
+        }
+        User user = model;
+        user.SecurityStamp = Guid.NewGuid().ToString();
+
+        try
+        {
+            var result = await _userManager.CreateAsync(user, model.Password!);
+
+            //if (!string.IsNullOrEmpty(model.Photo))
+            //{
+            //    var photoUser = Convert.FromBase64String(model.Photo);
+            //    model.Photo = await _fileStorage.SaveFileAsync(photoUser, ".jpg", _container);
+            //}
+            if (result.Succeeded)
+            {
+
+                //await _userManager.AddToRoleAsync(user, user.UserType.ToString());
+
+                var myToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                var tokenLink = Url.Action("ConfirmEmail", "accounts", new
+                {
+                    userid = user.Id,
+                    token = myToken
+                }, HttpContext.Request.Scheme, _configuration["UrlWEB"]);
+
+                var response = _mailHelper.SendMail(user.Name, user.Email!,
+                    $"Confirmação de conta Automações Brasil",
+                    $"<h1>Automações Brasil - Confirmação de conta</h1>" +
+                    $"<p>Para habilitar o usuário, por valor clique em 'Confirmar Email':</p>" +
+                    $"<b><a href ={tokenLink}>Confirmar Email</a></b>");
+
+                if (response.IsSuccess)
+                {
+                    return Ok(new Response { IsSuccess = true, Message = "Usuario criado com sucesso!!" });
+                }
+
+                return BadRequest(response.Message);
+            }
+        }
+        catch (DbUpdateException e)
+        {
+            if (e.InnerException!.Message.Contains("Duplicate"))
+            {
+                return BadRequest("O CPF / CNPJ informado já possui cadastro.");
+            }
+            return BadRequest(e.InnerException.Message);
+        }
+        catch (Exception e)
+        {
+            if (e.Message.Contains("DuplicateEmail") || e.Message.Contains("DuplicateUserName"))
+            {
+                return BadRequest("O CPF / CNPJ informado já possui cadastro.");
+            }
+
+            return BadRequest(e.Message);
+        }
+        return StatusCode(StatusCodes.Status500InternalServerError,
+                       new Response { IsSuccess = false, Message = "Não foi possivel completar seu cadastro, confira os dados informados!" });
+    }
+    [HttpPost]
+    [Route("refresh-token")]
+    public async Task<IActionResult> RefreshToken(TokenDTO tokenDTO)
+    {
+
+        if (tokenDTO is null)
+        {
+            return BadRequest("Requisição inválida");
+        }
+
+        string? accessToken = tokenDTO.Token
+                              ?? throw new ArgumentNullException(nameof(tokenDTO));
+
+        string? refreshToken = tokenDTO.RefreshToken
+                               ?? throw new ArgumentException(nameof(tokenDTO));
+
+        var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken!, _configuration);
+
+        if (principal == null)
+        {
+            return BadRequest("Token de acesso inválido");
+        }
+
+        string email = principal.FindFirstValue(ClaimTypes.Email)!;
+
+        var user = await _userManager.FindByEmailAsync(email!);
+
+        if (user == null || user.RefreshToken != refreshToken
+                         || user.RefreshTokenExpiryTime <= DateTime.Now)
+        {
+            return BadRequest("Token de acesso inválido");
+        }
+
+        var newAccessToken = _tokenService.GenerateAccessToken(
+                                           principal.Claims.ToList(), _configuration);
+
+        var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+        user.RefreshToken = newRefreshToken;
+
+        await _userManager.UpdateAsync(user);
+
+        return new ObjectResult(new
+        {
+            accessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
+            refreshToken = newRefreshToken
+        });
+    }
+
+    [Authorize]
+    [HttpPost]
+    [Route("revoke/{email}")]
+    public async Task<IActionResult> Revoke(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if (user == null) 
+            return BadRequest("Email inválido.");
+
+        user.RefreshToken = null;
+
+        await _userManager.UpdateAsync(user);
+
+        return NoContent();
+    }
+
+    //[HttpPost("CreateUser")]
+    //public async Task<ActionResult> CreateUser([FromBody] UserDTO model)
+    //{
+    //    try
+    //    {
+
+    //        var result = await _userHelper.AddUserAsync(user, model.Password);
+
+    //        
+
+    //        throw new Exception(result.Errors?.FirstOrDefault()?.Code);
+
+    //    }
+    //    
+
+
+
+
+
+
+
+
+
+
 
     //[HttpPost("RecoverPassword")]
     //public async Task<ActionResult> RecoverPassword([FromBody] EmailDTO model)
@@ -86,28 +314,7 @@ public class AccountsController : ControllerBase
     //    var teste = await _userHelper.GetUserAsync(User.FindFirstValue(ClaimTypes.Sid));
     //    return Ok(await _userHelper.GetUserAsync(User.FindFirstValue(ClaimTypes.Email)));
     //}
-    //[HttpPost("Login")]
-    //public async Task<ActionResult> Login([FromBody] LoginDTO model)
-    //{
-    //    var result = await _userHelper.LoginAsync(model);
-    //    if (result.Succeeded)
-    //    {
-    //        var user = await _userHelper.GetUserAsync(model.Email);
-    //        return Ok(BuildToken(user));
-    //    }
-    //    if (result.IsLockedOut)
-    //    {
-    //        return BadRequest("Superou o número máximo de tentativas, sua conta está bloqueada, tente de novo em 5 minutos.");
-    //    }
 
-    //    if (result.IsNotAllowed)
-    //    {
-    //        return BadRequest("O usuário não foi habilitado, deve seguir as instruções do e-mail enviado para poder habilitar o usuário.");
-    //    }
-
-
-    //    return BadRequest("Email ou Senha inválidos.");
-    //}
 
     //[HttpPost("changePassword")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -258,67 +465,7 @@ public class AccountsController : ControllerBase
     //    return BadRequest(response.Message);
     //}
 
-    //[HttpPost("CreateUser")]
-    //public async Task<ActionResult> CreateUser([FromBody] UserDTO model)
-    //{
-    //    try
-    //    {
-    //        User user = model;
-    //        if (!string.IsNullOrEmpty(model.Photo))
-    //        {
-    //            var photoUser = Convert.FromBase64String(model.Photo);
-    //            model.Photo = await _fileStorage.SaveFileAsync(photoUser, ".jpg", _container);
-    //        }
 
-    //        var result = await _userHelper.AddUserAsync(user, model.Password);
-            
-    //        if (result.Succeeded)
-    //        {
-    //            await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
-
-    //            //return Ok(BuildToken(user));
-
-    //            var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-    //            var tokenLink = Url.Action("ConfirmEmail", "accounts", new
-    //            {
-    //                userid = user.Id,
-    //                token = myToken
-    //            }, HttpContext.Request.Scheme, _configuration["UrlWEB"]);
-
-    //            var response = _mailHelper.SendMail(user.Name, user.Email!,
-    //                $"Confirmação de conta Automações Brasil",
-    //                $"<h1>Automações Brasil - Confirmação de conta</h1>" +
-    //                $"<p>Para habilitar o usuário, por valor clique em 'Confirmar Email':</p>" +
-    //                $"<b><a href ={tokenLink}>Confirmar Email</a></b>");
-
-    //            if (response.IsSuccess)
-    //            {
-    //                return NoContent();
-    //            }
-
-    //            return BadRequest(response.Message);
-    //        }
-
-    //        throw new Exception(result.Errors?.FirstOrDefault()?.Code);
-
-    //    }
-    //    catch (DbUpdateException e)
-    //    {
-    //        if (e.InnerException!.Message.Contains("Duplicate"))
-    //        {
-    //            return BadRequest("O CPF / CNPJ informado já possui cadastro.");
-    //        }
-    //        return BadRequest(e.InnerException.Message);
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        if (e.Message.Contains("DuplicateEmail") || e.Message.Contains("DuplicateUserName"))
-    //        {
-    //            return BadRequest("O CPF / CNPJ informado já possui cadastro.");
-    //        }
-
-    //        return BadRequest(e.Message);
-    //    }
 
     //}
     //[HttpGet("all")]

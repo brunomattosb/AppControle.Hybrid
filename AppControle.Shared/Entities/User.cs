@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AppControle.Shared.Enums;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace AppControle.Shared.Entities;
 public class User : IdentityUser
@@ -22,8 +24,8 @@ public class User : IdentityUser
     [Display(Name = "Foto")]
     public string? Photo { get; set; }
 
-    //[Display(Name = "Tipo de usuario")]
-    //public UserType UserType { get; set; }
+    [Display(Name = "Tipo de usuario")]
+    public UserType UserType { get; set; }
 
     //public City? City { get; set; }
 
@@ -64,7 +66,10 @@ public class User : IdentityUser
     public DateTime RefreshTokenExpiryTime { get; set; }
 
     //Collections 
+    [JsonIgnore]
     public ICollection<Product>? lProducts { get; set; }
+
+    [JsonIgnore]
     public ICollection<Category>? Category { get; set; }
     //public ICollection<Client>? lClients { get; set; }
     //public ICollection<MonthlyFee>? lMonthlyFees { get; set; }

@@ -16,8 +16,6 @@ using System.Text.Json.Serialization;
 
 
 
-//Mail
-builder.Services.AddScoped<IMailHelper, MailHelper>();
 //Azure
 builder.Services.AddScoped<IFileStorage, FileStorage>();
 

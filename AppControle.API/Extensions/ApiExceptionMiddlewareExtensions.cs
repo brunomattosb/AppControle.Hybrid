@@ -1,4 +1,4 @@
-﻿using AppControle.Shared.Entities;
+﻿using AppControle.Shared.DTO;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 

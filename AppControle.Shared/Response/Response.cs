@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppControle.Shared.DTO.AccountDTOs;
+namespace AppControle.Shared.Response;
 
-public class ResponseAccountDTO
+public class Response
 {
-    public string? Status { get; set; }
+    public bool IsSuccess { get; set; }
     public string? Message { get; set; }
+    public object? Result { get; set; }
+
 }

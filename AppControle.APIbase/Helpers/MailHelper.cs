@@ -1,7 +1,5 @@
-﻿using AppControle.Shared.Responses;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MimeKit;
-using System.Security.Authentication;
 
 namespace AppControleAPI.Helpers
 {

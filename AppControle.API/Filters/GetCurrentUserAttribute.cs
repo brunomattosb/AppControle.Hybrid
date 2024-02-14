@@ -13,7 +13,10 @@ public class GetCurrentUserAttribute : TypeFilterAttribute
     private class GetCurrentUser : IAsyncActionFilter
     {
 
-        //private readonly UserManager<SeuUsuario> _userManager;
+        //private readonly
+        //
+        //
+        //<SeuUsuario> _userManager;
 
         //public GetCurrentUser(UserManager<SeuUsuario> userManager)
         //{

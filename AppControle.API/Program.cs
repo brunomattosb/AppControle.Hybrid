@@ -4,6 +4,7 @@ using AppControle.API.Extensions;
 using AppControle.API.Filters;
 using AppControle.API.Logging;
 using AppControle.API.Repositories;
+using AppControle.API.Services;
 using AppControle.Shared.DTO.Mappings;
 using AppControle.Shared.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,7 +35,9 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddAutoMapper(typeof(MappingsProfile));
+builder.Services.AddScoped<IMailService, MailService>();
 
 //MySQL
 string? mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -79,10 +82,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-//Jwt
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication("Bearer").AddJwtBearer();
-
 //builder.Services.AddScoped<ApiLoggingFilter>();
 builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
 {
@@ -108,7 +107,8 @@ builder.Services.AddIdentity<User, IdentityRole>(x =>
 }).AddEntityFrameworkStores<DataContext>()
     .AddDefaultTokenProviders();
 
-//Jwt config
+//Jwt
+builder.Services.AddAuthorization();
 var tokenKey = builder.Configuration["JWT:SecretKey"]
         ?? throw new ArgumentException("Invalid token key");
 builder.Services.AddAuthentication(options =>
