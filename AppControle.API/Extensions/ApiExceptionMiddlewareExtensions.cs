@@ -18,7 +18,7 @@ public static class ApiExceptionMiddlewareExtensions
                 var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                 if (contextFeature != null)
                 {
-                    await context.Response.WriteAsync(new ErrorDetails()
+                    await context.Response.WriteAsync(new ErrorDetailsDTO()
                     {
                         StatusCode = context.Response.StatusCode,
                         Message = contextFeature.Error.Message,

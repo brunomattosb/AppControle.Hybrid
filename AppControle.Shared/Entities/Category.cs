@@ -1,9 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using AppControle.Shared.DTO.EntitiesDTO;
 
 namespace AppControle.Shared.Entities;
-public class Category : UserUnion
+public class Category : UserUnionDTO
 {
     public Category()
     {

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240208182327_Iniciando")]
-    partial class Iniciando
+    [Migration("20240213163921_Iniciando229")]
+    partial class Iniciando229
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,13 +32,10 @@ namespace AppControle.API.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("Name", "UserId");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Categories");
                 });
@@ -71,13 +68,10 @@ namespace AppControle.API.Migrations
                     b.Property<float>("Stock")
                         .HasColumnType("float");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("Name", "UserId");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Products");
                 });

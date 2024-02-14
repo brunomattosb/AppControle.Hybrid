@@ -1,128 +1,84 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AppControle.API.Context;
 using AppControle.Shared.Entities;
+using AppControle.API.Repositories;
+using AutoMapper;
+using Newtonsoft.Json;
+using AppControle.Shared.Entities.Pagination;
 using Microsoft.AspNetCore.Authorization;
-using System;
-using AppControle.Shared.DTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using AppControle.Shared.DTO.EntitiesDTO;
 
 namespace AppControle.API.Controllers
 {
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IUnitOfWork _uof;
+        private readonly IMapper _mapper;
         //private readonly IFileStorage _fileStorage;
 
-        public ProductsController(DataContext context) //, IFileStorage fileStorage)
+        public ProductsController(IUnitOfWork uof, IMapper mapper) //, IFileStorage fileStorage)
         {
-            _context = context;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(string? filter)
-        {
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            //if (user == null)
-            //{
-            //    return BadRequest("User not valid.");
-            //}
-
-            var queryable = _context.Products
-                //.Include(x => x.lProductImages)
-                .Include(x => x.lProductCategories!)
-                .ThenInclude(x => x.Category)
-                .AsQueryable();
-
-            //queryable = queryable.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
-
-            if (!string.IsNullOrEmpty(filter))
-            {
-                queryable = queryable.Where(x => x.Name!.Contains(filter));
-            }
-
-            var lProducts = await queryable
-                .OrderBy(x => x.Name)
-                .AsNoTracking()
-                .ToListAsync();
-
-            if(lProducts is null)
-            {
-                return NotFound();
-            }
-            return lProducts;
+            _uof = uof;
+            _mapper = mapper;
         }
 
         [HttpGet("combobox")]
-        public async Task<ActionResult<IEnumerable<ProductCbbDTO>>> GetCombo()
+        public async Task<ActionResult<IEnumerable<ProductDTOCbb>>> GetCombo()
         {
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            //if (user == null)
-            //{
-            //    return BadRequest("User not valid.");
-            //}
+            var lProducts = await _uof.ProductRepository.GetAllAsync();
 
-            if (_context.Products == null)
+            if (lProducts is null)
             {
                 return NotFound();
             }
-            var queryable = _context.Products
-                .Where(x => x.IsService == true)
-                .AsQueryable();
-            //queryable = queryable.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
 
-            var lProducts = await queryable
-                .OrderBy(x => x.Name)
-                .AsNoTracking()
-                .ToListAsync();
+            var lProductsDTO = _mapper.Map<IEnumerable<ProductDTOCbb>>(lProducts);
 
-            List<ProductCbbDTO> productCbbDTO = new();
-            
-            foreach (var prodDTO in lProducts)
-            {
-                productCbbDTO.Add(new ProductCbbDTO { 
-                    Description = prodDTO.Description,
-                    Name = prodDTO.Name,
-                    Id = prodDTO.Id,
-                    Price = prodDTO.Price,
-                });
-            }
-            return productCbbDTO;
+            return Ok(lProductsDTO);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductDTOList>>> GetProducts([FromQuery] FiltersProduct pagination)
+        {
+            var lProducts = await _uof.ProductRepository.GetProductsFullAsync(pagination);
+
+            if (lProducts is null)
+            {
+                return NotFound();
+            }
+
+            //TODO: Melhorar essa forma de adicionar os parametros
+            var metadata = new
+            {
+                lProducts.Count,
+                lProducts.PageSize,
+                lProducts.PageCount,
+                lProducts.TotalItemCount,
+                lProducts.HasNextPage,
+                lProducts.HasPreviousPage
+            };
+
+            Response.Headers.Append("X-pagination", JsonConvert.SerializeObject(metadata));
+
+            var lProductsDTO = _mapper.Map<IEnumerable<ProductDTOList>>(lProducts);
+
+            return Ok(lProductsDTO);
+        }
         [HttpGet("{id:int:min(1)}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            //if (user == null)
-            //{
-            //    return BadRequest("User not valid.");
-            //}
-
-            var product = await _context.Products
-                //.Include(x => x.lProductImages)
-                .Include(x => x.lProductCategories!)
-                .ThenInclude(x => x.Category)
-                //.Where(x => x.User!.Id == user.Id)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var product = await _uof.ProductRepository.GetProductFullAsync(id);
 
             if (product == null)
             {
                 return NotFound();
-            }
-            else
-            {
-                //if (product.UserId != user.Id)
-                //{
-                //    return BadRequest("User not valid.");
-                //}
-            }
+            }           
 
             return product;
         }
-
 
         [HttpPut("{id:int:min(1)}")]
         public async Task<IActionResult> PutProduct(int id, ProductDTO productDTO)
@@ -131,17 +87,8 @@ namespace AppControle.API.Controllers
             {
                 return BadRequest();
             }
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            //if (user == null)
-            //{
-            //    return BadRequest("User not valid.");
-            //}
 
-            var productExists = await _context.Products
-                .Include(x => x.lProductCategories)
-                //.Include(x => x.lProductImages)
-                //.Where(x => x.User!.Id == user.Id)
-                .FirstOrDefaultAsync(x => x.Id == productDTO.Id);
+            var productExists = await _uof.ProductRepository.GetProductFullAsync(id);
 
             if (productExists == null)
             {
@@ -170,175 +117,58 @@ namespace AppControle.API.Controllers
             productExists.IsService = productDTO.IsService;
             productExists.lProductCategories = productDTO.ProductCategoryIds!.Select(x => new ProductCategory { CategoryId = x }).ToList();
 
-            try
-            {
-                _context.Entry(productExists).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
 
-                return Ok(productExists);
-            }
-            catch (DbUpdateException dbUpdateException)
-            {
-                if (dbUpdateException.InnerException!.Message.ToLower().Contains("duplicate"))
-                {
-                    return BadRequest("Já existe uma categoria com o mesmo nome.");
-                }
-                else
-                {
-                    return BadRequest(dbUpdateException.InnerException.Message);
-                }
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
-            }
+            _uof.ProductRepository.Update(productExists);
+            await _uof.CommitAsync();
+
+            return Ok(productExists);
         }
 
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(ProductDTO productDTO)
         {
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            //if (user == null)
+            Product newProduct = _mapper.Map<Product>(productDTO);
+
+            if (newProduct is null)
+            {
+                return NotFound();
+            }
+
+            //foreach (var productImage in productDTO.ProductImages!)
             //{
-            //    return BadRequest("User not valid.");
+            //    var photoProduct = Convert.FromBase64String(productImage);
+            //    newProduct.lProductImages.Add(new ProductImage { Image = await _fileStorage.SaveFileAsync(photoProduct, ".jpg", "products") });
             //}
-            Product newProduct = new()
-            {
-                Name = productDTO.Name,
-                Description = productDTO.Description,
-                Price = productDTO.Price,
-                Stock = productDTO.Stock,
-                lProductCategories = new List<ProductCategory>(),
-                //lProductImages = new List<ProductImage>(),
-                //User = user,
-                //UserId = user.Id,
-                IsActive = productDTO.IsActive,
-                IsService = productDTO.IsService,
-            };
 
-            try
+            foreach (var productCategoryId in productDTO.ProductCategoryIds!)
             {
-                //foreach (var productImage in productDTO.ProductImages!)
-                //{
-                //    var photoProduct = Convert.FromBase64String(productImage);
-                //    newProduct.lProductImages.Add(new ProductImage { Image = await _fileStorage.SaveFileAsync(photoProduct, ".jpg", "products") });
-                //}
+                var category = await _uof.CategoryRepository.GetAsync(x => x.Id == productCategoryId);
 
-                foreach (var productCategoryId in productDTO.ProductCategoryIds!)
-                {
-                    var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == productCategoryId);
-                    newProduct.lProductCategories.Add(new ProductCategory { Category = category! });
-                }
-
-            } catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
+                newProduct.lProductCategories!.Add(new ProductCategory { Category = category! });
             }
 
-            try
-            {
-                _context.Products.Add(newProduct);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction("GetProduct", new { id = newProduct.Id }, newProduct);
-            }
-            catch (DbUpdateException dbUpdateException)
-            {
-                if (dbUpdateException.InnerException!.Message.ToLower().Contains("duplicate"))
-                {
-                    return BadRequest("Já existe uma produto com o mesmo nome.");
-                }
-                else
-                {
-                    return BadRequest(dbUpdateException.InnerException.Message);
-                }
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
-            }
+            _uof.ProductRepository.Create(newProduct);
+            await _uof.CommitAsync();
+
+            return CreatedAtAction("GetProduct", new { id = newProduct.Id }, newProduct);
         }
 
         [HttpDelete("{id:int:min(1)}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<ActionResult<ProductDTO>> DeleteProduct(int id)
         {
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            //if (user == null)
-            //{
-            //    return BadRequest("User not valid.");
-            //}
+            var product = await _uof.ProductRepository.GetAsync(p => p.Id == id);
 
-            var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            //if(user.Id != category.UserId)
-            //{
-            //    return NotFound();
-            //}
+            var productDeleted = _mapper.Map<ProductDTO>(_uof.ProductRepository.Delete(product));
+            await _uof.CommitAsync();
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(productDeleted);
         }
     }
 }
 
 
-//[HttpPost("addImages")]
-//public async Task<ActionResult> PostAddImagesAsync(ImageDTO imageDTO)
-//{
-//    var product = await _context.Products
-//        .Include(x => x.lProductImages)
-//        .FirstOrDefaultAsync(x => x.Id == imageDTO.ProductId);
-//    if (product == null)
-//    {
-//        return NotFound();
-//    }
-
-//    if (product.lProductImages is null)
-//    {
-//        product.lProductImages = new List<ProductImage>();
-//    }
-
-//    for (int i = 0; i < imageDTO.Images.Count; i++)
-//    {
-//        if (!imageDTO.Images[i].StartsWith("https://sales2023.blob.core.windows.net/products/"))
-//        {
-//            var photoProduct = Convert.FromBase64String(imageDTO.Images[i]);
-//            imageDTO.Images[i] = await _fileStorage.SaveFileAsync(photoProduct, ".jpg", "products");
-//            product.lProductImages!.Add(new ProductImage { Image = imageDTO.Images[i] });
-//        }
-//    }
-
-//    _context.Update(product);
-//    await _context.SaveChangesAsync();
-//    return Ok(imageDTO);
-//}
-
-//[HttpPost("removeLastImage")]
-//public async Task<ActionResult> PostRemoveLastImageAsync(ImageDTO imageDTO)
-//{
-//    var product = await _context.Products
-//        .Include(x => x.lProductImages)
-//        .FirstOrDefaultAsync(x => x.Id == imageDTO.ProductId);
-//    if (product == null)
-//    {
-//        return NotFound();
-//    }
-
-//    if (product.lProductImages is null || product.lProductImages.Count == 0)
-//    {
-//        return Ok();
-//    }
-
-//    var lastImage = product.lProductImages.LastOrDefault();
-//    await _fileStorage.RemoveFileAsync(lastImage!.Image, "products");
-//    product.lProductImages.Remove(lastImage);
-//    _context.Update(product);
-//    await _context.SaveChangesAsync();
-//    imageDTO.Images = product.lProductImages.Select(x => x.Image).ToList();
-//    return Ok(imageDTO);
-//}

@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AppControle.Shared.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace AppControle.API.Context;
-public class DataContext : DbContext //IdentityDbContext<User>
+public class DataContext : IdentityDbContext<User>
 {
     public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
@@ -20,6 +21,9 @@ public class DataContext : DbContext //IdentityDbContext<User>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasCharSet(null, DelegationModes.ApplyToDatabases);
+        base.OnModelCreating(modelBuilder);
+
         //modelBuilder.Entity<ProductCategory>()
         //    .HasKey(cp => new { cp.ProductId, cp.CategoryId });
 
@@ -33,20 +37,23 @@ public class DataContext : DbContext //IdentityDbContext<User>
         //    .WithMany(c => c.lProductCategories)
         //    .HasForeignKey(cp => cp.CategoryId);
 
-        //modelBuilder.HasCharSet(null, DelegationModes.ApplyToDatabases);
-        //base.OnModelCreating(modelBuilder);
-
         //modelBuilder.Entity<Country>().HasIndex(x => x.Name).IsUnique();
         //modelBuilder.Entity<State>().HasIndex("CountryId", "Name").IsUnique();
         //modelBuilder.Entity<City>().HasIndex("StateId", "Name").IsUnique();
-        //modelBuilder.Entity<User>().HasIndex("Cpf_Cnpj").IsUnique();
+
+        modelBuilder.Entity<User>()
+            .HasIndex("Cpf_Cnpj").IsUnique();
 
         //modelBuilder.Entity<Client>()
         //    .HasAlternateKey(x => new { x.Cpf_Cnpj, x.UserId });
-        //modelBuilder.Entity<Product>()
-        //    .HasAlternateKey(x => new { x.Name, x.UserId });
-        //modelBuilder.Entity<Category>()
-        //    .HasAlternateKey(x => new { x.Name, x.UserId });
+        modelBuilder.Entity<Product>()
+            .HasIndex(x => new { x.Name }) //, x.UserId 
+            .IsUnique();
+
+        modelBuilder.Entity<Category>()
+            .HasIndex(c => c.Name)
+            .IsUnique();//, x.UserId });
+        //TODO:Testar se o hasalteratekey deixar alterar o nome da categoria
 
 
 

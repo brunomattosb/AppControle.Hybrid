@@ -6,7 +6,7 @@
 //    {
 //        [Required(ErrorMessage = "O campo {0} é obligatorio.")]
 //        [EmailAddress(ErrorMessage = "Você deve inserir um email válido.")]
-//        public string Email { get; set; } = null!;
+//        public string Username { get; set; } = null!;
 
 //        [Display(Name = "Senha")]
 //        [Required(ErrorMessage = "O campo {0} é obligatorio.")]

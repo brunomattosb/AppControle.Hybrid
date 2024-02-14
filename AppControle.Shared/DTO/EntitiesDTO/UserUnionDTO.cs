@@ -5,8 +5,8 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace AppControle.Shared.Entities;
-public class UserUnion
+namespace AppControle.Shared.DTO.EntitiesDTO;
+public class UserUnionDTO
 {
     //public string? UserId { get; set; }
 

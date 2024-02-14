@@ -3,6 +3,7 @@ using System;
 using AppControle.API.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240214123838_AddUSerss")]
+    partial class AddUSerss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,12 +189,6 @@ namespace AppControle.API.Migrations
 
                     b.Property<string>("Photo")
                         .HasColumnType("longtext");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime(6)");

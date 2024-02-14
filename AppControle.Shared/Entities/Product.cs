@@ -2,9 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.ObjectModel;
 using AppControle.API.Validations;
+using AppControle.Shared.DTO.EntitiesDTO;
 
 namespace AppControle.Shared.Entities;
-public class Product : UserUnion//, IValidatableObject
+public class Product : UserUnionDTO//, IValidatableObject
 {
     public Product()
     {

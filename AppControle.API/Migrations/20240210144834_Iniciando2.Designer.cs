@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240208190044_Iniciando2")]
+    [Migration("20240210144834_Iniciando2")]
     partial class Iniciando2
     {
         /// <inheritdoc />
@@ -33,6 +33,8 @@ namespace AppControle.API.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
 
                     b.ToTable("Categories");
                 });
@@ -66,6 +68,8 @@ namespace AppControle.API.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
 
                     b.ToTable("Products");
                 });

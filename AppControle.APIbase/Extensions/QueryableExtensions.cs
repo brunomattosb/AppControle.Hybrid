@@ -1,6 +1,4 @@
-﻿
-
-using AppControle.Shared.Entities;
+﻿using AppControle.Shared.Entities.Pagination;
 
 namespace AppControle.API.Extensions
 {

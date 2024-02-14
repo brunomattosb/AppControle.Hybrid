@@ -1,193 +1,143 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AppControle.API.Context;
-using AppControle.Shared.Entities;
-using System;
+﻿using AppControle.Shared.Entities;
+using AppControle.API.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using Newtonsoft.Json;
+using AppControle.Shared.Entities.Pagination;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using AppControle.Shared.DTO.EntitiesDTO;
 
 namespace AppControle.API.Controllers
 {
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IUnitOfWork _uof;
+        private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public CategoriesController(DataContext context)
+        public CategoriesController(IUnitOfWork uof, ILogger<CategoriesController> logger, IMapper mapper)
         {
-            _context = context;
+            _logger = logger;
+            _uof = uof;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories(string? filter)
+        //TODO: Exemplo de um filtro
+        //[ServiceFilter(typeof(ApiLoggingFilter))]
+        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategories()
         {
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            //if (user == null)
-            //{
-            //    return BadRequest("User not valid.");
-            //}
+            var lCategories = await _uof.CategoryRepository.GetAllAsync();
 
-            var queryable = _context.Categories.AsQueryable();
-            //queryable = queryable.Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
-
-            if (!string.IsNullOrEmpty(filter))
+            if (lCategories is null)
             {
-                queryable = queryable.Where(x => x.Name!.Contains(filter));
+                return NotFound();
             }
 
-            try
-            {
-                var lCategories = await queryable
-                .OrderBy(x => x.Name)
-                //TODO: Estudar mais sobre o asnotraking
-                .AsNoTracking()
-                .ToListAsync();
+            var lCategoriesDTO = _mapper.Map<IEnumerable<CategoryDTO>>(lCategories);
 
-                if (lCategories is null)
-                {
-                    return NotFound();
-                }
-                return lCategories;
-            }
-            catch(Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, 
-                    "Ocorreu um problema ao tratar a sua solicitação, entre em contato com o suporte!");
-                //TODO: Excessoes é custoso.. ver uma opção melhor!
-            }            
+            return Ok(lCategoriesDTO);
         }
 
-        [HttpGet("{id:int:min(1)}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        [HttpGet("Pagination")]
+        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategoriesPagination([FromQuery] FiltersCategory pagination)
         {
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            //if (user == null)
-            //{
-            //    return BadRequest("User not valid.");
-            //}
-            var category = await _context.Categories.FindAsync(id);
+            var lCategories = await _uof.CategoryRepository.GetCategoryPaginationAsync(pagination);
 
+            var metadata = new
+            {
+                lCategories.Count,
+                lCategories.PageSize,
+                lCategories.PageCount,
+                lCategories.TotalItemCount,
+                lCategories.HasNextPage,
+                lCategories.HasPreviousPage
+            };
+
+            Response.Headers.Append("X-pagination", JsonConvert.SerializeObject(metadata));
+
+            if (lCategories is null)
+            {
+                return NotFound();
+            }
+
+            var lCategoriesDTO = _mapper.Map<IEnumerable<CategoryDTO>>(lCategories);
+
+            return Ok(lCategoriesDTO);
+        }
+        [HttpGet("{id:int:min(1)}")]
+        public async Task<ActionResult<CategoryDTO>> GetCategory(int id)
+        {
+            var category = await _uof.CategoryRepository.GetAsync(c => c.Id == id);
 
             if (category == null)
             {
                 return NotFound();
             }
-            else
-            {
-                //if (category.UserId != user.Id)
-                //{
-                //    return BadRequest("User not valid.");
-                //}
-            }
 
-            return category;
+            var CategoriesDTO = _mapper.Map<CategoryDTO>(category);
+
+            return Ok(CategoriesDTO);
         }
 
 
         [HttpPut("{id:int:min(1)}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        public async Task<IActionResult> PutCategory(int id, CategoryDTO category)
         {
             if (id != category.Id)
             {
                 return BadRequest();
             }
 
-            var categoryExists = await _context.Categories.FindAsync(id);
+            var categoryExists = await _uof.CategoryRepository.GetAsync(c => c.Id == id);
 
             if (categoryExists == null)
             {
                 return NotFound();
             }
 
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            //if (user == null || user.Id != categoryExists.UserId)
-            //{
-            //    return BadRequest("User not valid.");
-            //}
-
             categoryExists.Name = category.Name;
 
-            try
-            {
-                _context.Entry(categoryExists).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException dbUpdateException)
-            {
-                if (dbUpdateException.InnerException!.Message.ToLower().Contains("duplicate"))
-                {
-                    return BadRequest("Já existe uma categoria com o mesmo nome.");
-                }
-                else
-                {
-                    return BadRequest(dbUpdateException.InnerException.Message);
-                }
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
-            }
+            _uof.CategoryRepository.Update(categoryExists);
+            await _uof.CommitAsync();
 
-            return NoContent();
+            var categoryDTO = _mapper.Map<CategoryDTO>(categoryExists);
+
+            return Ok(categoryDTO);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        public async Task<ActionResult<CategoryDTO>> PostCategory(CategoryDTO categoryDTO)
         {
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            //if (user == null)
-            //{
-            //    return BadRequest("User not valid.");
-            //}
-            
-            _context.Add(category);
+            if (categoryDTO is null)
+            {
+                return BadRequest("Dados inválidos");
+            }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-                return CreatedAtAction("GetCategory", new { id = category.Id }, category);
-            }
-            catch (DbUpdateException dbUpdateException)
-            {
-                if (dbUpdateException.InnerException!.Message.ToLower().Contains("duplicate"))
-                {
-                    return BadRequest("Já existe uma catgoria com o mesmo nome.");
-                }
-                else
-                {
-                    return BadRequest(dbUpdateException.InnerException.Message);
-                }
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
-            }
+            var category = _mapper.Map<Category>(categoryDTO);
+
+            var newCategory = _uof.CategoryRepository.Create(category);
+            await _uof.CommitAsync();
+            return CreatedAtAction("GetCategory", new { id = newCategory.Id }, newCategory);
         }
 
         [HttpDelete("{id:int:min(1)}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<ActionResult<CategoryDTO>> DeleteCategory(int id)
         {
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            //if (user == null)
-            //{
-            //    return BadRequest("User not valid.");
-            //}
-
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _uof.CategoryRepository.GetAsync(c => c.Id == id);
             if (category == null)
             {
                 return NotFound();
             }
 
-            //if(user.Id != category.UserId)
-            //{
-            //    return NotFound();
-            //}
+            var categoryDeleted = _mapper.Map<CategoryDTO>(_uof.CategoryRepository.Delete(category));
+            await _uof.CommitAsync();
 
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(categoryDeleted);
         }
     }
 }

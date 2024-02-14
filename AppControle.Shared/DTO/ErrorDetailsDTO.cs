@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
-namespace AppControle.Shared.Entities;
-public class ErrorDetails
+namespace AppControle.Shared.DTO;
+public class ErrorDetailsDTO
 {
     public int StatusCode { get; set; }
     public string? Message { get; set; }

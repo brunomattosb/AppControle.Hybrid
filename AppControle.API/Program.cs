@@ -1,14 +1,40 @@
+using APICatalogo.Repositories;
 using AppControle.API.Context;
+using AppControle.API.Extensions;
+using AppControle.API.Filters;
+using AppControle.API.Logging;
+using AppControle.API.Repositories;
+using AppControle.Shared.DTO.Mappings;
+using AppControle.Shared.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SisVendas.API.Data;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-//Ignoiree Ref.Cycles
-builder.Services.AddControllers()
-    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-//Ignore navigations var
+
+//Filter Exeptions
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(typeof(ApiExceptionFilter));
+})
+.AddJsonOptions(options =>
+{
+    //Ignoiree Ref.Cycles
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
+
+//Services
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddAutoMapper(typeof(MappingsProfile));
 
 //MySQL
 string? mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -53,6 +79,61 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+//Jwt
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication("Bearer").AddJwtBearer();
+
+//builder.Services.AddScoped<ApiLoggingFilter>();
+builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
+{
+    LogLevel = LogLevel.Information
+}));
+
+//Identity
+builder.Services.AddIdentity<User, IdentityRole>(x =>
+{
+    x.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    x.SignIn.RequireConfirmedEmail = true;
+    x.User.RequireUniqueEmail = true;
+    x.Password.RequireDigit = false;
+    x.Password.RequiredUniqueChars = 0;
+    x.Password.RequireLowercase = false;
+    x.Password.RequireNonAlphanumeric = false;
+    x.Password.RequireUppercase = false;
+    x.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); //TODO: Change to 5 minutes
+    x.Lockout.MaxFailedAccessAttempts = 6;
+    x.Lockout.AllowedForNewUsers = true;
+    x.Password.RequiredLength = 6;
+
+}).AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
+
+//Jwt config
+var tokenKey = builder.Configuration["JWT:SecretKey"]
+        ?? throw new ArgumentException("Invalid token key");
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    //TODO: true em produção
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+
+        ValidateIssuerSigningKey = true,
+        ClockSkew = TimeSpan.Zero,
+        ValidAudience = builder.Configuration["JWT:ValidAudience"],
+        ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
+    };
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -60,6 +141,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ConfigureExceptionHandler();
 }
 
 app.UseHttpsRedirection();
@@ -88,5 +170,3 @@ void SeedData(WebApplication app)
 }
 
 app.Run();
-
-BindingAddress extinsion aq

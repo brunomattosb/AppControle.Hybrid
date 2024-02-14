@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AppControle.API.Migrations
 {
     /// <inheritdoc />
-    public partial class Iniciando : Migration
+    public partial class Iniciando2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,14 +21,12 @@ namespace AppControle.API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
-                    table.UniqueConstraint("AK_Categories_Name_UserId", x => new { x.Name, x.UserId });
+                    table.UniqueConstraint("AK_Categories_Name", x => x.Name);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -45,14 +43,12 @@ namespace AppControle.API.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Stock = table.Column<float>(type: "float", nullable: false),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsService = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    IsService = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
-                    table.UniqueConstraint("AK_Products_Name_UserId", x => new { x.Name, x.UserId });
+                    table.UniqueConstraint("AK_Products_Name", x => x.Name);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
