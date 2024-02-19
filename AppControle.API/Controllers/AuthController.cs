@@ -3,6 +3,7 @@ using AppControle.API.Services;
 using AppControle.Shared.DTO;
 using AppControle.Shared.DTO.AccountDTOs;
 using AppControle.Shared.Entities;
+using AppControle.Shared.Enums;
 using AppControle.Shared.Response;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -54,9 +55,8 @@ public class AuthController : ControllerBase
         {
             var roles = await _userManager.GetRolesAsync(user);
 
-
             //TODO:Verificar claims
-            var claims = new List<Claim>
+            var lclaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Email, user.Email!),
                     new Claim(ClaimTypes.Role, user.UserType.ToString()),
@@ -68,12 +68,13 @@ public class AuthController : ControllerBase
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     //new Claim("CityId", user.CityId.ToString())
             };
+
             foreach (var role in roles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                lclaims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var token = _tokenService.GenerateAccessToken(claims, _configuration);
+            var token = _tokenService.GenerateAccessToken(lclaims, _configuration);
             
             var refreshToken = _tokenService.GenerateRefreshToken();
 
@@ -113,6 +114,9 @@ public class AuthController : ControllerBase
         User user = model;
         user.SecurityStamp = Guid.NewGuid().ToString();
 
+        user.EmailConfirmed = false;
+        user.UserType = UserType.User;
+
         try
         {
             var result = await _userManager.CreateAsync(user, model.Password!);
@@ -125,7 +129,7 @@ public class AuthController : ControllerBase
             if (result.Succeeded)
             {
 
-                //await _userManager.AddToRoleAsync(user, user.UserType.ToString());
+                await _userManager.AddToRoleAsync(user, user.UserType.ToString());
 
                 var myToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -143,7 +147,7 @@ public class AuthController : ControllerBase
 
                 if (response.IsSuccess)
                 {
-                    return Ok(new Response { IsSuccess = true, Message = "Usuario criado com sucesso!!" });
+                    return Ok(new Response { IsSuccess = true,Message = "Usuario criado com sucesso!!" });
                 }
 
                 return BadRequest(response.Message);
@@ -169,6 +173,7 @@ public class AuthController : ControllerBase
         return StatusCode(StatusCodes.Status500InternalServerError,
                        new Response { IsSuccess = false, Message = "Não foi possivel completar seu cadastro, confira os dados informados!" });
     }
+    
     [HttpPost]
     [Route("refresh-token")]
     public async Task<IActionResult> RefreshToken(TokenDTO tokenDTO)
@@ -211,14 +216,14 @@ public class AuthController : ControllerBase
 
         await _userManager.UpdateAsync(user);
 
-        return new ObjectResult(new
+        return Ok(new ObjectResult(new
         {
             accessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
             refreshToken = newRefreshToken
-        });
+        }));
     }
 
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     [HttpPost]
     [Route("revoke/{email}")]
     public async Task<IActionResult> Revoke(string email)
@@ -235,21 +240,18 @@ public class AuthController : ControllerBase
         return NoContent();
     }
 
-    //[HttpPost("CreateUser")]
-    //public async Task<ActionResult> CreateUser([FromBody] UserDTO model)
-    //{
-    //    try
-    //    {
-
-    //        var result = await _userHelper.AddUserAsync(user, model.Password);
-
-    //        
-
-    //        throw new Exception(result.Errors?.FirstOrDefault()?.Code);
-
-    //    }
-    //    
-
+    [HttpPost("CreateRole")]
+    public async void CheckRoleAsync(string roleName)
+    {
+        bool roleExists = await _roleManager.RoleExistsAsync(roleName);
+        if (!roleExists)
+        {
+            await _roleManager.CreateAsync(new IdentityRole
+            {
+                Name = roleName
+            });
+        }
+    }
 
 
 
