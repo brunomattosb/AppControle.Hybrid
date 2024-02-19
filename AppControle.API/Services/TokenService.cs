@@ -16,7 +16,7 @@ public class TokenService : ITokenService
         var privateKey = Encoding.UTF8.GetBytes(key);
 
         var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(privateKey),
-                                 SecurityAlgorithms.HmacSha256Signature);
+                                 SecurityAlgorithms.HmacSha256);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

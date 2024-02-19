@@ -3,6 +3,7 @@ using AppControle.API.Context;
 using AppControle.API.Extensions;
 using AppControle.API.Filters;
 using AppControle.API.Logging;
+using AppControle.API.RateLimitOptions;
 using AppControle.API.Repositories;
 using AppControle.API.Services;
 using AppControle.Shared.DTO.Mappings;
@@ -15,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using SisVendas.API.Data;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +30,36 @@ builder.Services.AddControllers(options =>
     //Ignoiree Ref.Cycles
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+//LimitingRate
+var myOptions = new MyRateLimitOptions();
+builder.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
+//builder.Services.AddRateLimiter(rateLimiterOptions =>
+//{
+//    rateLimiterOptions.AddFixedWindowLimiter(policyName: "fixedwindow", options =>
+//    {
+//        options.PermitLimit = myOptions.PermitLimit;//1;
+//        options.Window = TimeSpan.FromSeconds(myOptions.Window);
+//        options.QueueLimit = myOptions.QueueLimit;//2;
+//        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+//    });
+//    rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+//});
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpcontext =>
+                            RateLimitPartition.GetFixedWindowLimiter(
+                                               partitionKey: httpcontext.User.Identity?.Name ??
+                                                             httpcontext.Request.Headers.Host.ToString(),
+                            factory: partition => new FixedWindowRateLimiterOptions
+                            {
+                                AutoReplenishment = myOptions.AutoReplenishment,
+                                PermitLimit = myOptions.PermitLimit,
+                                QueueLimit = myOptions.QueueLimit,
+                                Window = TimeSpan.FromSeconds(myOptions.Window),
+                            }));
+});
 
 //Services
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -38,6 +69,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddAutoMapper(typeof(MappingsProfile));
 builder.Services.AddScoped<IMailService, MailService>();
+builder.Services.AddScoped<IUserHelper, UserHelper>();
 
 //MySQL
 string? mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -149,6 +181,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//RateLimit
+app.UseRateLimiter();
 
 //TODO: Diz que melhora a segurança.. confirmar
 app.UseCors(x => x
