@@ -10,14 +10,14 @@ using X.PagedList;
 
 namespace AppControle.API.Repositories;
 
-public class UserHelper : IUserHelper
+public class UserRepository : IUserRepository
 {
     private readonly DataContext _context;
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly SignInManager<User> _signInManager;
 
-    public UserHelper(DataContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager)
+    public UserRepository(DataContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager)
     {
         _context = context;
         _userManager = userManager;

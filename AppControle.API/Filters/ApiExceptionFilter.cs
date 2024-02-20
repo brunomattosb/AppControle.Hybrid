@@ -14,27 +14,15 @@ public class ApiExceptionFilter : IExceptionFilter
     }
     public void OnException(ExceptionContext context)
     {
-        if (context.Exception is DbUpdateException dbUpdateException)
+        if (context.Exception.Message.Contains("Duplicate") ||
+            context.Exception.Message.Contains("DuplicateEmail") ||
+            context.Exception.Message.Contains("DuplicateUserName"))
         {
-            if (dbUpdateException.InnerException is MySqlException mySqlException && mySqlException.Number == 1062)
+            // Código 1062 geralmente indica uma violação de índice único (duplicidade)
+            context.Result = new ObjectResult(new { error = "Duplicidade de dados." })
             {
-                // Código 1062 geralmente indica uma violação de índice único (duplicidade)
-                context.Result = new ObjectResult(new { error = "Duplicidade de dados." })
-                {
-                    StatusCode = 409 // Código de status 409 para indicar conflito
-                };
-            }
-            else
-            {
-                //TODO: Arrimar aqui
-                //Exception em geral
-                _logger.LogError(context.Exception, "Ocorreu um exceção não tratada: Status Code 500");
-
-                context.Result = new ObjectResult("Ocorreu um problema ao tratar a sua solicitação: Status Code 500")
-                {
-                    StatusCode = StatusCodes.Status500InternalServerError,
-                };
-            }
+                StatusCode = 409 // Código de status 409 para indicar conflito
+            };            
         }
         else
         {

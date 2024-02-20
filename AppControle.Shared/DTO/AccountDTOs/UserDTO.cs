@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AppControle.Shared.DTO
 {
-    public class RegisterDTO : User
+    public class UserDTO : User
     {
         [DataType(DataType.Password)]
         [Display(Name = "Senha")]

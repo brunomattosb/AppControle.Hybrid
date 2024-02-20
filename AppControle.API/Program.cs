@@ -69,7 +69,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddAutoMapper(typeof(MappingsProfile));
 builder.Services.AddScoped<IMailService, MailService>();
-builder.Services.AddScoped<IUserHelper, UserHelper>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //MySQL
 string? mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");

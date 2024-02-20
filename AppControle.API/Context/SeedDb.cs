@@ -9,6 +9,7 @@ using AppControle.API.Context;
 using AppControle.API.Repositories;
 using AppControle.Shared.Entities;
 using AppControle.Shared.Enums;
+using AppControle.Shared.Response;
 using Microsoft.EntityFrameworkCore;
 
 namespace SisVendas.API.Data
@@ -16,64 +17,64 @@ namespace SisVendas.API.Data
     public class SeedDb
     {
         private readonly DataContext _context;
-//        private readonly IApiService _apiService;
-        private readonly IUserHelper _userHelper;
-//        private readonly IFileStorage _fileStorage;
-//        private City city;
-//        private User user;
-//        private Client client;
+        //        private readonly IApiService _apiService;
+        private readonly IUserRepository _userRepository;
+        //        private readonly IFileStorage _fileStorage;
+        //        private City city;
+        //        private User user;
+        //        private Client client;
 
-        public SeedDb(DataContext context, IUserHelper userHelper) //, IApiService apiService, IUserHelper userHelper, IFileStorage fileStorage)
+        public SeedDb(DataContext context, IUserRepository userHelper) //, IApiService apiService, IUserHelper userHelper, IFileStorage fileStorage)
         {
             _context = context;
-//            _apiService = apiService;
-            _userHelper = userHelper;
-//            _fileStorage = fileStorage;
+            //            _apiService = apiService;
+            _userRepository = userHelper;
+            //            _fileStorage = fileStorage;
         }
 
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
-           
+
             await CheckCategoriesAsync();
             await CheckProductsAsync();
 
             await CheckRolesAsync();
-//            await CheckCountriesAsync();
+            await CheckCountriesAsync();
             await CheckUserAsync("1010", "Juan", "Zuluaga", "zulu@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "JuanZuluaga.jpeg", UserType.Admin);
-//            await CheckUserAsync("2020", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpeg", UserType.User);
-//            await CheckUserAsync("3030", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
-//            await CheckUserAsync("4040", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
-//            await CheckUserAsync("5050", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
-//            city = await _context.Cities!.FirstOrDefaultAsync();
-//            user = await _context.Users!.FirstOrDefaultAsync(c => c.Cpf_Cnpj == "1010")!;
-//            await CheckClientsAsync();
-//            client = await _context.Clients!.FirstOrDefaultAsync()!;
-//            await CheckMonthlyFeeAsync();
+            //            await CheckUserAsync("2020", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpeg", UserType.User);
+            //            await CheckUserAsync("3030", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
+            //            await CheckUserAsync("4040", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
+            //            await CheckUserAsync("5050", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
+            //            city = await _context.Cities!.FirstOrDefaultAsync();
+            //            user = await _context.Users!.FirstOrDefaultAsync(c => c.Cpf_Cnpj == "1010")!;
+            //            await CheckClientsAsync();
+            //            client = await _context.Clients!.FirstOrDefaultAsync()!;
+            //            await CheckMonthlyFeeAsync();
         }
         private async Task CheckCategoriesAsync()
         {
             if (!_context.Categories.Any())
             {
-                _context.Categories.Add(new Category { Name = "Apple"});
-                _context.Categories.Add(new Category { Name = "Autos"});
-                _context.Categories.Add(new Category { Name = "Belleza"});
-                _context.Categories.Add(new Category { Name = "Calzado"});
+                _context.Categories.Add(new Category { Name = "Apple" });
+                _context.Categories.Add(new Category { Name = "Autos" });
+                _context.Categories.Add(new Category { Name = "Belleza" });
+                _context.Categories.Add(new Category { Name = "Calzado" });
                 _context.Categories.Add(new Category { Name = "Comida" });
                 _context.Categories.Add(new Category { Name = "Cosmeticos" });
-                _context.Categories.Add(new Category { Name = "Cosmeticos E Remedios em geral Teste Nome Grande"});
-                _context.Categories.Add(new Category { Name = "Deportes"});
-                _context.Categories.Add(new Category { Name = "Erótica"});
-                _context.Categories.Add(new Category { Name = "Ferreteria"});
-                _context.Categories.Add(new Category { Name = "Gamer"});
-                _context.Categories.Add(new Category { Name = "Hogar"});
-                _context.Categories.Add(new Category { Name = "Jardín"});
-                _context.Categories.Add(new Category { Name = "Jugetes"});
-                _context.Categories.Add(new Category { Name = "Lenceria"});
-                _context.Categories.Add(new Category { Name = "Mascotas"});
-                _context.Categories.Add(new Category { Name = "Nutrición"});
-                _context.Categories.Add(new Category { Name = "Ropa"});
-                _context.Categories.Add(new Category { Name = "Tecnología"});
+                _context.Categories.Add(new Category { Name = "Cosmeticos E Remedios em geral Teste Nome Grande" });
+                _context.Categories.Add(new Category { Name = "Deportes" });
+                _context.Categories.Add(new Category { Name = "Erótica" });
+                _context.Categories.Add(new Category { Name = "Ferreteria" });
+                _context.Categories.Add(new Category { Name = "Gamer" });
+                _context.Categories.Add(new Category { Name = "Hogar" });
+                _context.Categories.Add(new Category { Name = "Jardín" });
+                _context.Categories.Add(new Category { Name = "Jugetes" });
+                _context.Categories.Add(new Category { Name = "Lenceria" });
+                _context.Categories.Add(new Category { Name = "Mascotas" });
+                _context.Categories.Add(new Category { Name = "Nutrición" });
+                _context.Categories.Add(new Category { Name = "Ropa" });
+                _context.Categories.Add(new Category { Name = "Tecnología" });
                 await _context.SaveChangesAsync();
             }
         }
@@ -199,7 +200,7 @@ namespace SisVendas.API.Data
                 //UserId = user.Id,
                 IsService = true,
                 IsActive = true,
-                
+
             };
 
             foreach (var categoryName in categories)
@@ -306,20 +307,20 @@ namespace SisVendas.API.Data
         //        }
         private async Task CheckRolesAsync()
         {
-            await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
-            await _userHelper.CheckRoleAsync(UserType.User.ToString());
+            await _userRepository.CheckRoleAsync(UserType.Admin.ToString());
+            await _userRepository.CheckRoleAsync(UserType.User.ToString());
         }
 
         private async Task<User> CheckUserAsync(string document, string firstName, string lastName, string email, string phone, string address, string image, UserType userType)
         {
-            var user = await _userHelper.GetUserAsync(email);
+            var user = await _userRepository.GetUserAsync(email);
             if (user == null)
             {
-                //var city = await _context.Cities!.FirstOrDefaultAsync(x => x.Name == "Medellín");
-                //if (city == null)
-                //{
-                //    city = await _context.Cities!.FirstOrDefaultAsync();
-                //}
+                var city = await _context.Cities!.FirstOrDefaultAsync(x => x.Name == "Medellín");
+                if (city == null)
+                {
+                    city = await _context.Cities!.FirstOrDefaultAsync();
+                }
 
                 //string filePath;
                 //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -343,89 +344,89 @@ namespace SisVendas.API.Data
                     PhoneNumber = phone,
                     Address = address,
                     UserType = userType,
-
+                    CityId = city!.Id,
                 };
 
-                await _userHelper.AddUserAsync(user, "123123");
-                await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+                await _userRepository.AddUserAsync(user, "123123");
+                await _userRepository.AddUserToRoleAsync(user, userType.ToString());
 
-                var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                await _userHelper.ConfirmEmailAsync(user, token);
+                var token = await _userRepository.GenerateEmailConfirmationTokenAsync(user);
+                await _userRepository.ConfirmEmailAsync(user, token);
             }
 
             return user;
         }
 
 
-        //        private async Task CheckCountriesAsync()
-        //        {
+        private async Task CheckCountriesAsync()
+        {
 
-        //            if (!_context.Countries.Any())
-        //            {
-        //                Response responseCountries = await _apiService.GetListAsync<ResponseApiCities>("/v1", "/countries");
-        //                if (responseCountries.IsSuccess)
-        //                {
-        //                    List<ResponseApiCities> countries = (List<ResponseApiCities>)responseCountries.Result!;
-        //                    foreach (ResponseApiCities countryResponse in countries)
-        //                    {
-        //                        if(countryResponse.Name == "Brazil" || countryResponse.Name == "Italy")
-        //                        {
-        //                            Country? country = await _context.Countries!.FirstOrDefaultAsync(c => c.Name == countryResponse.Name!)!;
-        //                            if (country == null)
-        //                            {
-        //                                country = new() { Name = countryResponse.Name!, lStates = new List<State>() };
-        //                                Response responseStates = await _apiService.GetListAsync<ResponseApiCities>("/v1", $"/countries/{countryResponse.Iso2}/states");
-        //                                if (responseStates.IsSuccess)
-        //                                {
-        //                                    List<ResponseApiCities> states = (List<ResponseApiCities>)responseStates.Result!;
-        //                                    foreach (ResponseApiCities stateResponse in states!)
-        //                                    {
+            if (!_context.Countries.Any())
+            {
+                Response responseCountries = await _apiService.GetListAsync<ResponseApiCities>("/v1", "/countries");
+                if (responseCountries.IsSuccess)
+                {
+                    List<ResponseApiCities> countries = (List<ResponseApiCities>)responseCountries.Result!;
+                    foreach (ResponseApiCities countryResponse in countries)
+                    {
+                        if (countryResponse.Name == "Brazil" || countryResponse.Name == "Italy")
+                        {
+                            Country? country = await _context.Countries!.FirstOrDefaultAsync(c => c.Name == countryResponse.Name!)!;
+                            if (country == null)
+                            {
+                                country = new() { Name = countryResponse.Name!, lStates = new List<State>() };
+                                Response responseStates = await _apiService.GetListAsync<ResponseApiCities>("/v1", $"/countries/{countryResponse.Iso2}/states");
+                                if (responseStates.IsSuccess)
+                                {
+                                    List<ResponseApiCities> states = (List<ResponseApiCities>)responseStates.Result!;
+                                    foreach (ResponseApiCities stateResponse in states!)
+                                    {
 
-        //                                        State state = country.lStates!.FirstOrDefault(s => s.Name == stateResponse.Name!)!;
-        //                                        if (state == null)
-        //                                        {
-        //                                            state = new() { Name = stateResponse.Name!, lCities = new List<City>() };
-        //                                            Response responseCities = await _apiService.GetListAsync<ResponseApiCities>("/v1", $"/countries/{countryResponse.Iso2}/states/{stateResponse.Iso2}/cities");
-        //                                            if (responseCities.IsSuccess)
-        //                                            {
-        //                                                List<ResponseApiCities> cities = (List<ResponseApiCities>)responseCities.Result!;
-        //                                                foreach (ResponseApiCities cityResponse in cities)
-        //                                                {
-        //                                                    if (cityResponse.Name == "Mosfellsbær" || cityResponse.Name == "Șăulița")
-        //                                                    {
-        //                                                        continue;
-        //                                                    }
-        //                                                    City city = state.lCities!.FirstOrDefault(c => c.Name == cityResponse.Name!)!;
-        //                                                    if (city == null)
-        //                                                    {
-        //                                                        state.lCities.Add(new City() { Name = cityResponse.Name! });
-        //                                                    }
+                                        State state = country.lStates!.FirstOrDefault(s => s.Name == stateResponse.Name!)!;
+                                        if (state == null)
+                                        {
+                                            state = new() { Name = stateResponse.Name!, lCities = new List<City>() };
+                                            Response responseCities = await _apiService.GetListAsync<ResponseApiCities>("/v1", $"/countries/{countryResponse.Iso2}/states/{stateResponse.Iso2}/cities");
+                                            if (responseCities.IsSuccess)
+                                            {
+                                                List<ResponseApiCities> cities = (List<ResponseApiCities>)responseCities.Result!;
+                                                foreach (ResponseApiCities cityResponse in cities)
+                                                {
+                                                    if (cityResponse.Name == "Mosfellsbær" || cityResponse.Name == "Șăulița")
+                                                    {
+                                                        continue;
+                                                    }
+                                                    City city = state.lCities!.FirstOrDefault(c => c.Name == cityResponse.Name!)!;
+                                                    if (city == null)
+                                                    {
+                                                        state.lCities.Add(new City() { Name = cityResponse.Name! });
+                                                    }
 
-        //                                                    country.lStates.Add(state);
-        //                                                    //_context.Countries.Add(country);
-        //                                                    //await _context.SaveChangesAsync();
-        //                                                    //return;
-        //                                                }
+                                                    country.lStates.Add(state);
+                                                    //_context.Countries.Add(country);
+                                                    //await _context.SaveChangesAsync();
+                                                    //return;
+                                                }
 
-        //                                            }
+                                            }
 
-        //                                            if (state.lCities.Count > 0)
-        //                                            {
-        //                                                country.lStates.Add(state);
-        //                                            }
-        //                                        }
-        //                                    }
-        //                                }
-        //                                if (country.lStates.Count > 0)
-        //                                {
-        //                                    _context.Countries.Add(country);
-        //                                    await _context.SaveChangesAsync();
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
+                                            if (state.lCities.Count > 0)
+                                            {
+                                                country.lStates.Add(state);
+                                            }
+                                        }
+                                    }
+                                }
+                                if (country.lStates.Count > 0)
+                                {
+                                    _context.Countries.Add(country);
+                                    await _context.SaveChangesAsync();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

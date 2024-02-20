@@ -8,7 +8,7 @@ using X.PagedList;
 
 namespace AppControle.API.Repositories
 {
-    public interface IUserHelper
+    public interface IUserRepository
     {
         Task<User> GetUserAsync(string email);
 

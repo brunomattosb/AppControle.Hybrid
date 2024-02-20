@@ -70,7 +70,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AppControle.Shared\AppControle.SharedBase.csproj" />
+      <ProjectReference Include="..\AppControle.Shared\AppControle.Shared.csproj" />
     </ItemGroup>
 
 </Project>

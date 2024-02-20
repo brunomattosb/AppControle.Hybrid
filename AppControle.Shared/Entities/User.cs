@@ -27,7 +27,7 @@ public class User : IdentityUser
     [Display(Name = "Tipo de usuario")]
     public UserType UserType { get; set; }
 
-    //public City? City { get; set; }
+    public City? City { get; set; }
 
     [Display(Name = "Cidade")]
     [Range(1, int.MaxValue, ErrorMessage = "Você deve selecionar um {0}.")]

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240219175339_Iniciando")]
+    [Migration("20240220204915_Iniciando")]
     partial class Iniciando
     {
         /// <inheritdoc />
@@ -46,6 +46,47 @@ namespace AppControle.API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CodCity")
+                        .HasMaxLength(10)
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("City");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Country");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.Product", b =>
@@ -108,6 +149,27 @@ namespace AppControle.API.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductCategories");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.State", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("State");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.User", b =>
@@ -217,6 +279,8 @@ namespace AppControle.API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("Cpf_Cnpj")
                         .IsUnique();
@@ -366,6 +430,17 @@ namespace AppControle.API.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("AppControle.Shared.Entities.City", b =>
+                {
+                    b.HasOne("AppControle.Shared.Entities.State", "State")
+                        .WithMany("lCities")
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("State");
+                });
+
             modelBuilder.Entity("AppControle.Shared.Entities.Product", b =>
                 {
                     b.HasOne("AppControle.Shared.Entities.User", null)
@@ -390,6 +465,28 @@ namespace AppControle.API.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.State", b =>
+                {
+                    b.HasOne("AppControle.Shared.Entities.Country", "Country")
+                        .WithMany("lStates")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.User", b =>
+                {
+                    b.HasOne("AppControle.Shared.Entities.City", "City")
+                        .WithMany("lUsers")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -448,9 +545,24 @@ namespace AppControle.API.Migrations
                     b.Navigation("lProductCategories");
                 });
 
+            modelBuilder.Entity("AppControle.Shared.Entities.City", b =>
+                {
+                    b.Navigation("lUsers");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.Country", b =>
+                {
+                    b.Navigation("lStates");
+                });
+
             modelBuilder.Entity("AppControle.Shared.Entities.Product", b =>
                 {
                     b.Navigation("lProductCategories");
+                });
+
+            modelBuilder.Entity("AppControle.Shared.Entities.State", b =>
+                {
+                    b.Navigation("lCities");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.User", b =>
