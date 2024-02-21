@@ -24,11 +24,11 @@ namespace SisVendas.API.Data
         //        private User user;
         //        private Client client;
 
-        public SeedDb(DataContext context, IUserRepository userHelper) //, IApiService apiService, IUserHelper userHelper, IFileStorage fileStorage)
+        public SeedDb(DataContext context, IUserRepository userRepository, IApiService apiService) // IUserHelper userHelper, IFileStorage fileStorage)
         {
             _context = context;
             //            _apiService = apiService;
-            _userRepository = userHelper;
+            _userRepository = userRepository;
             //            _fileStorage = fileStorage;
         }
 
@@ -360,7 +360,6 @@ namespace SisVendas.API.Data
 
         private async Task CheckCountriesAsync()
         {
-
             if (!_context.Countries.Any())
             {
                 Response responseCountries = await _apiService.GetListAsync<ResponseApiCities>("/v1", "/countries");
