@@ -37,9 +37,12 @@ public class DataContext : IdentityDbContext<User>
         //    .WithMany(c => c.lProductCategories)
         //    .HasForeignKey(cp => cp.CategoryId);
 
-        modelBuilder.Entity<Country>().HasIndex(x => x.Name).IsUnique();
-        modelBuilder.Entity<State>().HasIndex("CountryId", "Name").IsUnique();
-        modelBuilder.Entity<City>().HasIndex("StateId", "Name").IsUnique();
+        modelBuilder.Entity<Country>()
+            .HasIndex(x => x.Name).IsUnique();
+        modelBuilder.Entity<State>()
+            .HasIndex("CountryId", "Name").IsUnique();
+        modelBuilder.Entity<City>()
+            .HasIndex("StateId", "Name").IsUnique();
 
         modelBuilder.Entity<User>()
             .HasIndex("Cpf_Cnpj").IsUnique();

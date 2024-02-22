@@ -7,17 +7,19 @@
 
 using AppControle.API.Context;
 using AppControle.API.Repositories;
+using AppControle.API.Services;
 using AppControle.Shared.Entities;
 using AppControle.Shared.Enums;
 using AppControle.Shared.Response;
 using Microsoft.EntityFrameworkCore;
+using SisVendas.Shared.Responses;
 
 namespace SisVendas.API.Data
 {
     public class SeedDb
     {
         private readonly DataContext _context;
-        //        private readonly IApiService _apiService;
+        private readonly IApiService _apiService;
         private readonly IUserRepository _userRepository;
         //        private readonly IFileStorage _fileStorage;
         //        private City city;
@@ -27,7 +29,7 @@ namespace SisVendas.API.Data
         public SeedDb(DataContext context, IUserRepository userRepository, IApiService apiService) // IUserHelper userHelper, IFileStorage fileStorage)
         {
             _context = context;
-            //            _apiService = apiService;
+            _apiService = apiService;
             _userRepository = userRepository;
             //            _fileStorage = fileStorage;
         }
@@ -368,7 +370,7 @@ namespace SisVendas.API.Data
                     List<ResponseApiCities> countries = (List<ResponseApiCities>)responseCountries.Result!;
                     foreach (ResponseApiCities countryResponse in countries)
                     {
-                        if (countryResponse.Name == "Brazil" || countryResponse.Name == "Italy")
+                        if (countryResponse.Name == "Brazil" )// || countryResponse.Name == "Italy")
                         {
                             Country? country = await _context.Countries!.FirstOrDefaultAsync(c => c.Name == countryResponse.Name!)!;
                             if (country == null)

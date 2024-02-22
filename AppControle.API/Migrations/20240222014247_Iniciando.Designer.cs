@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppControle.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240220204915_Iniciando")]
+    [Migration("20240222014247_Iniciando")]
     partial class Iniciando
     {
         /// <inheritdoc />
@@ -68,9 +68,10 @@ namespace AppControle.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StateId");
+                    b.HasIndex("StateId", "Name")
+                        .IsUnique();
 
-                    b.ToTable("City");
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.Country", b =>
@@ -86,7 +87,10 @@ namespace AppControle.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Country");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.Product", b =>
@@ -167,9 +171,10 @@ namespace AppControle.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("CountryId", "Name")
+                        .IsUnique();
 
-                    b.ToTable("State");
+                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("AppControle.Shared.Entities.User", b =>

@@ -226,7 +226,7 @@ public class AccountsController : ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult> Get()
     {
-        var teste = await _userRepository.GetUserAsync(User.FindFirstValue(ClaimTypes.Sid));
+        //TODO: retornar apenas o que pode, ta retornando tudo..
         return Ok(await _userRepository.GetUserAsync(User.FindFirstValue(ClaimTypes.Email)));
     }
     [HttpPost("changePassword")]
