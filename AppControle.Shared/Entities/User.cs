@@ -1,4 +1,5 @@
-﻿using AppControle.Shared.Enums;
+﻿using AppControle.API.Validations;
+using AppControle.Shared.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -10,6 +11,7 @@ public class User : IdentityUser
     [Display(Name = "CPF / CNPJ")]
     [Required(ErrorMessage = "O campo {0} é obligatório.")]
     [MaxLength(14, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
+    [ValidateCpf]
     public string? Cpf_Cnpj { get; set; }
 
     [Display(Name = "Nome / Razão Social")]
