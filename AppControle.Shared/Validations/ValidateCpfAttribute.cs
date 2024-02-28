@@ -12,7 +12,7 @@ namespace AppControle.API.Validations
 
             string cpf = value.ToString()!;
 
-            Não deixar o usuario digitar caracteres
+            //TODO:Não deixar o usuario digitar caracteres
 
             if (ContainsNonNumericCharacters(cpf))
                 return new ValidationResult("CPF / CNPJ inválido!");
