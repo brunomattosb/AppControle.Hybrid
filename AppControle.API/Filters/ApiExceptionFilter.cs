@@ -23,6 +23,14 @@ public class ApiExceptionFilter : IExceptionFilter
             {
                 StatusCode = 409 // Código de status 409 para indicar conflito
             };            
+        } else if(context.Exception.Message.Contains("InvalidUserName") ||
+            context.Exception.Message.Contains("InvalidEmail"))
+        {
+            // Código 1062 geralmente indica uma violação de índice único (duplicidade)
+            context.Result = new ObjectResult(new { error = "Email inválido." })
+            {
+                StatusCode = StatusCodes.Status500InternalServerError,
+            };
         }
         else
         {
