@@ -60,9 +60,9 @@ public class UserRepository : IUserRepository
     public async Task<User> GetUserAsync(string email)
     {
         var user = await _context.Users
-            //.Include(u => u.City!)
-            //.ThenInclude(c => c.State!)
-            //.ThenInclude(s => s.Country!)
+            .Include(u => u.City!)
+            .ThenInclude(c => c.State!)
+            .ThenInclude(s => s.Country!)
             .FirstOrDefaultAsync(x => x.Email == email);
         return user!;
     }
@@ -70,9 +70,9 @@ public class UserRepository : IUserRepository
     public async Task<User> GetUserAsync(Guid userId)
     {
         var user = await _context.Users
-            //.Include(u => u.City!)
-            //.ThenInclude(c => c.State!)
-            //.ThenInclude(s => s.Country!)
+            .Include(u => u.City!)
+            .ThenInclude(c => c.State!)
+            .ThenInclude(s => s.Country!)
             .FirstOrDefaultAsync(x => x.Id == userId.ToString());
         return user!;
     }

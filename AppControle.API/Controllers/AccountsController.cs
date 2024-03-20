@@ -348,37 +348,38 @@ public class AccountsController : ControllerBase
         });
     }
 
+    [HttpPost("ResedToken")]
+    public async Task<ActionResult> ResedToken([FromBody] EmailDTO model)
+    {
+        User user = await _userRepository.GetUserAsync(model.Email);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        //TODO: Improve code
+        var myToken = await _userRepository.GenerateEmailConfirmationTokenAsync(user);
+        var tokenLink = Url.Action("ConfirmEmail", "accounts", new
+        {
+            userid = user.Id,
+            token = myToken
+        }, HttpContext.Request.Scheme, _configuration["UrlWEB"]);
+
+        var response = _mailService.SendMail(user.Name, user.Email!,
+            "Confirmação de conta Automações Brasil",
+            $"<h1>Automações Brasil - Confirmação de conta</h1>" +
+            $"<p>Para habilitar o usuário, por valor clique em 'Confirmar Email':</p>" +
+            $"<b><a href ={tokenLink}>Confirmar Email</a></b>");
+
+        if (response.IsSuccess)
+        {
+            return NoContent();
+        }
+
+        return BadRequest(response.Message);
+    }
 }
 
 
 
-//[HttpPost("ResedToken")]
-//public async Task<ActionResult> ResedToken([FromBody] EmailDTO model)
-//{
-//    User user = await _userHelper.GetUserAsync(model.Email);
-//    if (user == null)
-//    {
-//        return NotFound();
-//    }
 
-//    //TODO: Improve code
-//    var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-//    var tokenLink = Url.Action("ConfirmEmail", "accounts", new
-//    {
-//        userid = user.Id,
-//        token = myToken
-//    }, HttpContext.Request.Scheme, _configuration["UrlWEB"]);
-
-//    var response = _mailHelper.SendMail(user.Name, user.Email!,
-//        "Confirmação de conta Automações Brasil",
-//        $"<h1>Automações Brasil - Confirmação de conta</h1>" +
-//        $"<p>Para habilitar o usuário, por valor clique em 'Confirmar Email':</p>" +
-//        $"<b><a href ={tokenLink}>Confirmar Email</a></b>");
-
-//    if (response.IsSuccess)
-//    {
-//        return NoContent();
-//    }
-
-//    return BadRequest(response.Message);
-//}

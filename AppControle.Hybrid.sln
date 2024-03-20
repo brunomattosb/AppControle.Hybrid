@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.WebApp", "AppCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.API", "AppControle.API\AppControle.API.csproj", "{7A5C8ECD-BBCF-4C7E-8E5F-93C62134F512}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppControle.Shared", "AppControle.Shared\AppControle.Shared.csproj", "{C0305391-CD1D-4754-8F2B-CC65D6B7F394}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppControle.Shared", "AppControle.Shared\AppControle.Shared.csproj", "{C0305391-CD1D-4754-8F2B-CC65D6B7F394}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,11 +28,9 @@ Global
 		{168DB395-31F3-4621-9AC3-31D9CF3B935F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{168DB395-31F3-4621-9AC3-31D9CF3B935F}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{5E20F4E7-33AD-4158-8AE2-FC0A60E1BF3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E20F4E7-33AD-4158-8AE2-FC0A60E1BF3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E20F4E7-33AD-4158-8AE2-FC0A60E1BF3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E20F4E7-33AD-4158-8AE2-FC0A60E1BF3F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{977EC182-EA6C-4AA5-BA6E-12F31D1CD6C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{977EC182-EA6C-4AA5-BA6E-12F31D1CD6C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{977EC182-EA6C-4AA5-BA6E-12F31D1CD6C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{977EC182-EA6C-4AA5-BA6E-12F31D1CD6C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0898EFD5-675A-4020-8F99-07B2B6F227B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -44,7 +42,6 @@ Global
 		{7A5C8ECD-BBCF-4C7E-8E5F-93C62134F512}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A5C8ECD-BBCF-4C7E-8E5F-93C62134F512}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C0305391-CD1D-4754-8F2B-CC65D6B7F394}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0305391-CD1D-4754-8F2B-CC65D6B7F394}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0305391-CD1D-4754-8F2B-CC65D6B7F394}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0305391-CD1D-4754-8F2B-CC65D6B7F394}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

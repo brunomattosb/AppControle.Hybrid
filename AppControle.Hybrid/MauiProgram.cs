@@ -26,8 +26,13 @@ namespace AppControle.Hybrid
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();
 #endif
+			//For Blazor Wasm use:
+			builder.Services.AddAuthorizationCore(config =>
+			{
+				config.AddPolicy("IsAdmin", policy => policy.RequireClaim("roles", "admin"));
+			});
 
-            builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7175/") }); //7175 //44380
+			builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7175/") }); //7175 //44380
             builder.Services.AddScoped<IRepository, Repository>();
             //Modal
             //builder.Services.AddBlazoredModal();

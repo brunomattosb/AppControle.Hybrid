@@ -12,7 +12,8 @@ public class User : IdentityUser
     [Required(ErrorMessage = "O campo {0} é obligatório.")]
     [MaxLength(14, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
     [ValidateCpf]
-    public string? Cpf_Cnpj { get; set; }
+	//[RegularExpression(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$", ErrorMessage = "CPF inválido. O formato deve ser XXX.XXX.XXX-XX.")]
+	public string? Cpf_Cnpj { get; set; }
 
     [Display(Name = "Nome / Razão Social")]
     [MaxLength(100, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]

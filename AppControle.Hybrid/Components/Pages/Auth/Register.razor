@@ -203,6 +203,7 @@
     {
         UserDTO.Photo = imagenBase64;
     }
+
     async Task OnChangeInputFile(InputFileChangeEventArgs e)
     {
         var imagenes = e.GetMultipleFiles();
@@ -218,6 +219,7 @@
             // StateHasChanged();
         }
     }
+     
     private async Task LoadCountriesAsync()
     {
         var responseHttp = await repository.GetNoPage<List<Country>>("/api/countries/combobox");

@@ -55,7 +55,7 @@ else
     <div class="row row-cols-1 row-cols-md-4 g-4 mt-1">
         @foreach (var product in lProducts!)
         {
-            <div class="col">
+            <div class="col">User.IsInRole
                 <div class="card h-100">
                     <div class="text-center zoom">
                         <img src="@product.MainImage" style="height:150px; max-width:200px;" class="text-center" alt=@product.Name />
@@ -84,7 +84,7 @@ else
     // private int CurrentPage = 1;
     // private int TotalPages;
     // private int counter = 0;
-    // private bool isAuthenticated;
+    private bool isAuthenticated;
 
     // public List<Product>? lProducts { get; set; }
 
@@ -96,21 +96,21 @@ else
     // [SupplyParameterFromQuery]
     // public string Filter { get; set; } = "";
 
-    // [CascadingParameter]
-    // private Task<AuthenticationState> authenticationStateTask { get; set; } = null!;
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; } = null!;
 
 
-    // protected async override Task OnParametersSetAsync()
-    // {
-    //     await CheckIsAuthenticatedAsync();
-    //     await LoadCounterAsync();
-    // }
+    protected async override Task OnParametersSetAsync()
+    {
+        await CheckIsAuthenticatedAsync();
+        // await LoadCounterAsync();
+    }
 
-    // private async Task CheckIsAuthenticatedAsync()
-    // {
-    //     var authenticationState = await authenticationStateTask;
-    //     isAuthenticated = authenticationState.User.Identity!.IsAuthenticated;
-    // }
+    private async Task CheckIsAuthenticatedAsync()
+    {
+        // var authenticationState = await authenticationStateTask;
+        // isAuthenticated = authenticationState.User.Identity!.IsAuthenticated;
+    }
 
     // private async Task LoadCounterAsync()
     // {

@@ -1,4 +1,4 @@
-﻿@* @page "/ResendToken"
+﻿@page "/ResendToken"
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
@@ -56,7 +56,6 @@ else
         //TOOD: Não deixar enviar para emails ja validado
         loading = false;
         await sweetAlertService.FireAsync("Confirmação", "Foi enviado novamente um e-mail com instruções para ativar seu usuário.", SweetAlertIcon.Info);
-        navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo("/Login");
     }
 }
- *@
