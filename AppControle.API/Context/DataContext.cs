@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using AppControle.Shared.Entities;
+using Shared.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace AppControle.API.Context;

@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AppControle.Shared.Entities;
+using Shared.Entities;
 using AppControle.API.Repositories;
 using AutoMapper;
 using Newtonsoft.Json;
-using AppControle.Shared.Entities.Pagination;
+using Shared.Entities.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using AppControle.Shared.DTO.EntitiesDTO;
+using Shared.DTO.EntitiesDTO;
 
 namespace AppControle.API.Controllers
 {

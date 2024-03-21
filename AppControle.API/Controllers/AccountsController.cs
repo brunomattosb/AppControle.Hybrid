@@ -1,11 +1,10 @@
 ﻿using AppControle.API.Context;
 using AppControle.API.Repositories;
 using AppControle.API.Services;
-using AppControle.Shared.DTO;
-using AppControle.Shared.DTO.AccountDTOs;
-using AppControle.Shared.Entities;
-using AppControle.Shared.Enums;
-using AppControle.Shared.Response;
+using Shared.DTO;
+using Shared.DTO.AccountDTOs;
+using Shared.Entities;
+using Shared.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +15,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
 using System.Text;
+using Shared.Response;
 
 namespace AppControle.API.Controllers;
 

@@ -1,4 +1,4 @@
-using AppControle.Shared.Repositories;
+
 using AppControle.WebApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7261/") });
-builder.Services.AddScoped<IRepository, Repository>();
+//builder.Services.AddScoped<IRepository, Repository>();
 
 var app = builder.Build();
 

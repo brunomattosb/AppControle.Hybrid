@@ -1,7 +1,7 @@
 ﻿using APICatalogo.Repositories;
-using AppControle.Shared.Entities;
-using AppControle.Shared.Entities.Pagination;
-using AppControle.Shared.Entities.Pagination.Pagination;
+using Shared.Entities;
+using Shared.Entities.Pagination;
+using Shared.Entities.Pagination.Pagination;
 using X.PagedList;
 
 namespace AppControle.API.Repositories

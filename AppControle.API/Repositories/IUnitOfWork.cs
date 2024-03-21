@@ -1,5 +1,5 @@
 ﻿using APICatalogo.Repositories;
-using AppControle.Shared.Entities;
+using Shared.Entities;
 
 namespace AppControle.API.Repositories;
 

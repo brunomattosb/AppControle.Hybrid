@@ -1,5 +1,5 @@
 ﻿using AppControle.API.Context;
-using AppControle.Shared.Entities;
+using Shared.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

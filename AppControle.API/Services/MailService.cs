@@ -1,4 +1,4 @@
-﻿using AppControle.Shared.Response;
+﻿using Shared.Response;
 using MailKit.Net.Smtp;
 using MimeKit;
 using System.Security.Authentication;

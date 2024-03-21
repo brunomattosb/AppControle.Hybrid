@@ -1,18 +1,18 @@
 ﻿//using AppControle.API.Helpers;
 //using AppControle.API.Services;
-//using AppControle.Shared.Enums;
-//using AppControle.Shared.Responses;
+//using Shared.Enums;
+//using Shared.Responses;
 //using SisVendas.Shared.Responses;
 //using System.Runtime.InteropServices;
 
 using AppControle.API.Context;
 using AppControle.API.Repositories;
 using AppControle.API.Services;
-using AppControle.Shared.Entities;
-using AppControle.Shared.Enums;
-using AppControle.Shared.Response;
+using Shared.Entities;
+using Shared.Enums;
+using Shared.Response;
 using Microsoft.EntityFrameworkCore;
-using SisVendas.Shared.Responses;
+using Shared.Responses;
 
 namespace SisVendas.API.Data
 {

@@ -1,7 +1,7 @@
 ﻿
 using APICatalogo.Repositories;
 using AppControle.API.Context;
-using AppControle.Shared.Entities;
+using Shared.Entities;
 
 namespace AppControle.API.Repositories;
 public class UnitOfWork : IUnitOfWork

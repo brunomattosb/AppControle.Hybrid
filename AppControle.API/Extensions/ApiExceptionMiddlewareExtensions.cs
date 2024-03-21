@@ -1,4 +1,4 @@
-﻿using AppControle.Shared.DTO;
+﻿using Shared.DTO;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 

@@ -1,9 +1,9 @@
 ﻿using APICatalogo.Repositories;
 using AppControle.API.Context;
-using AppControle.Shared.DTO.AccountDTOs;
-using AppControle.Shared.Entities;
-using AppControle.Shared.Entities.Pagination;
-using AppControle.Shared.Entities.Pagination.Pagination;
+using Shared.DTO.AccountDTOs;
+using Shared.Entities;
+using Shared.Entities.Pagination;
+using Shared.Entities.Pagination.Pagination;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;

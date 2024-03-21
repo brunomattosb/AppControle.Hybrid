@@ -58,16 +58,21 @@
     </ItemGroup>
 
     <ItemGroup>
+      <AndroidResource Remove="Components\Pages\**" />
+      <Compile Remove="Components\Pages\**" />
+      <Content Remove="Components\Pages\**" />
+      <EmbeddedResource Remove="Components\Pages\**" />
+      <MauiXaml Remove="Components\Pages\**" />
+      <None Remove="Components\Pages\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.3" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.4.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Components\Pages\" />
     </ItemGroup>
 
     <ItemGroup>

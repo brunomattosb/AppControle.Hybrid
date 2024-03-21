@@ -1,0 +1,15 @@
+﻿using Shared.DTO.EntitiesDTO;
+using Shared.Entities;
+using AutoMapper;
+
+namespace Shared.DTO.Mappings;
+public class MappingsProfile : Profile
+{
+    public MappingsProfile()
+    {
+        CreateMap<Product, ProductDTO>().ReverseMap();
+        CreateMap<Product, ProductDTOCbb>().ReverseMap();
+        CreateMap<Product, ProductDTOList>().ReverseMap();
+        CreateMap<Category, CategoryDTO>().ReverseMap();
+    }
+}

@@ -1,4 +1,4 @@
-﻿using AppControle.Shared.Response;
+﻿using Shared.Response;
 using Newtonsoft.Json;
 
 namespace AppControle.API.Services

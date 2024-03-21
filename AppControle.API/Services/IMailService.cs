@@ -1,7 +1,7 @@
 ﻿
 
 
-using AppControle.Shared.Response;
+using Shared.Response;
 
 namespace AppControle.API.Services;
 
