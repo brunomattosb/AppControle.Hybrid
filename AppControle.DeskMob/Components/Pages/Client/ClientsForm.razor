@@ -1,0 +1,308 @@
+﻿@* @inject SweetAlertService sweetAlertService
+@inject IRepository repository
+
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
+
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    
+    <form class="space-y-12  pe-3 sm:pe-5 ps-3 sm:ps-5">
+        <div class="border-b border-t border-gray-900/10 pb-12">
+            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
+
+                <div class="sm:col-span-4 md:col-span-2">
+                    <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">* CFP / CNPJ</label>
+                    <div class="mt-2">
+                        <InputText name="cpf_cnpj" id="cpf_cnpj" @bind-Value="@Client.Cpf_Cnpj" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.Cpf_Cnpj)" />
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2">
+                    <label for="rg_ie" class="block text-sm font-medium leading-6 text-gray-900">RG / IE</label>
+                    <div class="mt-2">
+                        <InputText name="rg_ie" id="rg_ie" @bind-Value="@Client.Rg_Ie" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.Rg_Ie)" />
+                    </div>
+                </div>
+
+                <div class="sm:col-span-4 md:col-span-2">
+                    <label for="name" class="block text-sm font-medium leading-6 text-gray-900">* Name</label>
+                    <div class="mt-2">
+                        <InputText name="name" id="name" @bind-Value="@Client.Name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.Name)" />
+                    </div>
+                </div>
+
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="fantasyname" class="block text-sm font-medium leading-6 text-gray-900">Nome Fantasia</label>
+                    <div class="mt-2">
+                        <InputText name="fantasyname" id="fantasyname" @bind-Value="@Client.FantasyName" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.FantasyName)" />
+                    </div>
+                </div>
+                <!-- -->
+                <div class="sm:col-span-4 ">
+                    <div class="grid-cols-3 grid">
+                        <div class="col-span-2">
+                            <label for="address" class="block text-sm font-medium leading-6 text-gray-900">Endereço</label>
+                            <div class="mt-2">
+                                <InputText name="address" id="address" @bind-Value="@Client.Address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.Address)" />
+                            </div>
+                        </div>
+
+                        <div class="col-span-1 pl-2 sm:pl-5 ">
+                            <label for="addressnumber" class="block text-sm font-medium leading-6 text-gray-900">N°</label>
+                            <div class="mt-2">
+                                <InputNumber name="addressnumber" id="addressnumber" @bind-Value="@Client.AddressNumber" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.AddressNumber)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="cep" class="block text-sm font-medium leading-6 text-gray-900">CEP</label>
+                    <div class="mt-2">
+                        <InputText name="cep" id="cep" @bind-Value="@Client.AddressCep" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.AddressCep)" />
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="bairro" class="block text-sm font-medium leading-6 text-gray-900">Bairro</label>
+                    <div class="mt-2">
+                        <InputText name="bairro" id="bairro" @bind-Value="@Client.Neighborhood" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.Neighborhood)" />
+                    </div>
+                </div>
+                <!-- -- -->
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="cep" class="block text-sm font-medium leading-6 text-gray-900">Pais</label>
+                    <div class="mt-2">
+                        <select id="country" name="country" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" @onchange="CountryChangedAsync">
+                            <option value="0">-- Selecione um Pais --</option>
+                            @if (countries is not null)
+                            {
+                                @foreach (var country in countries)
+                                {
+                                    <option value="@country.Id" selected="@(country.Id == Client?.City?.State!.Country!.Id)">@country.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="cep" class="block text-sm font-medium leading-6 text-gray-900">Estado</label>
+                    <div class="mt-2">
+                        <select id="country" name="country" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:text-sm sm:leading-6" @onchange="StateChangedAsync">
+                            <option value="0">-- Selecione um Estado --</option>
+                            @if (states is not null)
+                            {
+                                @foreach (var state in states)
+                                {
+                                    <option value="@state.Id" selected="@(state.Id == Client?.City?.State!.Id)">@state.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="cep" class="block text-sm font-medium leading-6 text-gray-900">* Cidade</label>
+                    <div class="mt-2">
+                        <select id="country" name="country" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:text-sm sm:leading-6" @bind="Client.CityId">
+                            <option value="0">-- Selecione uma Cidade --</option>
+
+                            @if (cities is not null)
+                            {
+                                @foreach (var city in cities)
+                                {
+                                    <option value="@city.Id" selected="@(city.Id == Client?.City?.Id)">@city.Name</option>
+                                }
+                            }
+                        </select>
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.CityId)" />
+                    </div>
+                </div>
+                <!-- -->
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                    <div class="mt-2">
+                        <InputText name="email" id="email" @bind-Value="@Client.Email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.Email)" />
+                    </div>
+                </div>
+
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label  class="block text-sm font-medium leading-6 text-gray-900">Telefone</label>
+                    <div class="mt-2">
+                        <InputNumber name="phoneNumber" id="phoneNumber" @bind-Value="@Client.PhoneNumber" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.PhoneNumber)" />
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label  class="block text-sm font-medium leading-6 text-gray-900">* Gênero</label>
+                    <div class="mt-2">
+                        <select class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:text-sm sm:leading-6" @onchange="GenderChangeAsync">
+                            <option value="0">-- Selecione um gênero --</option>
+                            <option value="1" selected="@(Client.Gender! == GenderType.Masculino)">Masculino</option>
+                            <option value="2" selected="@(Client.Gender! == GenderType.Feminino)">Feminino</option>
+                        </select>
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.Gender)" />
+                    </div>
+                </div>
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label for="addressnuphoneNumbermber" class="block text-sm font-medium leading-6 text-gray-900">Telefone</label>
+                    <div class="mt-2">
+                        <InputDate id="addressnuphoneNumbermber" @bind-Value="@Client.BirthData" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.BirthData)" />
+                    </div>
+                </div>
+                <!-- -->
+                <div class="sm:col-span-4 md:col-span-5 ">
+                    <label for="Remarks" class="form-label">Comentário</label>
+                    <InputTextArea class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" id="Remarks" @bind-Value="@Client.Remarks" />
+                    <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.Remarks)" />
+                </div>
+
+                <div class="sm:col-span-4 md:col-span-2 ">
+                    <label class="block text-sm font-medium leading-6 text-gray-900">Dia do vencimento da mensalidade</label>
+                    <div class="mt-2">
+                        <InputNumber @bind-Value="@Client.MonthlyFeeDueDate" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="text-red-500 font-bold" For="@(() => Client.MonthlyFeeDueDate)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="mt-6 flex items-center justify-end gap-x-6 mb-5 me-5">
+        <button type="button" @onclick="ReturnAction" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+        <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Salvar</button>
+    </div>
+
+</EditForm>
+
+@code {
+
+
+    private EditContext editContext = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public Client Client { get; set; } = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback OnValidSubmit { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback ReturnAction { get; set; }
+
+    public bool FormPostedSuccessfully { get; set; }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        editContext = new(Client);
+        await LoadCountriesAsync();
+
+        if(Client.City != null){
+
+            await LoadStatesAsyn(Client!.City!.State!.Country!.Id);
+            await LoadCitiesAsyn(Client!.City!.State!.Id);
+        }
+    }
+
+    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
+    {
+        var formWasMofied = editContext.IsModified();
+        if (!formWasMofied || FormPostedSuccessfully)
+        {
+            return;
+        }
+
+        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmação",
+                Text = "Deseja abandonar a página e perder as mudanças",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true,
+                CancelButtonText = "Não",
+                ConfirmButtonText = "Sim"
+            });
+
+        var confirm = !string.IsNullOrEmpty(result.Value);
+        if (confirm)
+        {
+            return;
+        }
+
+        context.PreventNavigation();
+    }
+    #region Country/State/City/Gender
+
+    private List<Country> countries;
+    private List<State> states;
+    private List<City> cities;
+    private async Task LoadCountriesAsync()
+    {
+        var responseHttp = await repository.GetNoPage<List<Country>>("/api/countries/combobox");
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            // await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        countries = responseHttp.Response;
+    }
+    private async Task GenderChangeAsync(ChangeEventArgs e)
+    {
+        var selectedCountry = Convert.ToInt32(e.Value!);
+        if (selectedCountry == 1)
+            Client.Gender = GenderType.Masculino;
+        else if (selectedCountry == 2)
+            Client.Gender = GenderType.Feminino;
+        else
+            Client.Gender = null;
+    }
+
+    private async Task CountryChangedAsync(ChangeEventArgs e)
+    {
+        await LoadStatesAsyn(Convert.ToInt32(e.Value!));
+    }
+    
+    private async Task LoadStatesAsyn(int countryId)
+    {
+        var responseHttp = await repository.GetNoPage<List<State>>($"/api/states/combobox/{countryId}");
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            // await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        states = responseHttp.Response;
+    }
+
+    private async Task StateChangedAsync(ChangeEventArgs e)
+    {
+        var selectedState = Convert.ToInt32(e.Value!);
+        await LoadCitiesAsyn(selectedState);
+    }
+
+    private async Task LoadCitiesAsyn(int stateId)
+    {
+        var responseHttp = await repository.GetNoPage<List<City>>($"/api/cities/combobox/{stateId}");
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            // await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        cities = responseHttp.Response;
+    }
+    #endregion
+}
+ *@

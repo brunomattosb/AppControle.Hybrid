@@ -1,5 +1,5 @@
 ﻿
-namespace AppControle.Hybrid.Helpers
+namespace AppControle.DeskMob.Helpers
 {
     public class MultipleSelectorModel
     {

@@ -1,0 +1,54 @@
+﻿@* @page "/clients/create"
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+@attribute [Authorize]
+
+
+<div class="grid grid-cols-2">
+    <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
+        <span>
+            <a class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" href="/Clients">
+                <iconify-icon icon="mingcute:back-2-line"></iconify-icon> Voltar
+            </a>
+        </span>
+    </div>
+
+    <div class="mt-5 grid-cols-1 flex justify-end pe-3 sm:pe-5 mb-2 space-x-1">
+        <h2 class="text-xl font-bold leading-7 text-gray-900">Novo cliente</h2>
+    </div>
+</div>
+
+
+<ClientsForm @ref="ClientForm" Client="Client" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+
+
+
+
+@code {
+    private Client Client = new();
+    private ClientsForm? ClientForm;
+
+    private async Task CreateAsync()
+    {
+        // Client.City = null;
+        // Client.User = null;
+        var httpResponse = await repository.Post("/api/clients", Client);
+        if(httpResponse.Error)
+        {
+            var message = await httpResponse.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+        else
+            await sweetAlertService.FireAsync("Sucesso!", "Client salvo!", SweetAlertIcon.Success);
+        Return();
+    }
+
+    private void Return()
+    {
+        ClientForm!.FormPostedSuccessfully = true;
+        navigationManager.NavigateTo("/clients");
+    }
+}
+ *@

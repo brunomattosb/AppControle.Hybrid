@@ -1,5 +1,5 @@
 ﻿
-namespace AppControle.Hybrid.Auth
+namespace AppControle.DeskMob.Auth
 {
     public interface ILoginService
     {

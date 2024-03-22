@@ -1,0 +1,344 @@
+﻿@page "/EditUser"
+@inject IRepository repository
+@inject SweetAlertService sweetAlertService
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+
+
+
+@if (isLoading || user is null)
+{
+	//TODO: Padronizar spinner
+	<div class="text-center">
+		<div role="status">
+			<svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+				<path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+			</svg>
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div>
+}
+else
+{
+
+	<EditForm Model="user" OnValidSubmit="SaveUserAsync">
+		<DataAnnotationsValidator />
+		<div class="grid grid-cols-2 mb-2">
+			<div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
+				<h2 class="text-xl font-bold leading-7 text-gray-900">Editar usuário</h2>
+			</div>
+
+			<div class="mt-5 grid-cols-1 flex justify-end pe-3 sm:pe-5 mb-2">
+
+				<span>
+					<a class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" href="/changePassword">
+						<iconify-icon icon="mdi:password-outline"></iconify-icon> Alterar senha
+					</a>
+				</span>
+			</div>
+		</div>
+
+		<form class="space-y-12  pe-3 sm:pe-5 ps-3 sm:ps-5">
+			<div class="border-b border-t border-gray-900/10 pb-12">
+
+
+				<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
+					<div class="sm:col-span-4 md:col-span-2">
+						<label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">* CFP / CNPJ</label>
+						<div class="mt-2">
+							<InputText name="cpf_cnpj" id="cpf_cnpj" @bind-Value="@user.Cpf_Cnpj" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+							<ValidationMessage class="text-red-500 font-bold" For="@(() => user.Cpf_Cnpj)" />
+						</div>
+					</div>
+
+					<div class="sm:col-span-4 md:col-span-2">
+						<label for="rg_ie" class="block text-sm font-medium leading-6 text-gray-900">RG / IE</label>
+						<div class="mt-2">
+							<InputText name="rg_ie" id="rg_ie" @bind-Value="@user.Rg_Ie" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+							<ValidationMessage class="text-red-500 font-bold" For="@(() => user.Rg_Ie)" />
+						</div>
+					</div>
+
+					<div class="sm:col-span-4 md:col-span-2">
+						<label for="name" class="block text-sm font-medium leading-6 text-gray-900">* Name</label>
+						<div class="mt-2">
+							<InputText name="name" id="name" @bind-Value="@user.Name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+							<ValidationMessage class="text-red-500 font-bold" For="@(() => user.Name)" />
+						</div>
+					</div>
+
+					<div class="sm:col-span-4 md:col-span-2 ">
+						<label for="fantasyname" class="block text-sm font-medium leading-6 text-gray-900">Nome Fantasia</label>
+						<div class="mt-2">
+							<InputText name="fantasyname" id="fantasyname" @bind-Value="@user.FantasyName" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+							<ValidationMessage class="text-red-500 font-bold" For="@(() => user.FantasyName)" />
+						</div>
+					</div>
+					<!-- -- -->
+					<div class="sm:col-span-4 ">
+						<div class="grid-cols-3 grid">
+							<div class="col-span-2">
+								<label for="address" class="block text-sm font-medium leading-6 text-gray-900">Endereço</label>
+								<div class="mt-2">
+									<InputText name="address" id="address" @bind-Value="@user.Address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+									<ValidationMessage class="text-red-500 font-bold" For="@(() => user.Address)" />
+								</div>
+							</div>
+
+							<div class="col-span-1 pl-2 sm:pl-5 ">
+								<label for="addressnumber" class="block text-sm font-medium leading-6 text-gray-900">N°</label>
+								<div class="mt-2">
+									<InputNumber name="addressnumber" id="addressnumber" @bind-Value="@user.AddressNumber" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+									<ValidationMessage class="text-red-500 font-bold" For="@(() => user.AddressNumber)" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="sm:col-span-4 md:col-span-2 ">
+						<label for="cep" class="block text-sm font-medium leading-6 text-gray-900">CEP</label>
+						<div class="mt-2">
+							<InputText name="cep" id="cep" @bind-Value="@user.AddressCep" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+							<ValidationMessage class="text-red-500 font-bold" For="@(() => user.AddressCep)" />
+						</div>
+					</div>
+					<div class="sm:col-span-4 md:col-span-2 ">
+						<label for="bairro" class="block text-sm font-medium leading-6 text-gray-900">Bairro</label>
+						<div class="mt-2">
+							<InputText name="bairro" id="bairro" @bind-Value="@user.Neighborhood" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+							<ValidationMessage class="text-red-500 font-bold" For="@(() => user.Neighborhood)" />
+						</div>
+					</div>
+					<!-- -- -->
+					<div class="sm:col-span-4 md:col-span-2 ">
+						<label for="cep" class="block text-sm font-medium leading-6 text-gray-900">Pais</label>
+						<div class="mt-2">
+							@if (countries is not null)
+							{
+								<select id="country" name="country" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" @onchange="CountryChangedAsync">
+									<option value="0">-- Selecione um Pais --</option>
+									@foreach (var country in countries)
+									{
+										<option value="@country.Id" selected="@(country.Id == user.City?.State!.Country!.Id)">@country.Name</option>
+									}
+								</select>
+							}
+						</div>
+					</div>
+					<div class="sm:col-span-4 md:col-span-2 ">
+						<label for="cep" class="block text-sm font-medium leading-6 text-gray-900">Estado</label>
+						<div class="mt-2">
+							@if (states is not null)
+							{
+								<select id="country" name="country" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:text-sm sm:leading-6" @onchange="StateChangedAsync">
+									<option value="0">-- Selecione um Estado --</option>
+
+									@foreach (var state in states)
+									{
+										<option value="@state.Id" selected="@(state.Id == user.City?.State!.Id)">@state.Name</option>
+									}
+								</select>
+							}
+						</div>
+					</div>
+					<div class="sm:col-span-4 md:col-span-2 ">
+						<label for="cep" class="block text-sm font-medium leading-6 text-gray-900">Cidade</label>
+						<div class="mt-2">
+							@if (cities is not null)
+							{
+								<select id="city" name="city" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" @bind="user.CityId">
+									<option value="0">-- Selecione uma Cidade --</option>
+									@foreach (var city in cities)
+									{
+										<option value="@city.Id" selected="@(city.Id == user.City?.Id)">@city.Name</option>
+									}
+								</select>
+							}
+							<ValidationMessage class="text-red-500 font-bold" For="@(() => user.CityId)" />
+						</div>
+					</div>
+
+					<!-- -->
+					<div class="sm:col-span-4 md:col-span-2 ">
+						<label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+						<div class="mt-2">
+							<InputText name="email" id="email" @bind-Value="@user.Email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+							<ValidationMessage class="text-red-500 font-bold" For="@(() => user.Email)" />
+						</div>
+					</div>
+
+					<div class="sm:col-span-4 md:col-span-2 ">
+						<label for="addressnuphoneNumbermber" class="block text-sm font-medium leading-6 text-gray-900">Telefone</label>
+						<div class="mt-2">
+							<InputText name="phoneNumber" id="phoneNumber" @bind-Value="@user.PhoneNumber" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+							<ValidationMessage class="text-red-500 font-bold" For="@(() => user.PhoneNumber)" />
+						</div>
+					</div>
+					<!-- -->
+					<div class="sm:col-span-4">
+						<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Selecione a imagem</label>
+						<InputFile OnChange="OnChangeInputFile" accept=".jpg,.jpeg,.png" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" />
+					</div>
+
+
+
+				</div>
+			</div>
+		</form>
+
+		<div class="mt-6 flex items-center justify-end gap-x-6 mb-5 me-5">
+			<a type="button" href="/" class="text-sm font-semibold leading-6 text-gray-900">Cancel</a>
+			<button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Salvar</button>
+		</div>
+	</EditForm>
+
+}
+@code {
+	private bool isLoading = true;
+
+	private User user = null;
+	private List<Country> countries;
+	private List<State> states;
+	private List<City> cities;
+	private string imageUrl;
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public bool IsAdmin { get; set; }
+
+	async Task OnChangeInputFile(InputFileChangeEventArgs e)
+	{
+		var imagenes = e.GetMultipleFiles();
+
+		foreach (var imagen in imagenes)
+		{
+			var arrBytes = new byte[imagen.Size];
+			await imagen.OpenReadStream().ReadAsync(arrBytes);
+			var imageBase64 = Convert.ToBase64String(arrBytes);
+			// ImageURL = null;
+			user.Photo = imageBase64;
+			// await ImageSelected.InvokeAsync(imageBase64);
+			// StateHasChanged();
+		}
+	}
+	protected async override Task OnInitializedAsync()
+	{
+		isLoading = true;
+
+		await LoadUserAsyc();
+		if (user is not null)
+		{
+			await LoadCountriesAsync();
+			await LoadStatesAsyn(user!.City!.State!.Country!.Id);
+			await LoadCitiesAsyn(user!.City!.State!.Id);
+
+			if (!string.IsNullOrEmpty(user!.Photo))
+			{
+				imageUrl = user.Photo;
+				user.Photo = null;
+			}
+		}
+		isLoading = false;
+	}
+
+	private void ImageSelected(string imagenBase64)
+	{
+		user.Photo = imagenBase64;
+		imageUrl = null;
+	}
+	private async Task LoadUserAsyc()
+	{
+		var responseHTTP = await repository.GetNoPage<User>($"/api/accounts");
+		if (responseHTTP.Error)
+		{
+			if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+			{
+				navigationManager.NavigateTo("/");
+				return;
+			}
+			var messageError = await responseHTTP.GetErrorMessageAsync();
+			await sweetAlertService.FireAsync("Error", messageError, SweetAlertIcon.Error);
+			return;
+		}
+		user = responseHTTP.Response;
+
+
+	}
+	#region Country/State/City
+
+	private async Task LoadCountriesAsync()
+	{
+		var responseHttp = await repository.GetNoPage<List<Country>>("/api/countries/combobox");
+		if (responseHttp.Error)
+		{
+			var message = await responseHttp.GetErrorMessageAsync();
+			// await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+			return;
+		}
+
+		countries = responseHttp.Response;
+	}
+
+	private async Task CountryChangedAsync(ChangeEventArgs e)
+	{
+		var selectedCountry = Convert.ToInt32(e.Value!);
+		await LoadStatesAsyn(selectedCountry);
+	}
+
+	private async Task LoadStatesAsyn(int countryId)
+	{
+		var responseHttp = await repository.GetNoPage<List<State>>($"/api/states/combobox/{countryId}");
+		if (responseHttp.Error)
+		{
+			var message = await responseHttp.GetErrorMessageAsync();
+			// await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+			return;
+		}
+
+		states = responseHttp.Response;
+	}
+
+	private async Task StateChangedAsync(ChangeEventArgs e)
+	{
+		var selectedState = Convert.ToInt32(e.Value!);
+		await LoadCitiesAsyn(selectedState);
+	}
+
+	private async Task LoadCitiesAsyn(int stateId)
+	{
+		var responseHttp = await repository.GetNoPage<List<City>>($"/api/cities/combobox/{stateId}");
+		if (responseHttp.Error)
+		{
+			var message = await responseHttp.GetErrorMessageAsync();
+			// await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+			return;
+		}
+
+		cities = responseHttp.Response;
+	}
+	#endregion
+
+	private async Task SaveUserAsync()
+	{
+		user.City = null;
+		var responseHttp = await repository.Put<User, TokenDTO>("/api/accounts", user!);
+		if (responseHttp.Error)
+		{
+			var message = await responseHttp.GetErrorMessageAsync();
+			await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+			return;
+		}
+		await loginService.LoginAsync(responseHttp.Response!.Token, false);
+
+		//TODO: Padronizar toast
+		var toast = sweetAlertService.Mixin(new SweetAlertOptions
+			{
+				Toast = true,
+				Position = SweetAlertPosition.TopEnd,
+				ShowConfirmButton = true,
+				Timer = 5000
+			});
+		await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Usuario alterado com sucesso!");
+		navigationManager.NavigateTo("/");
+	}
+}

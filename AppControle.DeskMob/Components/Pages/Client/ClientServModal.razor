@@ -1,0 +1,138 @@
+﻿@* @inject IRepository repository
+@inject SweetAlertService sweetAlertService
+
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+	<DataAnnotationsValidator />	
+
+	<div>
+		<label for="prodId" class="block text-sm font-medium leading-6 text-gray-900">* Serviço</label>
+		<div class="mt-2">
+			<select name="prodId" id="prodId" @onchange="ProductChangeAsync"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+				<option selected value="0">-- Selecione o serviço --</option>
+				@if (lProducts is not null)
+				{
+					@foreach (var Product in lProducts)
+					{
+						<option title="@Product.Price.ToString("C")" value="@Product.Id">@Product.Name @Product.Description</option>
+					}
+				}
+			</select>
+		</div>
+	</div>
+	<div>
+		<label for="Price" class="block text-sm font-medium leading-6 text-gray-900">* Preço</label>
+		<div class="mt-2">
+			<InputText disabled name="Price" id="Price" @bind-Value="@PriceString" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+		</div>
+	</div>
+	<div>
+		<label for="Price" class="block text-sm font-medium leading-6 text-gray-900">* Desconto</label>
+		<div class="mt-2">
+			<InputNumber name="Price" id="Price" @bind-Value="@clientService.Discount" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+			<ValidationMessage class="text-red-500 font-bold" For="@(() => clientService.Discount)" />
+		</div>
+	</div>
+
+	<div>
+		<label for="Remarks" class="block text-sm font-medium leading-6 text-gray-900">Comentário</label>
+		<div class="mt-2">
+			<InputText name="Remarks" id="Remarks" @bind-Value="@clientService.Remarks" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+			<ValidationMessage class="text-red-500 font-bold" For="@(() => clientService.Remarks)" />
+		</div>
+	</div>
+
+	<div class="mt-6 flex items-center justify-end gap-x-6 mb-5 me-5">
+		
+		<button type="button" @onclick="ReturnCancelAction" class="text-sm font-semibold leading-6 text-gray-900">Voltar</button>
+		<button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Criar</button>
+	</div>
+
+</EditForm>
+@code {
+	public ClientService clientService { get; set; } = new()!;
+
+	private EditContext editContext = null!;
+
+	[CascadingParameter]
+	BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+	private int CurrentPage = 1;
+	private int TotalPages;
+	public List<Product>? lProducts { get; set; }
+
+	[Parameter]
+	public int ClientId { get; set; }
+
+	string PriceString = "R$ 0,00";
+
+	protected override async Task OnInitializedAsync()
+	{
+		await LoadAsync();
+	}
+	private async Task SelectedPageAsync(int page)
+	{
+		CurrentPage = page;
+		await LoadAsync(page);
+	}
+	private async Task LoadAsync(int page = 1, int QuantityPerPage = 5)
+	{
+		try
+		{
+			var responseHttp = await repository.GetNoPage<List<Product>>($"/api/products/combobox");
+			if (!responseHttp.Error)
+			{
+				TotalPages = responseHttp.TotalPages;
+				lProducts = responseHttp.Response;
+
+			}
+		}
+		catch (Exception e)
+		{
+			await sweetAlertService.FireAsync("Error", e.Message, SweetAlertIcon.Error);
+		}
+	}
+	private async void ProductChangeAsync(ChangeEventArgs e)
+	{
+		clientService.ProductId = Convert.ToInt32(e.Value!);
+		var prodSelected = lProducts?.Where(x => x.Id == clientService.ProductId).FirstOrDefault();
+		clientService.Product = prodSelected!;
+
+		PriceString = prodSelected!.Price.ToString("C");
+	}
+	protected override void OnInitialized()
+	{
+		editContext = new(clientService);
+	}
+	private async void OnValidSubmit()
+	{
+		clientService.ClientId = ClientId;
+		clientService.Product = null;
+
+		var httpResponse = await repository.Post("/api/clients/saveclientservice", clientService);
+		if (httpResponse.Error)
+		{
+			var message = await httpResponse.GetErrorMessageAsync();
+			await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+			return;
+		}
+		else
+		{
+			//TODO: Unificar Toast
+			var toast = sweetAlertService.Mixin(new SweetAlertOptions
+				{
+					Toast = true,
+					Position = SweetAlertPosition.TopEnd,
+					ShowConfirmButton = true,
+					Timer = 5000
+				});
+			await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Serviço adicionado com sucesso!");
+		}
+
+		await BlazoredModal.CloseAsync(ModalResult.Ok());
+	}
+
+	private async void ReturnCancelAction()
+	{
+		await BlazoredModal.CloseAsync(ModalResult.Cancel());
+	}
+}   *@

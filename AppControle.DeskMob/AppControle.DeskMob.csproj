@@ -58,15 +58,39 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AndroidResource Remove="Components\Pages\**" />
-      <Compile Remove="Components\Pages\**" />
-      <Content Remove="Components\Pages\**" />
-      <EmbeddedResource Remove="Components\Pages\**" />
-      <MauiXaml Remove="Components\Pages\**" />
-      <None Remove="Components\Pages\**" />
+      <None Include="Components\Pages\Auth\ChangePassword.razor" />
+      <None Include="Components\Pages\Auth\EditUser.razor" />
+      <None Include="Components\Pages\Auth\Login.razor" />
+      <None Include="Components\Pages\Auth\Logout.razor" />
+      <None Include="Components\Pages\Auth\RecoverPassword.razor" />
+      <None Include="Components\Pages\Auth\Register.razor" />
+      <None Include="Components\Pages\Auth\ResendConfirmationEmailToken.razor" />
+      <None Include="Components\Pages\Auth\UserIndex.razor" />
+      <None Include="Components\Pages\Client\ClientIndex.razor" />
+      <None Include="Components\Pages\Client\ClientsCreate.razor" />
+      <None Include="Components\Pages\Client\ClientsDetails.razor" />
+      <None Include="Components\Pages\Client\ClientsEdit.razor" />
+      <None Include="Components\Pages\Client\ClientServModal.razor" />
+      <None Include="Components\Pages\Client\ClientsForm.razor" />
+      <None Include="Components\Pages\Index.razor" />
+      <None Include="Components\Pages\MonthlyFee\MonthlyFeeCreate.razor" />
+      <None Include="Components\Pages\MonthlyFee\MonthlyFeeDetailsModal.razor" />
+      <None Include="Components\Pages\MonthlyFee\MonthlyFeeIndex.razor" />
+      <None Include="Components\Pages\Products\ProductEdit.razor" />
+      <None Include="Components\Pages\Products\ProductForm.razor" />
+      <None Include="Components\Pages\Products\ProductsCategoryModal.razor" />
+      <None Include="Components\Pages\Products\ProductsCreate.razor" />
+      <None Include="Components\Pages\Products\ProductsDetails.razor" />
+      <None Include="Components\Pages\Products\ProductsIndex.razor" />
+      <None Include="Components\Pages\Products\ProductsIndexForm.razor" />
+      <None Include="Components\Shared\CarouselView.razor" />
+      <None Include="Components\Shared\GenericList.razor" />
+      <None Include="Components\Shared\MultipleSelector.razor" />
+      <None Include="Components\Shared\Pagination.razor" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.6.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.3" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />

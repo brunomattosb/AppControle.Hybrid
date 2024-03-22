@@ -1,0 +1,63 @@
+﻿@page "/Login"
+@inject IRepository repository
+@inject SweetAlertService sweetAlertService 
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+
+<div>
+    <div class="flex justify-center">
+        <form class="space-y-6 max-w-sm mt-5 p-4 w-full border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700" action="#">
+            <EditForm Model="login" OnValidSubmit="LoginAsync" >
+            <DataAnnotationsValidator />
+                <h5 class="text-xl font-medium text-gray-900 dark:text-white">Faça login em nossa plataforma!</h5>
+                <div> 
+                    
+                    <label for="email" class="labelInput">Email</label>
+                    <InputText type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" @bind-Value="@login.Email" />
+                    <ValidationMessage class="bg-red-500" For="@(() => login.Email)" />
+                </div>
+                <div>
+                    <label for="password" class="labelInput">Senha</label>
+                    <InputText type="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" @bind-Value="@login.Password" />
+                    <ValidationMessage For="@(() => login.Password)" />
+                </div>
+                <div class="mt-2 flex items-start">
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <InputCheckbox id="remember" @bind-Value="@remember" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" />
+                        </div>
+                        <label for="remember" class="  ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Manter conectado</label>
+                    </div>
+                    <a href="/RecoverPassword" class="ms-auto text-sm aLink">Esqueceu a senha?</a>
+                </div>
+                <button type="submit" class="mt-2 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Iniciar Sessão</button>
+                <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
+                    Não é registrado? <a href="/Register" class="aLink">Cadastre-se</a>
+                </div>
+                <div class="mt-2 text-sm font-medium text-gray-500 dark:text-gray-300">
+                    <a href="/ResendToken" class="aLink">Reenviar email de ativação.</a>
+                </div>
+            </EditForm>
+        </form>
+    </div>
+</div>
+
+
+@code {
+    private LoginDTO login = new();
+    private bool remember = false;
+
+    private async Task LoginAsync()
+    {
+        var responseHttp = await repository.Post<LoginDTO, TokenDTO>("/api/accounts/Login", login);
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        await loginService.LoginAsync(responseHttp.Response!.Token, remember);
+        navigationManager.NavigateTo("/");
+    }
+}

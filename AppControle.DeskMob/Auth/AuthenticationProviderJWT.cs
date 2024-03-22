@@ -1,11 +1,11 @@
-﻿using AppControle.Hybrid.Helpers;
+﻿using AppControle.DeskMob.Helpers;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 
-namespace AppControle.Hybrid.Auth
+namespace AppControle.DeskMob.Auth
 {
     public class AuthenticationProviderJWT : AuthenticationStateProvider, ILoginService
     {

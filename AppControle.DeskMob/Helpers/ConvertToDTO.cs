@@ -8,7 +8,7 @@
 //using System.Text;
 //using System.Threading.Tasks;
 
-//namespace AppControle.Hybrid.Helpers
+//namespace AppControle.DeskMob.Helpers
 //{
 //    public static class ConvertToDTO
 //    {
