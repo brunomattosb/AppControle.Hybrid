@@ -5,7 +5,7 @@ namespace APICatalogo.Repositories;
 public interface IRepository<T>
 {
     //cuidado para não violar o principio ISP
-    Task<IEnumerable<T>> GetAllAsync();
+    Task<IEnumerable<T>> GetAllNoPaginationAsync();
     Task<T?> GetAsync(Expression<Func<T, bool>> predicate);
     T Create(T entity);
     T Update(T entity);

@@ -2,8 +2,6 @@
 using AppControle.API.Context;
 using Shared.DTO.AccountDTOs;
 using Shared.Entities;
-using Shared.Entities.Pagination;
-using Shared.Entities.Pagination.Pagination;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;

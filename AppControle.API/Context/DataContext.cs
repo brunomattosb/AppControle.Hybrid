@@ -14,7 +14,7 @@ public class DataContext : IdentityDbContext<User>
     public DbSet<Country>? Countries { get; set; }
     public DbSet<City>? Cities { get; set; }
     public DbSet<State>? States { get; set; }
-    //public DbSet<Client> Clients { get; set; }
+    public DbSet<Client> Clients { get; set; }
     //public DbSet<ProductImage> ProductImages { get; set; }
     //public DbSet<ClientService> ClientService { get; set; }
     //public DbSet<MonthlyFee> MonthlyFee { get; set; }

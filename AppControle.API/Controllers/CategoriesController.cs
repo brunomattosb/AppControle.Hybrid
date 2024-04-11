@@ -3,10 +3,10 @@ using AppControle.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Newtonsoft.Json;
-using Shared.Entities.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Shared.DTO.EntitiesDTO;
+using Shared.DTO.Pagination;
 
 namespace AppControle.API.Controllers
 {
@@ -31,7 +31,7 @@ namespace AppControle.API.Controllers
         //[ServiceFilter(typeof(ApiLoggingFilter))]
         public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategories()
         {
-            var lCategories = await _uof.CategoryRepository.GetAllAsync();
+            var lCategories = await _uof.CategoryRepository.GetAllNoPaginationAsync();
 
             if (lCategories is null)
             {

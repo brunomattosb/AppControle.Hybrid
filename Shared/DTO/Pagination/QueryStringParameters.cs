@@ -1,6 +1,6 @@
 ﻿
 
-namespace Shared.Entities.Pagination.Pagination;
+namespace Shared.DTO.Pagination;
 public abstract class QueryStringParameters
 {
     const int maxPageSize = 50;

@@ -4,7 +4,7 @@
 //using System.Text;
 //using System.Threading.Tasks;
 
-//namespace Shared.Entities.Pagination.Pagination;
+//namespace Shared.DTO.Pagination
 //public class PagedList<T> : List<T> where T : class
 //{
 //    public int CurrentPage { get; private set; }

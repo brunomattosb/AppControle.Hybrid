@@ -1,6 +1,6 @@
-﻿using Shared.Entities.Pagination.Pagination;
+﻿
 
-namespace Shared.Entities.Pagination;
+namespace Shared.DTO.Pagination;
 
 public class FiltersProduct : QueryStringParameters
 {

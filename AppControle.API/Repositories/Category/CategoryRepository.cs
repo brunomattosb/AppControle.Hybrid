@@ -1,17 +1,15 @@
 ﻿using APICatalogo.Repositories;
 using AppControle.API.Context;
 using Shared.Entities;
-using Shared.Entities.Pagination;
-using Shared.Entities.Pagination.Pagination;
-using Microsoft.EntityFrameworkCore;
 using X.PagedList;
+using Shared.DTO.Pagination;
 
 namespace AppControle.API.Repositories
 {
     public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
 
-        public CategoryRepository(DataContext context) : base(context) 
+        public CategoryRepository(DataContext context) : base(context)
         {
 
         }

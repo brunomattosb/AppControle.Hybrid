@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AppControle.API.Repositories;
+using AutoMapper;
+using Shared.DTO.EntitiesDTO;
 
 namespace AppControle.API.Controllers;
 
@@ -12,11 +15,15 @@ namespace AppControle.API.Controllers;
 [ApiController]
 public class StatesController : ControllerBase
 {
-    private readonly DataContext _context;
+    private readonly IUnitOfWork _uof;
+    private readonly ILogger _logger;
+    private readonly IMapper _mapper;
 
-    public StatesController(DataContext context)
+    public StatesController(IUnitOfWork uof, ILogger<CategoriesController> logger, IMapper mapper)
     {
-        _context = context;
+        _logger = logger;
+        _uof = uof;
+        _mapper = mapper;
     }
 
     // GET: api/States/combobox/1
@@ -24,29 +31,34 @@ public class StatesController : ControllerBase
     [HttpGet("combobox/{countryId:int}")]
     public async Task<ActionResult> GetCombo(int countryId)
     {
-        return Ok(await _context.States
-            .Where(x => x.CountryId == countryId)
-            .ToListAsync());
+        var lState = await _uof.StateRepository.GetStateByCountryIdAsync(countryId);
+
+        if (lState is null)
+        {
+            return NotFound();
+        }
+
+        var lStateDTO = _mapper.Map<IEnumerable<StateDTO>>(lState);
+
+        return Ok(lStateDTO);
     }
 
     // GET: api/States/5
     [HttpGet("{id}")]
     public async Task<ActionResult<State>> GetState(int id)
     {
-        if (_context.States == null)
-        {
-            return NotFound();
-        }
-        var State = await _context.States
-            .Include(x => x.lCities!)
-            .FirstOrDefaultAsync(x => x.Id == id);
+        var state = await _uof.StateRepository.GetAsync(c => c.Id == id);
 
-        if (State == null)
+        if (state == null)
         {
             return NotFound();
         }
 
-        return State;
+        var StateReturn = _mapper.Map<StateDTO>(state);
+
+        return Ok(StateReturn);
+
+
     }
 
 

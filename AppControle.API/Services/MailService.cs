@@ -48,6 +48,7 @@ public class MailService : IMailService
         }
         catch (Exception ex)
         {
+            //TODO: Remover e tratar global com o IdTrace
             return new Response
             {
                 IsSuccess = false,

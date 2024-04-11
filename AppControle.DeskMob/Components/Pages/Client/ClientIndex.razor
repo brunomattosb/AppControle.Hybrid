@@ -1,4 +1,4 @@
-﻿@* @page "/clients"
+﻿@page "/clients"
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
@@ -61,7 +61,7 @@
                                     @client.RegisterDate
                                 </td>
                                 <td class="px-6 py-4">
-                                    @client.ServicesValue.ToString("C")
+                                    @* @client.ServicesValue.ToString("C") *@
                                 </td>
                                 <td class="px-6 py-4">
                                     <a href="/clients/details/@client.Id" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Detalhar</a>
@@ -92,7 +92,7 @@
                             @client.Name
                         </div>
                         <div class="text-sm font-medium text-black">
-                            Mensalidade: @client.ServicesValue.ToString("C")
+                            @* Mensalidade: @client.ServicesValue.ToString("C") *@
                         </div>
                         <a href="/clients/details/@client.Id" class="mt-2 font-bold text-blue-500 hover:underline">Detalhar</a>
                     </div>
@@ -152,7 +152,6 @@
     }
 }
 
- *@
 
 @*
 //TODO: Table padrão

@@ -1,8 +1,6 @@
 ﻿using APICatalogo.Repositories;
 using Shared.DTO.AccountDTOs;
 using Shared.Entities;
-using Shared.Entities.Pagination;
-using Shared.Entities.Pagination.Pagination;
 using Microsoft.AspNetCore.Identity;
 using X.PagedList;
 

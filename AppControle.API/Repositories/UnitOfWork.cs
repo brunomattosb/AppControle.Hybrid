@@ -1,13 +1,13 @@
-﻿
-using APICatalogo.Repositories;
-using AppControle.API.Context;
-using Shared.Entities;
+﻿using AppControle.API.Context;
 
 namespace AppControle.API.Repositories;
 public class UnitOfWork : IUnitOfWork
 {
     private IProductRepository? _produtoRepo;
     private ICategoryRepository? _categoriaRepo;
+    private ICityRepository? _cityRepository;
+    private IStateRepository? _stateRepository;
+    private ICountryRepository? _countryRepository;
 
     public DataContext _context;
     public UnitOfWork(DataContext context)
@@ -31,6 +31,25 @@ public class UnitOfWork : IUnitOfWork
         get
         {
             return _categoriaRepo ??= new CategoryRepository(_context);
+        }
+    }
+    public ICityRepository CityRepository
+    {
+        get
+        {
+            return _cityRepository ??= new CityRepository(_context);
+        }
+    }public IStateRepository StateRepository
+    {
+        get
+        {
+            return _stateRepository ??= new StateRepository(_context);
+        }
+    }public ICountryRepository CountryRepository
+    {
+        get
+        {
+            return _countryRepository ??= new CountryRepository(_context);
         }
     }
     public async Task CommitAsync()

@@ -1,8 +1,8 @@
 ﻿using AppControle.API.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-namespace APICatalogo.Repositories;
 
+namespace APICatalogo.Repositories;
 public class Repository<T> : IRepository<T> where T : class
 {
     protected readonly DataContext _context;
@@ -11,8 +11,7 @@ public class Repository<T> : IRepository<T> where T : class
     {
         _context = context;
     }
-
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public async Task<IEnumerable<T>> GetAllNoPaginationAsync()
     {
         return await _context.Set<T>()
             .AsNoTracking()

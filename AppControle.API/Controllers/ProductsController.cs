@@ -3,10 +3,10 @@ using Shared.Entities;
 using AppControle.API.Repositories;
 using AutoMapper;
 using Newtonsoft.Json;
-using Shared.Entities.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Shared.DTO.EntitiesDTO;
+using Shared.DTO.Pagination;
 
 namespace AppControle.API.Controllers
 {
@@ -28,16 +28,19 @@ namespace AppControle.API.Controllers
         [HttpGet("combobox")]
         public async Task<ActionResult<IEnumerable<ProductDTOCbb>>> GetCombo()
         {
-            var lProducts = await _uof.ProductRepository.GetAllAsync();
 
-            if (lProducts is null)
-            {
-                return NotFound();
-            }
+            throw new NotImplementedException();
 
-            var lProductsDTO = _mapper.Map<IEnumerable<ProductDTOCbb>>(lProducts);
+            //var lProducts = await _uof.ProductRepository.GetProductNoPaginationAsync();
 
-            return Ok(lProductsDTO);
+            //if (lProducts is null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var lProductsDTO = _mapper.Map<IEnumerable<ProductDTOCbb>>(lProducts);
+
+            //return Ok(lProductsDTO);
         }
 
         [HttpGet]

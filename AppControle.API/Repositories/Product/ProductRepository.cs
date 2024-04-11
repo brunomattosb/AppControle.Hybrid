@@ -1,9 +1,10 @@
 ﻿using APICatalogo.Repositories;
 using AppControle.API.Context;
 using Shared.Entities;
-using Shared.Entities.Pagination;
+
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
+using Shared.DTO.Pagination;
 
 namespace AppControle.API.Repositories
 {

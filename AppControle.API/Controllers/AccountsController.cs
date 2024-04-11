@@ -103,6 +103,7 @@ public class AccountsController : ControllerBase
     }
 
     [HttpPost("CreateUser")]
+    //TODO: criar DTO personalizado!
     public async Task<ActionResult> CreateUser([FromBody] UserDTO userDTO)
     {
         
@@ -255,6 +256,7 @@ public class AccountsController : ControllerBase
     [HttpPut]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult> Put(User user)
+        //TODO: Mudar para um DT
     {
         try
 

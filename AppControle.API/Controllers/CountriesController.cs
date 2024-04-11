@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AppControle.API.Repositories;
+using AutoMapper;
+using Shared.DTO.EntitiesDTO;
 
 namespace AppControle.API.Controllers;
 
@@ -12,11 +15,15 @@ namespace AppControle.API.Controllers;
 [ApiController]
 public class CountriesController : ControllerBase
 {
-    private readonly DataContext _context;
+    private readonly IUnitOfWork _uof;
+    private readonly ILogger _logger;
+    private readonly IMapper _mapper;
 
-    public CountriesController(DataContext context)
+    public CountriesController(IUnitOfWork uof, ILogger<CategoriesController> logger, IMapper mapper)
     {
-        _context = context;
+        _logger = logger;
+        _uof = uof;
+        _mapper = mapper;
     }
 
     // GET: api/Countries/combobox
@@ -24,32 +31,17 @@ public class CountriesController : ControllerBase
     [HttpGet("combobox")]
     public async Task<ActionResult<IEnumerable<Country>>> GetCombo()
     {
-        if (_context.Countries == null)
-        {
-            return NotFound();
-        }
-        return await _context.Countries.ToListAsync();
-    }
+        var lCountry = await _uof.CountryRepository.GetAllNoPaginationAsync();
 
-    // GET: api/Countries/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Country>> GetCountry(int id)
-    {
-        if (_context.Countries == null)
-        {
-            return NotFound();
-        }
-        var country = await _context.Countries
-            .Include(x => x.lStates!)
-            .ThenInclude(x => x.lCities)
-            .FirstOrDefaultAsync(x => x.Id == id);
-
-        if (country == null)
+        if (lCountry is null)
         {
             return NotFound();
         }
 
-        return country;
+        var lCountryDTO = _mapper.Map<IEnumerable<CountryDTO>>(lCountry);
+
+        return Ok(lCountryDTO);
+
     }
 
 

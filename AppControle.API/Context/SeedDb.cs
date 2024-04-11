@@ -22,9 +22,9 @@ namespace SisVendas.API.Data
         private readonly IApiService _apiService;
         private readonly IUserRepository _userRepository;
         //        private readonly IFileStorage _fileStorage;
-        //        private City city;
-        //        private User user;
-        //        private Client client;
+        private City city;
+        private User user;
+        private Client client;
 
         public SeedDb(DataContext context, IUserRepository userRepository, IApiService apiService) // IUserHelper userHelper, IFileStorage fileStorage)
         {
@@ -44,13 +44,13 @@ namespace SisVendas.API.Data
             await CheckRolesAsync();
             await CheckCountriesAsync();
             await CheckUserAsync("1010", "Juan", "Zuluaga", "zulu@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "JuanZuluaga.jpeg", UserType.Admin);
-            //            await CheckUserAsync("2020", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpeg", UserType.User);
-            //            await CheckUserAsync("3030", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
-            //            await CheckUserAsync("4040", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
-            //            await CheckUserAsync("5050", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
-            //            city = await _context.Cities!.FirstOrDefaultAsync();
-            //            user = await _context.Users!.FirstOrDefaultAsync(c => c.Cpf_Cnpj == "1010")!;
-            //            await CheckClientsAsync();
+            await CheckUserAsync("2020", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpeg", UserType.User);
+            await CheckUserAsync("3030", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
+            await CheckUserAsync("4040", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
+            await CheckUserAsync("5050", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
+            city = await _context.Cities!.FirstOrDefaultAsync();
+            user = await _context.Users!.FirstOrDefaultAsync();
+            await CheckClientsAsync();
             //            client = await _context.Clients!.FirstOrDefaultAsync()!;
             //            await CheckMonthlyFeeAsync();
         }
@@ -235,78 +235,36 @@ namespace SisVendas.API.Data
         }
 
 
-        //        private async Task CheckClientsAsync()
-        //        {
-        //            ClientService cli = new();
-        //            cli.Product = await _context.Products.FirstOrDefaultAsync();
+        private async Task CheckClientsAsync()
+        {
+            //ClientService cli = new();
+            //cli.Product = await _context.Products.FirstOrDefaultAsync();
 
-        //            if (!_context.Clients.Any())
-        //            {
-        //                _context.Clients.Add(new Client
-        //                {
-        //                    Name = "Client 1",
-        //                    Cpf_Cnpj = "38713376845",
-        //                    MonthlyFeeDueDate = 20,
-        //                    BirthData = DateTime.Now,
-        //                    Neighborhood = "Bairro Um",
-        //                    City = city,
-        //                    AddressNumber = 1,
-        //                    CityId = city.Id,
-        //                    RegisterDate = DateTime.Now,
-        //                    User = user,
-        //                    UserId = user.Id,
-        //                    lClientService = new List<ClientService>()
-        //                    {
-        //                        cli,
-        //                    },
-        //                });
-        //                _context.Clients.Add(new Client
-        //                {
-        //                    Name = "Client 2",
-        //                    Cpf_Cnpj = "06960118806",
-        //                    MonthlyFeeDueDate = 20,
-        //                    BirthData = DateTime.Now,
-        //                    Neighborhood = "Bairro dois",
-        //                    City = city,
-        //                    CityId = city.Id,
-        //                    AddressNumber = 1,
-        //                    RegisterDate = DateTime.Now,
-        //                    User = user,
-        //                    UserId = user.Id
-        //                });
-        //                _context.Clients.Add(new Client
-        //                {
-        //                    Name = "Teste cliente",
-        //                    Cpf_Cnpj = "06960118805",
-        //                    MonthlyFeeDueDate = 20,
-        //                    RegisterDate = DateTime.Now,
-        //                    BirthData = DateTime.Now,
-        //                    Neighborhood = "Bairro dois",
-        //                    City = city,
-        //                    CityId = city.Id,
-        //                    AddressNumber = 1,
-        //                    User = user,
-        //                    UserId = user.Id
-        //                });
+            if (!_context.Clients.Any())
+            {
+                _context.Clients.Add(new Client
+                {
+                    Name = "Client 1",
+                    Cpf_Cnpj = "38713376845",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro Um",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                    //lClientService = new List<ClientService>()
+                    //        {
+                    //            cli,
+                    //        },
+                });
 
-        //                _context.Clients.Add(new Client
-        //                {
-        //                    Name = "Teste ",
-        //                    Cpf_Cnpj = "06960118803",
-        //                    MonthlyFeeDueDate = 20,
-        //                    RegisterDate = DateTime.Now,
-        //                    BirthData = DateTime.Now,
-        //                    Neighborhood = "Bairro dois",
-        //                    City = city,
-        //                    CityId = city.Id,
-        //                    AddressNumber = 1,
-        //                    User = user,
-        //                    UserId = user.Id
-        //                });
 
-        //                await _context.SaveChangesAsync();
-        //            }
-        //        }
+                await _context.SaveChangesAsync();
+            }
+        }
         private async Task CheckRolesAsync()
         {
             await _userRepository.CheckRoleAsync(UserType.Admin.ToString());

@@ -11,5 +11,8 @@ public class MappingsProfile : Profile
         CreateMap<Product, ProductDTOCbb>().ReverseMap();
         CreateMap<Product, ProductDTOList>().ReverseMap();
         CreateMap<Category, CategoryDTO>().ReverseMap();
+        CreateMap<City, CityDTO>().ReverseMap();
+        CreateMap<State, StateDTO>().ReverseMap();
+        CreateMap<Country, CountryDTO>().ReverseMap();
     }
 }
