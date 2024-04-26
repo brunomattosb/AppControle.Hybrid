@@ -1,0 +1,5 @@
+﻿Persistencia de dados
+envio de emails
+serviços de cache
+autenticação e autorização
+chamadas a API externas

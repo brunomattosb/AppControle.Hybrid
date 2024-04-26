@@ -100,6 +100,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Library.Application\Library.Application.csproj" />
       <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
