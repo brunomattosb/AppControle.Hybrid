@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Shared.DTO.EntitiesDTO;
 using Shared.DTO.Pagination;
+using Shared.Response.Headers;
+using System.Drawing.Printing;
 
 namespace AppControle.API.Controllers
 {
@@ -48,17 +50,15 @@ namespace AppControle.API.Controllers
         {
             var lCategories = await _uof.CategoryRepository.GetCategoryPaginationAsync(pagination);
 
-            var metadata = new
+            Response.Headers.Append("X-pagination", JsonConvert.SerializeObject(new ResponseHeaderPagination
             {
-                lCategories.Count,
-                lCategories.PageSize,
-                lCategories.PageCount,
-                lCategories.TotalItemCount,
-                lCategories.HasNextPage,
-                lCategories.HasPreviousPage
-            };
-
-            Response.Headers.Append("X-pagination", JsonConvert.SerializeObject(metadata));
+                Count = lCategories.Count,
+                PageSize = lCategories.PageSize,
+                PageCount = lCategories.PageCount,
+                TotalItemCount = lCategories.TotalItemCount,
+                HasNextPage = lCategories.HasNextPage,
+                HasPreviousPage = lCategories.HasPreviousPage
+            }));
 
             if (lCategories is null)
             {

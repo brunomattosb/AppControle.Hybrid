@@ -8,6 +8,7 @@ public class UnitOfWork : IUnitOfWork
     private ICityRepository? _cityRepository;
     private IStateRepository? _stateRepository;
     private ICountryRepository? _countryRepository;
+    private IClientRepository? _clientRepository;
 
     public DataContext _context;
     public UnitOfWork(DataContext context)
@@ -45,11 +46,19 @@ public class UnitOfWork : IUnitOfWork
         {
             return _stateRepository ??= new StateRepository(_context);
         }
-    }public ICountryRepository CountryRepository
+    }
+    public ICountryRepository CountryRepository
     {
         get
         {
             return _countryRepository ??= new CountryRepository(_context);
+        }
+    }
+    public IClientRepository ClientRepository
+    {
+        get
+        {
+            return _clientRepository ??= new ClientRepository(_context);
         }
     }
     public async Task CommitAsync()

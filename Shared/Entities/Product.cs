@@ -40,8 +40,6 @@ public class Product : UserUnionDTO//, IValidatableObject
     public bool IsActive { get; set; } = true;
     public bool IsService { get; set; }
 
-
-
     #region Não Utilizados
     //public ICollection<TemporalSale>? TemporalSales { get; set; }
 

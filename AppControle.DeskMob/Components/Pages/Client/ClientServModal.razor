@@ -5,9 +5,9 @@
 	<DataAnnotationsValidator />	
 
 	<div>
-		<label for="prodId" class="block text-sm font-medium leading-6 text-gray-900">* Serviço</label>
+		<label for="prodId" class="leading-6 block text-sm font-medium text-gray-900">* Serviço</label>
 		<div class="mt-2">
-			<select name="prodId" id="prodId" @onchange="ProductChangeAsync"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+			<select name="prodId" id="prodId" @onchange="ProductChangeAsync"  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 				<option selected value="0">-- Selecione o serviço --</option>
 				@if (lProducts is not null)
 				{
@@ -20,30 +20,30 @@
 		</div>
 	</div>
 	<div>
-		<label for="Price" class="block text-sm font-medium leading-6 text-gray-900">* Preço</label>
+		<label for="Price" class="leading-6 block text-sm font-medium text-gray-900">* Preço</label>
 		<div class="mt-2">
-			<InputText disabled name="Price" id="Price" @bind-Value="@PriceString" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+			<InputText disabled name="Price" id="Price" @bind-Value="@PriceString" class="border-0 ring-1 block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
 		</div>
 	</div>
 	<div>
-		<label for="Price" class="block text-sm font-medium leading-6 text-gray-900">* Desconto</label>
+		<label for="Price" class="leading-6 block text-sm font-medium text-gray-900">* Desconto</label>
 		<div class="mt-2">
-			<InputNumber name="Price" id="Price" @bind-Value="@clientService.Discount" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-			<ValidationMessage class="text-red-500 font-bold" For="@(() => clientService.Discount)" />
+			<InputNumber name="Price" id="Price" @bind-Value="@clientService.Discount" class="border-0 ring-1 block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+			<ValidationMessage class="font-bold text-red-500" For="@(() => clientService.Discount)" />
 		</div>
 	</div>
 
 	<div>
-		<label for="Remarks" class="block text-sm font-medium leading-6 text-gray-900">Comentário</label>
+		<label for="Remarks" class="leading-6 block text-sm font-medium text-gray-900">Comentário</label>
 		<div class="mt-2">
-			<InputText name="Remarks" id="Remarks" @bind-Value="@clientService.Remarks" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-			<ValidationMessage class="text-red-500 font-bold" For="@(() => clientService.Remarks)" />
+			<InputText name="Remarks" id="Remarks" @bind-Value="@clientService.Remarks" class="border-0 ring-1 block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+			<ValidationMessage class="font-bold text-red-500" For="@(() => clientService.Remarks)" />
 		</div>
 	</div>
 
-	<div class="mt-6 flex items-center justify-end gap-x-6 mb-5 me-5">
+	<div class="mb-5 me-5 mt-6 flex items-center justify-end gap-x-6">
 		
-		<button type="button" @onclick="ReturnCancelAction" class="text-sm font-semibold leading-6 text-gray-900">Voltar</button>
+		<button type="button" @onclick="ReturnCancelAction" class="leading-6 text-sm font-semibold text-gray-900">Voltar</button>
 		<button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Criar</button>
 	</div>
 
@@ -78,7 +78,7 @@
 	{
 		try
 		{
-			var responseHttp = await repository.GetNoPage<List<Product>>($"/api/products/combobox");
+			var responseHttp = await repository.Get<List<Product>>($"/api/products/combobox");
 			if (!responseHttp.Error)
 			{
 				TotalPages = responseHttp.TotalPages;

@@ -6,7 +6,7 @@ namespace Shared.Repositories
     public interface IRepository
     {
         Task<HttpResponseWrapper<T>> Get<T>(string url);
-        Task<HttpResponseWrapper<T>> GetNoPage<T>(string url);
+        //Task<HttpResponseWrapper<T>> Get<T>(string url);
 
         Task<HttpResponseWrapper<object>> Get(string url);
 

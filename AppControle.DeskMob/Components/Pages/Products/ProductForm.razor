@@ -7,35 +7,35 @@
     <DataAnnotationsValidator />
 
 
-    <form class="mt-5 space-y-12  pe-3 sm:pe-5 ps-3 sm:ps-5">
+    <form class="mt-5 space-y-12 pe-3 ps-3 sm:pe-5 sm:ps-5">
 
-        <div class="border-b border-t border-gray-900/10 pb-12">
-            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
+        <div class="border-gray-900/10 border-b border-t pb-12">
+            <div class="grid-cols-1 mt-10 grid gap-x-6 gap-y-8 sm:grid-cols-8">
 
                 <div class="sm:col-span-4 md:col-span-2">
-                    <label for="Name" class="block text-sm font-medium leading-6 text-gray-900">* Nome</label>
+                    <label for="Name" class="leading-6 block text-sm font-medium text-gray-900">* Nome</label>
                     <div class="mt-2">
-                        <InputText name="Name" id="Name" @bind-Value="@ProductDTO.Name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                        <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Name)" />
+                        <InputText name="Name" id="Name" @bind-Value="@ProductDTO.Name" class="border-0 ring-1 block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="font-bold text-red-500" For="@(() => ProductDTO.Name)" />
                     </div>
                 </div>
                 <div class="sm:col-span-4 md:col-span-4">
-                    <label for="Description" class="block text-sm font-medium leading-6 text-gray-900">Descrição</label>
+                    <label for="Description" class="leading-6 block text-sm font-medium text-gray-900">Descrição</label>
                     <div class="mt-2">
-                        <InputText name="Description" id="Description" @bind-Value="@ProductDTO.Description" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                        <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Description)" />
+                        <InputText name="Description" id="Description" @bind-Value="@ProductDTO.Description" class="border-0 ring-1 block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="font-bold text-red-500" For="@(() => ProductDTO.Description)" />
                     </div>
                 </div>
 
                 <div class="sm:col-span-4 md:col-span-2">
-                    <label for="Price" class="block text-sm font-medium leading-6 text-gray-900">* Preço</label>
+                    <label for="Price" class="leading-6 block text-sm font-medium text-gray-900">* Preço</label>
                     <div class="mt-2">
-                        <InputNumber name="Price" id="Price" @bind-Value="@ProductDTO.Price" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                        <ValidationMessage class="text-red-500 font-bold" For="@(() => ProductDTO.Price)" />
+                        <InputNumber name="Price" id="Price" @bind-Value="@ProductDTO.Price" class="border-0 ring-1 block w-full rounded-md py-1.5 text-gray-900 shadow-sm ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <ValidationMessage class="font-bold text-red-500" For="@(() => ProductDTO.Price)" />
                     </div>
                 </div>
                 <!-- -->
-                <div class="sm:col-span-4 md:col-span-2 grid content-center place-items-end">
+                <div class="grid place-items-end content-center sm:col-span-4 md:col-span-2">
                     <div class="mt-2">
                         <button @onclick=@(()=>ShowModalCategory()) class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                             Adicionar categoria
@@ -44,9 +44,9 @@
                 </div>
 
 
-                <div class="sm:col-span-4 md:col-span-4 ">
+                <div class="sm:col-span-4 md:col-span-4">
                     <div class="mb-3">
-                        <label for="bairro" class="block text-sm font-medium leading-6 text-gray-900">Categorias</label>
+                        <label for="bairro" class="leading-6 block text-sm font-medium text-gray-900">Categorias</label>
                         <div>
                             <MultipleSelector NonSelected="NonSelectedCategories" Selected="SelectedCategories" />
                         </div>
@@ -58,8 +58,8 @@
         </div>
     </form>
 
-    <div class="mt-6 flex items-center justify-end gap-x-6 mb-5 me-5">
-        <button type="button" @onclick="ReturnAction" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+    <div class="mb-5 me-5 mt-6 flex items-center justify-end gap-x-6">
+        <button type="button" @onclick="ReturnAction" class="leading-6 text-sm font-semibold text-gray-900">Cancel</button>
         <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Salvar</button>
     </div>
 
@@ -121,7 +121,7 @@
     }
     private async Task LoadCategory()
     {
-        var httpResponse = await repository.GetNoPage<List<Category>>("/api/categories");
+        var httpResponse = await repository.Get<List<Category>>("/api/categories");
         if (httpResponse.Error)
         {
             var message = await httpResponse.GetErrorMessageAsync();

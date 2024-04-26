@@ -4,22 +4,18 @@ using AppControle.API.Services;
 using Shared.DTO;
 using Shared.DTO.AccountDTOs;
 using Shared.Entities;
-using Shared.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
-using System.Text;
 using Shared.Response;
+using AutoMapper;
 
 namespace AppControle.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/[controller]")] 
 [ApiController]
 public class AccountsController : ControllerBase
 {
@@ -27,12 +23,14 @@ public class AccountsController : ControllerBase
     private readonly IConfiguration _configuration;
     //private readonly IFileStorage _fileStorage;
     private readonly IMailService _mailService;
+    private readonly IMapper _mapper;
     private readonly DataContext _context;
     private readonly string _container;
     private readonly ITokenService _tokenService;
 
-    public AccountsController(ITokenService tokenService, IUserRepository userRepository, IConfiguration configuration, DataContext context, IMailService mailService) //IFileStorage fileStorage,
+    public AccountsController(ITokenService tokenService, IUserRepository userRepository, IConfiguration configuration, DataContext context, IMailService mailService, IMapper mapper) //IFileStorage fileStorage,
     {
+        _mapper = mapper;
         _userRepository = userRepository;
         _configuration = configuration;
         //_fileStorage = fileStorage;
@@ -106,8 +104,8 @@ public class AccountsController : ControllerBase
     //TODO: criar DTO personalizado!
     public async Task<ActionResult> CreateUser([FromBody] UserDTO userDTO)
     {
-        
-        User user = userDTO;
+
+        User user = _mapper.Map<User>(userDTO);
         //if (!string.IsNullOrEmpty(userDTO.Photo))
         //{
         //    var photoUser = Convert.FromBase64String(userDTO.Photo);
@@ -227,8 +225,8 @@ public class AccountsController : ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult> Get()
     {
-        //TODO: retornar apenas o que pode, ta retornando tudo..
-        return Ok(await _userRepository.GetUserAsync(User.FindFirstValue(ClaimTypes.Email)));
+        var user = await _userRepository.GetUserAsync(User.FindFirstValue(ClaimTypes.Email));
+        return Ok(_mapper.Map<UserDTO>(user));
     }
     [HttpPost("changePassword")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

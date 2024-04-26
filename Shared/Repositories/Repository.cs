@@ -1,4 +1,5 @@
-﻿using Shared.Response;
+﻿using Newtonsoft.Json.Linq;
+using Shared.Response;
 using System.Text;
 using System.Text.Json;
 
@@ -26,10 +27,24 @@ namespace Shared.Repositories
 
         public async Task<HttpResponseWrapper<T>> Get<T>(string url)
         {
+            
             var responseHttp = await _httpClient.GetAsync(url);
             if (responseHttp.IsSuccessStatusCode)
             {
-                int totalPages = int.Parse(responseHttp.Headers.GetValues("totalPagesHeaders").FirstOrDefault());
+                int totalPages = 0;
+                try
+                {
+                    string xPaginationHeader = responseHttp.Headers.GetValues("X-pagination").FirstOrDefault();
+
+                    // Converte o valor do cabeçalho em um objeto JObject
+                    JObject paginationObject = JObject.Parse(xPaginationHeader);
+
+                    // Obtém o valor de TotalItemCount
+                    totalPages = (int)paginationObject["PageCount"]; //TODO:arrumar
+                }
+                catch { }
+
+
                 var response = await UnserializeAnswer<T>(responseHttp, _jsonDefaultOptions);
                 return new HttpResponseWrapper<T>(response, false, responseHttp, totalPages);
             }
@@ -95,16 +110,16 @@ namespace Shared.Repositories
             return JsonSerializer.Deserialize<T>(respuestaString, jsonSerializerOptions)!;
         }
 
-        public async Task<HttpResponseWrapper<T>> GetNoPage<T>(string url)
-        {
-            var responseHttp = await _httpClient.GetAsync(url);
-            if (responseHttp.IsSuccessStatusCode)
-            {
-                var response = await UnserializeAnswer<T>(responseHttp, _jsonDefaultOptions);
-                return new HttpResponseWrapper<T>(response, false, responseHttp);
-            }
+        //public async Task<HttpResponseWrapper<T>> Get<T>(string url)
+        //{
+        //    var responseHttp = await _httpClient.GetAsync(url);
+        //    if (responseHttp.IsSuccessStatusCode)
+        //    {
+        //        var response = await UnserializeAnswer<T>(responseHttp, _jsonDefaultOptions);
+        //        return new HttpResponseWrapper<T>(response, false, responseHttp);
+        //    }
 
-            return new HttpResponseWrapper<T>(default, true, responseHttp);
-        }
+        //    return new HttpResponseWrapper<T>(default, true, responseHttp);
+        //}
     }
 }

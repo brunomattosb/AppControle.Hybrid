@@ -71,7 +71,7 @@
       <None Include="Components\Pages\Client\ClientsDetails.razor" />
       <None Include="Components\Pages\Client\ClientsEdit.razor" />
       <None Include="Components\Pages\Client\ClientServModal.razor" />
-      <None Include="Components\Pages\Client\ClientsForm.razor" />
+      <None Include="Components\Pages\Client\ClientForm.razor" />
       <None Include="Components\Pages\Index.razor" />
       <None Include="Components\Pages\MonthlyFee\MonthlyFeeCreate.razor" />
       <None Include="Components\Pages\MonthlyFee\MonthlyFeeDetailsModal.razor" />

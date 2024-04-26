@@ -1,11 +1,18 @@
-﻿using AppControle.API.Context;
-using AppControle.API.Extensions;
+﻿using AppControle.API.Extensions;
+using AppControle.API.Repositories;
 using AppControle.Shared.Entities;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Mono.TextTemplating;
+using Newtonsoft.Json;
+using Shared.DTO.EntitiesDTO;
+using Shared.DTO.Pagination;
 using Shared.Entities;
+using Shared.Response.Headers;
+using System.Linq;
 using System.Security.Claims;
 
 namespace AppControle.API.Controllers
@@ -15,173 +22,114 @@ namespace AppControle.API.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ClientsController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IUnitOfWork _uof;
+        private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public ClientsController(DataContext context)
+        public ClientsController(IUnitOfWork uof, ILogger<CitiesController> logger, IMapper mapper)
         {
-            _context = context;
+            _logger = logger;
+            _uof = uof;
+            _mapper = mapper;
         }
 
         // GET: api/Clients
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetClient([FromQuery] Pagination pagination, [FromQuery] string? filter)
+        public async Task<ActionResult<IEnumerable<Client>>> GetAllClientPagination([FromQuery] FiltersClient pagination)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-            if (user == null)
+            var username = User.FindFirstValue(ClaimTypes.Email);
+
+            var lClients = await _uof.ClientRepository.GetAllPaginationByUserAsync(pagination, username);
+            Response.Headers.Append("X-pagination", JsonConvert.SerializeObject(new ResponseHeaderPagination
             {
-                return BadRequest("User not valid.");
-            }
+                Count = lClients.Count,
+                PageSize = lClients.PageSize,
+                PageCount = lClients.PageCount,
+                TotalItemCount = lClients.TotalItemCount,
+                HasNextPage = lClients.HasNextPage,
+                HasPreviousPage = lClients.HasPreviousPage
+            }));
 
-            if (_context.Clients == null)
-            {
-                return NotFound();
-            }
-            var queryable = _context.Clients.AsQueryable();
+            return Ok(lClients);
 
-            if (!string.IsNullOrEmpty(filter))
-            {
-                queryable = queryable.Where(x => x.Name!.Contains(filter));
-            }
-
-            queryable = queryable
-                //.Include(c => c.lClientService!)
-                //.ThenInclude(c => c.Product)
-                .Where(s => s.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
-
-
-            await HttpContext.InsertParamsInPageResponse(queryable, pagination.QuantityPerPage);
-
-            return await queryable
-                .OrderBy(x => x.Name)
-                //.Paginar(pagination)
-                .ToListAsync();
         }
 
-        //// GET: api/Clients/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Client>> GetClient(int id)
-        //{
+        // GET: api/Clients/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Client>> GetClient(int id)
+        {
+            var Sid = User.FindFirstValue(ClaimTypes.Sid);
 
-        //    if (_context.Clients == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-        //    if (user == null)
-        //    {
-        //        return BadRequest("User not valid.");
-        //    }
+            var Client = await _uof.ClientRepository.GetFullClientAsync(id, Sid!);
 
-        //    var client = await _context.Clients
-        //        .Include(u => u.City!)
-        //        .ThenInclude(c => c.State!)
-        //        .ThenInclude(s => s.Country!)
-        //        .Include(u => u.User!)
-        //        .Include(u => u.lClientService!)
-        //        .ThenInclude(x => x.Product)
-        //        .Where(x => x.User!.Id == user.Id)
-        //        .FirstOrDefaultAsync(x => x.Id == id && x.User!.Email == User.FindFirstValue(ClaimTypes.Email)!);
+            if (Client is null)
+            {
+                return NotFound("Cliente não encontrado...");
+            }
 
-        //    if (client == null)
-        //    {
-        //        return NotFound();
-        //    }
+            return Ok(Client);
+        }
 
-        //    return client;
-        //}
+        // PUT: api/Clients/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut()]
+        public async Task<IActionResult> PutClient(Client client)
+        {
+            var username = User.FindFirstValue(ClaimTypes.Email);
+            //TODO: Fazer as validações para deixar realizar as operacoes apenas do usuario
+            //Acho que se eu enviar o usernam no Update e depois verificar da certo!
 
-        //// PUT: api/Clients/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut()]
-        //public async Task<IActionResult> PutClient(Client client)
-        //{
-        //    _context.Entry(client).State = EntityState.Modified;
+            var produtoAtualizado = _uof.ClientRepository.Update(client);
+            await _uof.CommitAsync();
 
-        //    var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-        //    if (user == null)
-        //    {
-        //        return BadRequest("User not valid.");
-        //    }
-        //    if (client.UserId != user.Id)
-        //    {
-
-        //        return BadRequest("User not valid.");
-        //    }
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    //catch (DbUpdateConcurrencyException)
-        //    //{
-        //    //    //if (!CityExists(city.Id))
-        //    //    //{
-        //    //    //    return NotFound();
-        //    //    //}
-        //    //    //else
-        //    //    //{
-        //    //    //    throw;
-        //    //    //}
-        //    //}
-        //    catch (DbUpdateException e)
-        //    {
-        //        if (e.InnerException!.Message.Contains("Duplicate"))
-        //        {
-        //            return BadRequest("Já existe uma cliente com o mesmo nome.");
-        //        }
-        //        return BadRequest(e.InnerException.Message);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //    return NoContent();
-        //}
-
-        //// POST: api/Clients
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Client>> PostClient(Client client)
-        //{
-        //    try
-        //    {
-        //        if (_context.Clients == null)
-        //        {
-        //            return Problem("Entity set 'DataContext.Client'  is null.");
-        //        }
-        //        var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)!);
-        //        if (user == null)
-        //        {
-        //            return BadRequest("Usuario no válido");
-
-        //        }
-        //        client.User = user;
-        //        client.UserId = user.Id;
-
-        //        client.RegisterDate = DateTime.UtcNow;
-        //        _context.Clients.Add(client);
-        //        await _context.SaveChangesAsync();
-
-        //        return CreatedAtAction("GetClient", new { id = client.Id }, client);
-        //    }
-        //    catch (DbUpdateException dbUpdateException)
-        //    {
-        //        if (dbUpdateException.InnerException!.Message.ToLower().Contains("duplicate"))
-        //        {
-        //            return BadRequest("Já existe um cliente com o mesmo CPF.");
-        //        }
-        //        else
-        //        {
-        //            return BadRequest(dbUpdateException.InnerException.Message);
-        //        }
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        return BadRequest(exception.Message);
-        //    }
+            return Ok(produtoAtualizado);
 
 
-        //}
+        }
+
+        // POST: api/Clients
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<ClientDTO>> PostClient(ClientDTO clientDTO)
+        {
+
+            if (clientDTO is null)
+                return BadRequest();
+
+            var client = _mapper.Map<Client>(clientDTO);
+
+            var userId = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+            client.RegisterDate = DateTime.UtcNow;
+            client.UserId = userId;
+
+            var newClient = _uof.ClientRepository.Create(client);
+
+
+            await _uof.CommitAsync();
+
+            return new CreatedAtRouteResult("GetClient",
+                new { id = newClient.Id }, newClient);
+
+
+            //    catch (DbUpdateException dbUpdateException)
+            //    {
+            //        if (dbUpdateException.InnerException!.Message.ToLower().Contains("duplicate"))
+            //        {
+            //            return BadRequest("Já existe um cliente com o mesmo CPF.");
+            //        }
+            //        else
+            //        {
+            //            return BadRequest(dbUpdateException.InnerException.Message);
+            //        }
+            //    }
+            //    catch (Exception exception)
+            //    {
+            //        return BadRequest(exception.Message);
+            //    }
+
+
+        }
         //// DELETE: api/Clients/5
         //[HttpDelete("deleteclientservice/{id}")]
         //public async Task<IActionResult> DeleteClientService(int id)
@@ -201,27 +149,26 @@ namespace AppControle.API.Controllers
 
         //    return NoContent();
         //}
-        //// DELETE: api/Clients/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteClient(int id)
-        //{
-        //    if (_context.Clients == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var client = await _context.Clients.FindAsync(id);
-        //    if (client == null)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    _context.Clients.Remove(client);
-        //    await _context.SaveChangesAsync();
+        // DELETE: api/Clients/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteClient(int id)
+        {
+            var client = await _uof.ClientRepository.GetAsync(x => x.Id == id);
 
-        //    return NoContent();
-        //}
-        //// POST: api/Clients
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+            if (client is null)
+            {
+                return NotFound("Cliente não encontrado...");
+            }
+
+            var deletedClient = _uof.ClientRepository.Delete(client);
+            await _uof.CommitAsync();
+
+            return Ok(deletedClient);
+        }
+
+        // POST: api/Clients
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[HttpPost("saveclientservice")]
         //public async Task<ActionResult<ClientService>> PostClientService(ClientService clientProd)
         //{

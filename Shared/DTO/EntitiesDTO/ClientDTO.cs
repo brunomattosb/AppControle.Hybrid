@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Shared.Entities
 {
-    public class Client
+    public class ClientDTO
     {
 
         [Key]
@@ -74,7 +74,7 @@ namespace Shared.Entities
         [MaxLength(30, ErrorMessage = "O campo {0} deve ter no máximo {1} caracteres.")]
         public string? Neighborhood { get; set; }
 
-        public City? City { get; set; }
+
         [Display(Name = "Cidade")]
         [Range(1, int.MaxValue, ErrorMessage = "Selecione uma {0}.")]
         public int CityId { get; set; }
@@ -85,15 +85,6 @@ namespace Shared.Entities
         public long? PhoneNumber { get; set; }
 
         public string? UserId { get; set; }
-
-        [JsonIgnore]
-        public User? User { get; set; }
-
-        //public ICollection<ClientService>? lClientService { get; set; }
-        //public ICollection<MonthlyFee>? lMonthlyFees { get; set; }
-
-        //[Display(Name = "Mensalidades")]
-        //public decimal ServicesValue => lClientService == null ? 0 : lClientService.Sum(x => x.Product?.Price - x.Discount) ?? 0;
 
         [Display(Name = "Dia vencimento mensalidade")]
         [Range(1, 31)]

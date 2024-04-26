@@ -14,5 +14,7 @@ public class MappingsProfile : Profile
         CreateMap<City, CityDTO>().ReverseMap();
         CreateMap<State, StateDTO>().ReverseMap();
         CreateMap<Country, CountryDTO>().ReverseMap();
+        CreateMap<Client, ClientDTO>().ReverseMap();
+        CreateMap<User, UserDTO>().ReverseMap();
     }
 }

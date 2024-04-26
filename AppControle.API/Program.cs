@@ -63,7 +63,7 @@ builder.Services.AddRateLimiter(options =>
 
 //Services
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<IStateRepository, StateRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();

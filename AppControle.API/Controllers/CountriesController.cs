@@ -19,7 +19,7 @@ public class CountriesController : ControllerBase
     private readonly ILogger _logger;
     private readonly IMapper _mapper;
 
-    public CountriesController(IUnitOfWork uof, ILogger<CategoriesController> logger, IMapper mapper)
+    public CountriesController(IUnitOfWork uof, ILogger<CountriesController> logger, IMapper mapper)
     {
         _logger = logger;
         _uof = uof;

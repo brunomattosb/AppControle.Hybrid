@@ -4,11 +4,11 @@
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
 @attribute [Authorize]
-@inject IJSRuntime Js   
+@inject IJSRuntime Js
 
 
-<div class="grid grid-cols-2">
-    <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
+<div class="grid-cols-2 grid">
+    <div class="grid-cols-1 ms-2 mt-5 flex justify-start pe-3 sm:pe-5">
         <span>
             <a class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" href="/Clients">
                 <iconify-icon icon="mingcute:back-2-line"></iconify-icon> Voltar
@@ -16,7 +16,7 @@
         </span>
     </div>
 
-    <div class="mt-5 grid-cols-1 flex justify-end pe-3 sm:pe-5 mb-2 space-x-1">
+    <div class="grid-cols-1 mb-2 mt-5 flex justify-end space-x-1 pe-3 sm:pe-5">
         <AuthorizeView>
             <Authorized>
                 <div @onclick=@(() => EditAsync())>
@@ -39,7 +39,7 @@
 {
     <div class="text-center">
         <div role="status">
-            <svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg aria-hidden="true" class="inline h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
                 <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
             </svg>
@@ -51,69 +51,69 @@ else
 {
 
 
-    <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
-        <h2 class="text-xl font-bold leading-7 text-gray-900">Dados do cliente</h2>
+    <div class="grid-cols-1 ms-2 mt-5 flex justify-start pe-3 sm:pe-5">
+        <h2 class="leading-7 text-xl font-bold text-gray-900">Dados do cliente</h2>
     </div>
 
-    <div class="space-y-12  pe-3 sm:pe-5 ps-3 sm:ps-5 mt-5">
-        <div class="border-b border-t border-gray-900/10 pb-12 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
+    <div class="mt-5 space-y-12 pe-3 ps-3 sm:pe-5 sm:ps-5">
+        <div class="border-gray-900/10 grid-cols-1 grid gap-x-6 gap-y-8 border-b border-t pb-12 sm:grid-cols-2">
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">CFP / CNPJ</label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">CFP / CNPJ</label>
                 <label class="">@client.Cpf_Cnpj</label>
             </div>
 
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Cliente: </label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">Cliente: </label>
                 <label class="">@client.Name</label>
             </div>
 
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">RG / IE</label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">RG / IE</label>
                 <label class="">@client.Rg_Ie</label>
             </div>
 
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">Email</label>
                 <label class="">@client.Email</label>
             </div>
 
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Nome Fantasia</label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">Nome Fantasia</label>
                 <label class="">@client.FantasyName</label>
             </div>
 
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Endereço</label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">Endereço</label>
                 <label class="">@client.Address @client.AddressNumber, @client.City!.Name, @client.City.State!.Name, @client.City.State.Country!.Name</label>
             </div>
 
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">CEP</label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">CEP</label>
                 <label class="">@client.AddressCep</label>
             </div>
 
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Comentário</label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">Comentário</label>
                 <label class="">@client.Remarks</label>
             </div>
 
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Data de Nascimento</label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">Data de Nascimento</label>
                 <label class="">@client.BirthData</label>
             </div>
 
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Gênero</label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">Gênero</label>
                 <label class="">@client.Gender</label>
             </div>
 
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Bairro</label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">Bairro</label>
                 <label class="">@client.Neighborhood</label>
             </div>
 
             <div class="md:col-span-1">
-                <label for="cpf_cnpj" class="block text-sm font-medium leading-6 text-gray-900">Telefone</label>
+                <label for="cpf_cnpj" class="leading-6 block text-sm font-medium text-gray-900">Telefone</label>
                 <label class="">@client.PhoneNumber</label>
             </div>
 
@@ -131,16 +131,16 @@ else
 
     if (client?.lClientService?.Count != 0)
     {
-        <div class="p-5 bg-gray-100">
+        <div class="bg-gray-100 p-5">
 
-            <p class="text-xl mb-2">Serviços prestados</p>
+            <p class="mb-2 text-xl">Serviços prestados</p>
 
             <!-- Tabela -->
-            <div class="relative overflow-x-auto rounded-lg shadow hidden md:block">
+            <div class="relative hidden overflow-x-auto rounded-lg shadow md:block">
                 <GenericList MyList="client?.lClientService?.ToList()">
                     <Body>
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <table class="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                            <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
                                         Serviço
@@ -152,7 +152,7 @@ else
                                         Dt. Inicio
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        
+
                                     </th>
                                 </tr>
                             </thead>
@@ -160,7 +160,7 @@ else
                                 @foreach (var servico in client?.lClientService!)
                                 {
                                     <tr>
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                                             @servico.Product.Name
                                         </th>
                                         <td class="px-6 py-4">
@@ -182,18 +182,18 @@ else
             </div>
 
             <!-- Box -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+            <div class="grid-cols-1 grid gap-4 sm:grid-cols-2 md:hidden">
                 <GenericList MyList="client?.lClientService?.ToList()">
                     <Body>
                         @foreach (var servico in client?.lClientService!)
                         {
-                            <div class="bg-white space-y-3 p-4 rounded-lg shadow">
+                            <div class="space-y-3 rounded-lg bg-white p-4 shadow">
                                 <div class="flex items-center space-x-2 text-sm">
                                     <div>
                                         <a href="#" class="text-gray-500">Inicio:</a>
                                     </div>
                                     <div class="text-gray-500">@servico.StartDate</div>
-                                
+
                                 </div>
                                 <div class="text-sm text-gray-700">
                                     @servico.Product.Name
@@ -210,26 +210,26 @@ else
         </div>
     }
 
-    <div class="grid grid-cols-2 mb-5">
-        <div class="mt-5 grid-cols-1 flex justify-start pe-3 sm:pe-5 ms-2">
+    <div class="grid-cols-2 mb-5 grid">
+        <div class="grid-cols-1 ms-2 mt-5 flex justify-start pe-3 sm:pe-5">
             <button @onclick=@(()=>ShowModalClientServ()) class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                Adicionar serviço   
+                Adicionar serviço
             </button>
-        </div>        
+        </div>
     </div>
-    
+
 }
 
 @code {
-    private Client? client;
+    private Client? client = null;
 
     // private List<Product> lServicos;
 
     [Parameter]
     public int ClientId { get; set; }
 
-    [CascadingParameter]
-    IModalService ClientServModal { get; set; } = default!;
+    // [CascadingParameter]
+    // IModalService ClientServModal { get; set; } = default!;
 
     protected async override Task OnInitializedAsync()
     {
@@ -237,17 +237,17 @@ else
     }
     private async void ShowModalClientServ()
     {
-        IModalReference modalReference;
+        // IModalReference modalReference;
 
-        modalReference = ClientServModal.Show<ClientServModal>(string.Empty, new ModalParameters().Add("ClientId", ClientId));
+        // modalReference = ClientServModal.Show<ClientServModal>(string.Empty, new ModalParameters().Add("ClientId", ClientId));
 
-        var result = await modalReference.Result;
+        // var result = await modalReference.Result;
 
-        if (result.Confirmed)
-        {
-            await LoadAsync(); 
-            StateHasChanged();
-        }
+        // if (result.Confirmed)
+        // {
+        //     await LoadAsync();
+        //     StateHasChanged();
+        // }
     }
     private async void RemoverServicoClientAsync(int idServ)
     {
@@ -344,7 +344,7 @@ else
     }
     private async Task LoadAsync()
     {
-        var responseHppt = await repository.GetNoPage<Client>($"api/clients/{ClientId}");
+        var responseHppt = await repository.Get<Client>($"api/clients/{ClientId}");
         if (responseHppt.Error)
         {
             if (responseHppt.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
@@ -362,5 +362,4 @@ else
     {
         await Js.InvokeVoidAsync("window.initializeFlowbite");
     }
-}
- *@
+} *@

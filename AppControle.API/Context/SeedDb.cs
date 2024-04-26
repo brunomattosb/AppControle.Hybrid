@@ -49,7 +49,7 @@ namespace SisVendas.API.Data
             await CheckUserAsync("4040", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
             await CheckUserAsync("5050", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
             city = await _context.Cities!.FirstOrDefaultAsync();
-            user = await _context.Users!.FirstOrDefaultAsync();
+            user = await _context.Users!.FirstOrDefaultAsync(x=>x.Cpf_Cnpj == "38713376845");
             await CheckClientsAsync();
             //            client = await _context.Clients!.FirstOrDefaultAsync()!;
             //            await CheckMonthlyFeeAsync();
@@ -244,8 +244,8 @@ namespace SisVendas.API.Data
             {
                 _context.Clients.Add(new Client
                 {
-                    Name = "Client 1",
-                    Cpf_Cnpj = "38713376845",
+                    Name = "Erenci José Rocha",
+                    Cpf_Cnpj = "32299309837",
                     MonthlyFeeDueDate = 20,
                     BirthData = DateTime.Now,
                     Neighborhood = "Bairro Um",
@@ -259,6 +259,202 @@ namespace SisVendas.API.Data
                     //        {
                     //            cli,
                     //        },
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Heloisa Helena da Silva",
+                    Cpf_Cnpj = "05599029808",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro dois",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "José do Egito Pereira",
+                    Cpf_Cnpj = "01878307460",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro tres",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Jussara Fagundes Rodrigues",
+                    Cpf_Cnpj = "27845705845",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro uatro",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Lilian Ferreira de Souza",
+                    Cpf_Cnpj = "36481603896",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro cinco",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Luciana Gitti Lopes ",
+                    Cpf_Cnpj = "33224077808",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro Um",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Luciana Oliveira Domingues",
+                    Cpf_Cnpj = "25082962876",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro Um",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Luciana Rocha Luquete De Paiva",
+                    Cpf_Cnpj = "25421279804",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro Um",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Maria Clara Stacco Oliva ",
+                    Cpf_Cnpj = "32384951866",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro Um",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Maria da Penha do Carmo sousa",
+                    Cpf_Cnpj = "80693679620",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro Um",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Maria dos Réus Viana ",
+                    Cpf_Cnpj = "13991500817",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro Um",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Maria Eliana de Souza Leite Galdini ",
+                    Cpf_Cnpj = "18023139827",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro Um",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Noeme Gomes da Silva",
+                    Cpf_Cnpj = "96790113304",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro Um",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Normezia Brandão de Oliveira Almeida",
+                    Cpf_Cnpj = "18627482845",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro Um",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
+                });
+                _context.Clients.Add(new Client
+                {
+                    Name = "Nubia Romeiro Costa",
+                    Cpf_Cnpj = "37805830894",
+                    MonthlyFeeDueDate = 20,
+                    BirthData = DateTime.Now,
+                    Neighborhood = "Bairro Um",
+                    City = city,
+                    AddressNumber = 1,
+                    CityId = city.Id,
+                    RegisterDate = DateTime.Now,
+                    User = user,
+                    UserId = user.Id,
                 });
 
 

@@ -19,7 +19,7 @@ public class StatesController : ControllerBase
     private readonly ILogger _logger;
     private readonly IMapper _mapper;
 
-    public StatesController(IUnitOfWork uof, ILogger<CategoriesController> logger, IMapper mapper)
+    public StatesController(IUnitOfWork uof, ILogger<StatesController> logger, IMapper mapper)
     {
         _logger = logger;
         _uof = uof;

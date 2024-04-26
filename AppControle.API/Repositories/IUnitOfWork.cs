@@ -11,5 +11,6 @@ public interface IUnitOfWork
     ICityRepository CityRepository { get; }
     IStateRepository StateRepository { get; }
     ICountryRepository CountryRepository { get; }
+    IClientRepository ClientRepository { get; }
     Task CommitAsync();
 }

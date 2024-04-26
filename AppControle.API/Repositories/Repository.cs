@@ -1,6 +1,9 @@
 ﻿using AppControle.API.Context;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Shared.Entities;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace APICatalogo.Repositories;
 public class Repository<T> : IRepository<T> where T : class
@@ -17,7 +20,6 @@ public class Repository<T> : IRepository<T> where T : class
             .AsNoTracking()
             .ToListAsync();
     }
-
     public async Task<T?> GetAsync(Expression<Func<T, bool>> predicate)
     {
         return await _context.Set<T>().FirstOrDefaultAsync(predicate);
@@ -31,9 +33,9 @@ public class Repository<T> : IRepository<T> where T : class
     }
     public T Update(T entity)
     {
+        //_context.Entry(entity).State = EntityState.Modified;
         _context.Set<T>()
             .Update(entity);
-        //_context.Entry(entity).State = EntityState.Modified;
         return entity;
     }
     public T Delete(T entity)
@@ -42,4 +44,6 @@ public class Repository<T> : IRepository<T> where T : class
             .Remove(entity);
         return entity;
     }
+
+
 }
